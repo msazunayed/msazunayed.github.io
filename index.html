@@ -3023,6 +3023,30 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   width: 100%;
   transition: width 1s linear;
 }
+@media (max-width: 600px) {
+  #exit-box {
+    padding: 36px 24px;
+  }
+  #exit-box .exit-icon {
+    font-size: 52px;
+  }
+  #exit-box h2 {
+    font-size: 1.6rem;
+  }
+  #exit-box p {
+    font-size: 1.1rem;
+  }
+  #exit-countdown {
+    font-size: 3rem;
+  }
+  #exit-close-msg {
+    font-size: 0.95rem;
+  }
+  #exit-btn-stay {
+    font-size: 1.05rem;
+    padding: 14px 36px;
+  }
+}
 </style>
 
 <div id="exit-overlay" role="dialog" aria-modal="true" aria-labelledby="exit-title">
@@ -3068,18 +3092,37 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
 
   function tryClose() {
-    // Works when the tab was opened by a script (window.open)
+    // Attempt 1: standard close (works if tab was opened via window.open)
     window.close();
-    // Fallback for directly navigated tabs — redirect to a blank page
+
     setTimeout(function () {
-      if (!document.hidden) {
-        document.body.innerHTML =
-          '<div style="font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#050608;color:#9da3b4;gap:12px;">' +
-          '<span style="font-size:2rem;">✓</span>' +
-          '<p style="margin:0;">You can now close this tab.</p>' +
-          '</div>';
-      }
-    }, 300);
+      // Attempt 2: open blank over self then close
+      window.open('', '_self');
+      window.close();
+    }, 100);
+
+    setTimeout(function () {
+      // Attempt 3: navigate to about:blank (blanks the tab on most browsers)
+      try { window.location.replace('about:blank'); } catch(e) {}
+    }, 250);
+
+    setTimeout(function () {
+      // Final fallback: if still open, show a friendly close prompt
+      try {
+        document.open();
+        document.write(
+          '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+          '<style>*{margin:0;padding:0;box-sizing:border-box;}' +
+          'body{display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+          'height:100vh;background:#050608;color:#9da3b4;font-family:sans-serif;gap:16px;text-align:center;padding:20px;}' +
+          'span{font-size:2.5rem;}p{font-size:1rem;}kbd{background:#1e2029;padding:3px 10px;' +
+          'border-radius:5px;color:#C8F264;font-family:monospace;font-size:0.9rem;}</style></head>' +
+          '<body><span>✓</span><p>You can close this tab now.</p>' +
+          '<p>Press <kbd>Ctrl W</kbd> (Windows) &nbsp;or&nbsp; <kbd>&#8984; W</kbd> (Mac)</p></body></html>'
+        );
+        document.close();
+      } catch(e) {}
+    }, 500);
   }
 
   function showOverlay() {
