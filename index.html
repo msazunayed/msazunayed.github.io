@@ -3053,7 +3053,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   <div id="exit-box">
     <div class="exit-icon">👋</div>
     <h2 id="exit-title">Leaving so soon?</h2>
-    <p>It looks like you're about to leave.<br>The tab will close automatically in:</p>
+    <p>It looks like you're about to leave.<br>Redirecting away in:</p>
     <div id="exit-countdown"><span id="exit-count">3</span>s</div>
     <div id="exit-progress-bar"><div id="exit-progress-fill"></div></div>
     <p id="exit-close-msg">Tab closing automatically…</p>
@@ -3092,22 +3092,14 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
 
   function tryClose() {
-    // Attempt 1: standard close (works if tab was opened via window.open)
-    window.close();
+    // Browsers block window.close() on deployed sites unless the tab was
+    // opened via window.open(). Use about:blank redirect instead.
+    try { window.location.replace('about:blank'); } catch(e) {}
+    // REMOVED (does not work on deployed sites — browser security restriction):
+    // window.close();
 
+    // Fallback: if about:blank was blocked, overwrite with a goodbye page
     setTimeout(function () {
-      // Attempt 2: open blank over self then close
-      window.open('', '_self');
-      window.close();
-    }, 100);
-
-    setTimeout(function () {
-      // Attempt 3: navigate to about:blank (blanks the tab on most browsers)
-      try { window.location.replace('about:blank'); } catch(e) {}
-    }, 250);
-
-    setTimeout(function () {
-      // Final fallback: if still open, show a friendly close prompt
       try {
         document.open();
         document.write(
@@ -3115,14 +3107,14 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
           '<style>*{margin:0;padding:0;box-sizing:border-box;}' +
           'body{display:flex;flex-direction:column;align-items:center;justify-content:center;' +
           'height:100vh;background:#050608;color:#9da3b4;font-family:sans-serif;gap:16px;text-align:center;padding:20px;}' +
-          'span{font-size:2.5rem;}p{font-size:1rem;}kbd{background:#1e2029;padding:3px 10px;' +
+          'span{font-size:2.5rem;}p{font-size:1rem;line-height:1.6;}kbd{background:#1e2029;padding:3px 10px;' +
           'border-radius:5px;color:#C8F264;font-family:monospace;font-size:0.9rem;}</style></head>' +
-          '<body><span>✓</span><p>You can close this tab now.</p>' +
+          '<body><span>👋</span><p>Thanks for visiting!</p><p>You can close this tab now.</p>' +
           '<p>Press <kbd>Ctrl W</kbd> (Windows) &nbsp;or&nbsp; <kbd>&#8984; W</kbd> (Mac)</p></body></html>'
         );
         document.close();
       } catch(e) {}
-    }, 500);
+    }, 200);
   }
 
   function showOverlay() {
