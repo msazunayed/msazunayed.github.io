@@ -2533,13 +2533,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       var introRect = document.getElementById('matrix-intro').getBoundingClientRect();
 
       if(window.innerWidth <= 600){
-        /* Place warning below the input it belongs to — same style for all */
-        var warnTop = rect.bottom - introRect.top + 4;
-        /* For the last (name) input, snap to terminal top so it matches earlier warnings */
-        if(anchorEl === nameEl){
-          warnTop = 48;
-        }
-        warnEl.style.top  = warnTop + 'px';
+        /* Place warning directly below the input it belongs to, clamped so it stays visible */
+        var rawTop = rect.bottom - introRect.top + 4;
+        var maxTop = window.innerHeight - introRect.top - 48; /* keep warning within viewport */
+        warnEl.style.top  = Math.min(rawTop, maxTop) + 'px';
         warnEl.style.left = (rect.left - introRect.left) + 'px';
         warnEl.style.transform = 'none';
       } else {
