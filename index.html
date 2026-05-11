@@ -2512,7 +2512,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
   /* ─── Warning notification (2 seconds, plain red text) ─── */
   var warnTextEl = document.getElementById('mx-warn-text');
-  var warnCloseBtn = document.getElementById('mx-warn-close');
 
   function dismissWarn(){
     if(warnTimer){ clearTimeout(warnTimer); warnTimer = null; }
@@ -2522,8 +2521,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       warnEl.classList.remove('closing');
     }, 220);
   }
-
-  warnCloseBtn.addEventListener('click', function(){ dismissWarn(); });
 
   function showWarn(msg, anchorEl){
     if(warnTimer){ clearTimeout(warnTimer); warnTimer = null; }
