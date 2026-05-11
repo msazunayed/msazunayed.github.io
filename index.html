@@ -2531,10 +2531,22 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if(anchorEl){
       var rect = anchorEl.getBoundingClientRect();
       var introRect = document.getElementById('matrix-intro').getBoundingClientRect();
+
+      /* Make warn temporarily visible (off-screen) so offsetHeight is accurate */
+      warnEl.style.visibility = 'hidden';
+      warnEl.style.opacity    = '1';
+      warnEl.style.top        = '-9999px';
+      warnEl.style.left       = '-9999px';
+      void warnEl.offsetHeight; /* force layout */
+      var warnH = warnEl.offsetHeight;
+      warnEl.style.visibility = '';
+      warnEl.style.opacity    = '';
+
       if(window.innerWidth <= 600){
-        /* Place warning directly below the input field it belongs to */
-        warnEl.style.top  = (rect.bottom - introRect.top + 4) + 'px';
-        warnEl.style.left = (rect.left - introRect.left) + 'px';
+        /* Place warning above the input, left-aligned with the terminal content */
+        var termPaddingLeft = 20;
+        warnEl.style.top  = (rect.top - introRect.top - warnH - 6) + 'px';
+        warnEl.style.left = termPaddingLeft + 'px';
         warnEl.style.transform = 'none';
       } else {
         var midY = rect.top + (rect.height / 2) - introRect.top;
