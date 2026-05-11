@@ -2535,16 +2535,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       if(window.innerWidth <= 600){
         /* Place warning directly below the input it belongs to, clamped so it stays visible */
         var rawTop = rect.bottom - introRect.top + 4;
-        var maxTop = window.innerHeight - introRect.top - 48; /* keep warning within viewport */
+        var maxTop = window.innerHeight - introRect.top - 48;
         warnEl.style.top  = Math.min(rawTop, maxTop) + 'px';
-        warnEl.style.left = (rect.left - introRect.left) + 'px';
+        if(anchorEl === nameEl){
+          /* Last input — align warning to the right edge of the input */
+          warnEl.style.left = 'auto';
+          warnEl.style.right = (introRect.right - rect.right) + 'px';
+        } else {
+          warnEl.style.left = (rect.left - introRect.left) + 'px';
+          warnEl.style.right = 'auto';
+        }
         warnEl.style.transform = 'none';
       } else {
         var midY = rect.top + (rect.height / 2) - introRect.top;
         warnEl.style.top  = midY + 'px';
         warnEl.style.left = (rect.right - introRect.left - 16) + 'px';
+        warnEl.style.right = 'auto';
       }
-      warnEl.style.right = 'auto';
     }
 
     /* If already showing, just shake instead of re-animating in */
