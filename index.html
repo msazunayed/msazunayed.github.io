@@ -2537,21 +2537,25 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         var rawTop = rect.bottom - introRect.top + 4;
         var maxTop = window.innerHeight - introRect.top - 48;
         warnEl.style.top  = Math.min(rawTop, maxTop) + 'px';
-        if(anchorEl === nameEl){
-          /* Indent to align with the text after "visitor : " prompt */
-          var namePrompt = document.getElementById('mx-name-prompt');
-          var promptRight = namePrompt ? (namePrompt.getBoundingClientRect().right - introRect.left) : (rect.left - introRect.left);
-          warnEl.style.left = promptRight + 'px';
-        } else {
-          warnEl.style.left = (rect.left - introRect.left) + 'px';
-        }
+        var mPromptId = anchorEl === nameEl  ? 'mx-name-prompt'
+                      : anchorEl === hiInput ? 'mx-visitor-hi-prompt'
+                      : 'mx-yn-prompt';
+        var mPromptEl = document.getElementById(mPromptId);
+        var mPromptRight = mPromptEl ? (mPromptEl.getBoundingClientRect().right - introRect.left) : (rect.left - introRect.left);
+        warnEl.style.left = mPromptRight + 'px';
         warnEl.style.right = 'auto';
         warnEl.style.transform = 'none';
       } else {
-        var midY = rect.top + (rect.height / 2) - introRect.top;
-        warnEl.style.top  = midY + 'px';
-        warnEl.style.left = (rect.right - introRect.left - 16) + 'px';
+        /* Desktop/tablet — same logic: below the row, aligned after the prompt */
+        var promptId = anchorEl === nameEl   ? 'mx-name-prompt'
+                     : anchorEl === hiInput  ? 'mx-visitor-hi-prompt'
+                     : 'mx-yn-prompt';
+        var promptEl = document.getElementById(promptId);
+        var promptRight = promptEl ? (promptEl.getBoundingClientRect().right - introRect.left) : (rect.left - introRect.left);
+        warnEl.style.top  = (rect.bottom - introRect.top + 4) + 'px';
+        warnEl.style.left = promptRight + 'px';
         warnEl.style.right = 'auto';
+        warnEl.style.transform = 'none';
       }
     }
 
