@@ -2540,7 +2540,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         if(anchorEl === nameEl){
           /* Last input — align warning to the right edge of the input */
           warnEl.style.left = 'auto';
-          warnEl.style.right = (introRect.right - rect.right) + 'px';
+          warnEl.style.right = (introRect.right - rect.right + 40) + 'px';
         } else {
           warnEl.style.left = (rect.left - introRect.left) + 'px';
           warnEl.style.right = 'auto';
