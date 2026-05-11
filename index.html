@@ -3056,7 +3056,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     <p>It looks like you're about to leave.<br>Redirecting away in:</p>
     <div id="exit-countdown"><span id="exit-count">3</span>s</div>
     <div id="exit-progress-bar"><div id="exit-progress-fill"></div></div>
-    <p id="exit-close-msg">Tab closing automatically…</p>
+    <p id="exit-close-msg">You can close the tab now.</p>
     <button id="exit-btn-stay">Stay on Page</button>
   </div>
 </div>
@@ -3086,7 +3086,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       countEl.textContent = remaining;
       if (remaining <= 0) {
         clearInterval(closeTimer);
-        tryClose();
+        // Removed automatic shutdown
       }
     }, 1000);
   }
