@@ -2868,7 +2868,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
             setTimeout(function(){
               var intro = document.getElementById('matrix-intro');
               intro.classList.add('hide');
-              setTimeout(function(){ intro.style.display = 'none'; }, 1100);
+              setTimeout(function(){ intro.style.display = 'none'; document.getElementById('exit-overlay').remove(); }, 1100);
             }, 400);
           });
         });
