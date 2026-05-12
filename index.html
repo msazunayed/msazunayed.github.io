@@ -5181,74 +5181,30 @@
         scene.add(cornerBR);
 
         // --- 4 SIDES (strips along each edge, purple/soft tones) ---
-        // ── FULL-CANVAS NEBULA — matches reference image exactly ──
-        // The canvas is 45% wide on the right. Nebula fills the ENTIRE canvas behind the globe.
-        // Three layers: dense purple body + scattered gold specks + micro-dust haze
-
-        function gaussRand() {
-          return Math.sqrt(-2 * Math.log(Math.random() + 1e-9)) * Math.cos(Math.PI * 2 * Math.random());
+        // Build left side particles — organic nebula cloud, NOT a rectangular box
+        const lsCount = SS;
+        const lsBasePos = [];
+        const lsPhases = [];
+        const lsSpeeds = [];
+        for (let i = 0; i < lsCount; i++) {
+          // Gaussian-like spread in X: cluster around x≈-7.2 with natural spread
+          const gx = -7.2 + (Math.random() - 0.5) * 3.5 * Math.abs(Math.random() + Math.random() - 1.0);
+          // Y: tall range but density falls off at extremes (beta-like distribution)
+          const gy = (Math.pow(Math.random(), 0.7) * 2 - 1) * 6.5;
+          // Z: thin slab with organic variation
+          const gz = (Math.random() - 0.5) * 5.5;
+          // Scatter: push some particles further in x creating wispy tendrils
+          const tendril = Math.random() < 0.15 ? (Math.random() - 0.5) * 2.5 : 0;
+          lsBasePos.push(gx + tendril, gy, gz);
+          lsPhases.push(Math.random() * Math.PI * 2);
+          lsSpeeds.push(0.4 + Math.random() * 0.9);
         }
-
-        // Layer 1: Dense purple/blue nebula body — fills whole canvas, denser toward center-right
-        const NEBULA_COUNT = isMobileDevice ? 6000 : 35000;
-        const nebulaPos = [], nebulaPhase = [], nebulaSpeed = [];
-        for (let i = 0; i < NEBULA_COUNT; i++) {
-          // Density peaks at center (0,0) and falls off — but covers full canvas [-9,9] x [-7,7]
-          const gx = gaussRand() * 4.5;   // σ=4.5 covers whole canvas width
-          const gy = gaussRand() * 5.5;   // σ=5.5 covers whole canvas height
-          const gz = (Math.random() - 0.5) * 7;
-          nebulaPos.push(gx, gy, gz);
-          nebulaPhase.push(Math.random() * Math.PI * 2);
-          nebulaSpeed.push(0.20 + Math.random() * 0.55);
-        }
-        const nebulaGeo = new THREE.BufferGeometry();
-        nebulaGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nebulaPos), 3));
-        const sideMat_L = new THREE.PointsMaterial({ color: 0x8860CC, size: 0.028, transparent: true, opacity: 0.75, depthWrite: false, sizeAttenuation: true });
-        const sideL = new THREE.Points(nebulaGeo, sideMat_L);
+        const lsBuf = new Float32Array(lsBasePos);
+        const lsGeoA = new THREE.BufferGeometry();
+        lsGeoA.setAttribute('position', new THREE.BufferAttribute(lsBuf.slice(), 3));
+        const sideMat_L = new THREE.PointsMaterial({ color: 0xC8A0FF, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
+        const sideL = new THREE.Points(lsGeoA, sideMat_L);
         scene.add(sideL);
-
-        // Layer 2: Gold specks — scattered at top-right and throughout, like the reference
-        const GOLD_COUNT = isMobileDevice ? 2000 : 12000;
-        const goldPos = [], goldPhase = [], goldSpeed = [];
-        for (let i = 0; i < GOLD_COUNT; i++) {
-          // Bias toward top and right edges (more sparse at bottom-left like reference)
-          const gx = gaussRand() * 5.0 + 1.5;  // shifted right
-          const gy = gaussRand() * 5.0 + 1.0;  // shifted up
-          const gz = (Math.random() - 0.5) * 6;
-          goldPos.push(gx, gy, gz);
-          goldPhase.push(Math.random() * Math.PI * 2);
-          goldSpeed.push(0.15 + Math.random() * 0.45);
-        }
-        const goldGeo = new THREE.BufferGeometry();
-        goldGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(goldPos), 3));
-        const sideMat_LGold = new THREE.PointsMaterial({ color: 0xFFAA20, size: 0.050, transparent: true, opacity: 0.80, depthWrite: false, sizeAttenuation: true });
-        const sideLGold = new THREE.Points(goldGeo, sideMat_LGold);
-        scene.add(sideLGold);
-
-        // Layer 3: Micro-dust haze — very fine, everywhere
-        const DUST_COUNT = isMobileDevice ? 4000 : 20000;
-        const dustPos = [], dustPhase = [], dustSpeed = [];
-        for (let i = 0; i < DUST_COUNT; i++) {
-          const gx = (Math.random() - 0.5) * 20;
-          const gy = (Math.random() - 0.5) * 16;
-          const gz = (Math.random() - 0.5) * 8;
-          dustPos.push(gx, gy, gz);
-          dustPhase.push(Math.random() * Math.PI * 2);
-          dustSpeed.push(0.10 + Math.random() * 0.30);
-        }
-        const dustGeo = new THREE.BufferGeometry();
-        dustGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(dustPos), 3));
-        const sideMat_LDust = new THREE.PointsMaterial({ color: 0xB090EE, size: 0.014, transparent: true, opacity: 0.40, depthWrite: false, sizeAttenuation: true });
-        const sideLDust = new THREE.Points(dustGeo, sideMat_LDust);
-        scene.add(sideLDust);
-
-        // Base copies for animation drift
-        const lsPurpleBase = Array.from(nebulaPos);
-        const lsGoldBase   = Array.from(goldPos);
-        const lsDustBase   = Array.from(dustPos);
-        const lsPurplePhase = nebulaPhase, lsPurpleSpeed = nebulaSpeed;
-        const lsGoldPhase = goldPhase, lsGoldSpeed = goldSpeed;
-        const lsDustPhase = dustPhase, lsDustSpeed = dustSpeed;
 
         const rsGeo = makeCornerCloud(boxRegion(5.8, 9, -5.5, 5.5, -4, 4, SS));
         const sideMat_R = new THREE.PointsMaterial({ color: 0xC8A0FF, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
@@ -5506,61 +5462,29 @@
           cornerMat_BR.opacity = (isDark ? 0.50 : 0.65) + Math.sin(t * 1.7 + 3.0) * 0.08;
           cornerMat_BR.size = 0.060 * cornerPulse;
 
-          sideMat_L.color.set(isDark ? 0x8860CC : 0x5540AA);
-          sideMat_L.opacity = isDark ? 0.75 : 0.60;
-          sideMat_LGold.color.set(isDark ? 0xFFAA20 : 0xCC8800);
-          sideMat_LGold.opacity = isDark ? 0.80 : 0.60;
-          sideMat_LDust.color.set(isDark ? 0xB090EE : 0x7060BB);
-          sideMat_LDust.opacity = isDark ? 0.40 : 0.28;
-
-          sideMat_L.size     = 0.026 + Math.sin(t * 0.8) * 0.006;
-          sideMat_LGold.size = 0.048 + Math.sin(t * 1.0 + 1.0) * 0.009;
-          sideMat_LDust.size = 0.013 + Math.sin(t * 1.3 + 2.0) * 0.003;
-
-          // Animate purple nebula body — slow gentle drift
+          sideMat_L.color.set(isDark ? 0x9060EE : 0x2D3A8C);
+          sideMat_L.opacity = isDark ? 0.38 : 0.50;
+          // Organic nebula drift — each particle floats with independent multi-freq motion
           {
-            const pos = sideL.geometry.attributes.position;
-            const n = lsPurpleBase.length / 3;
-            for (let i = 0; i < n; i++) {
-              const bx = lsPurpleBase[i*3], by = lsPurpleBase[i*3+1], bz = lsPurpleBase[i*3+2];
-              const ph = lsPurplePhase[i], sp = lsPurpleSpeed[i];
-              pos.setXYZ(i,
-                bx + Math.sin(t * sp * 0.28 + ph * 1.5) * 0.14 + Math.cos(t * 0.15 + by * 0.10) * 0.09,
-                by + Math.sin(t * sp * 0.45 + ph) * 0.28 + Math.sin(t * sp * 1.1 + ph * 1.8) * 0.10,
-                bz
-              );
+            const lsPos = sideL.geometry.attributes.position;
+            for (let i = 0; i < lsCount; i++) {
+              const bx = lsBasePos[i * 3];
+              const by = lsBasePos[i * 3 + 1];
+              const bz = lsBasePos[i * 3 + 2];
+              const ph = lsPhases[i];
+              const sp = lsSpeeds[i];
+              // Multi-layered drift: slow large wave + fast small shimmer + slow lateral sway
+              const driftY = Math.sin(t * sp * 0.55 + ph) * 0.38
+                           + Math.sin(t * sp * 1.4  + ph * 2.1) * 0.14
+                           + Math.cos(t * 0.28 + by * 0.22) * 0.22;
+              const driftX = Math.sin(t * sp * 0.32 + ph * 1.7) * 0.18
+                           + Math.cos(t * 0.19 + by * 0.15 + ph) * 0.12;
+              // Opacity shimmer per-particle via size micro-variation
+              lsPos.setXYZ(i, bx + driftX, by + driftY, bz);
             }
-            pos.needsUpdate = true;
-          }
-          // Animate gold specks — slightly faster, more sparkle
-          {
-            const pos = sideLGold.geometry.attributes.position;
-            const n = lsGoldBase.length / 3;
-            for (let i = 0; i < n; i++) {
-              const bx = lsGoldBase[i*3], by = lsGoldBase[i*3+1], bz = lsGoldBase[i*3+2];
-              const ph = lsGoldPhase[i], sp = lsGoldSpeed[i];
-              pos.setXYZ(i,
-                bx + Math.sin(t * sp * 0.20 + ph * 1.2) * 0.18,
-                by + Math.sin(t * sp * 0.38 + ph) * 0.32 + Math.cos(t * 0.22 + ph * 1.6) * 0.13,
-                bz
-              );
-            }
-            pos.needsUpdate = true;
-          }
-          // Animate micro dust — fast shimmer
-          {
-            const pos = sideLDust.geometry.attributes.position;
-            const n = lsDustBase.length / 3;
-            for (let i = 0; i < n; i++) {
-              const bx = lsDustBase[i*3], by = lsDustBase[i*3+1], bz = lsDustBase[i*3+2];
-              const ph = lsDustPhase[i], sp = lsDustSpeed[i];
-              pos.setXYZ(i,
-                bx + Math.sin(t * sp * 0.50 + ph * 2.0) * 0.09,
-                by + Math.sin(t * sp * 0.70 + ph) * 0.22 + Math.sin(t * 1.9 + ph * 2.8) * 0.07,
-                bz
-              );
-            }
-            pos.needsUpdate = true;
+            lsPos.needsUpdate = true;
+            // Slowly breathe size for sparkle feel
+            sideMat_L.size = 0.032 + Math.sin(t * 1.3) * 0.012;
           }
 
           sideMat_R.color.set(isDark ? 0x9060EE : 0x2D3A8C);
