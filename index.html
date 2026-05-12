@@ -4187,21 +4187,12 @@
           if (iconSunMobile) iconSunMobile.style.display = 'block';
           if (iconMoonMobile) iconMoonMobile.style.display = 'none';
         }
-        try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch(e) {}
       }
 
-      // Init from saved preference or system preference
-      let isDark = false;
-      try {
-        const saved = localStorage.getItem('sa-theme');
-        if (saved) {
-          isDark = saved === 'dark';
-        } else {
-          // Default to dark mode at night (6 PM - 6 AM), white theme in the day
-          const hour = new Date().getHours();
-          isDark = (hour >= 18 || hour < 6);
-        }
-      } catch(e) {}
+      // Default to dark mode at night (6 PM - 6 AM), white theme in the day
+      const hour = new Date().getHours();
+      let isDark = (hour >= 18 || hour < 6);
+      
       applyTheme(isDark);
 
       themeToggle?.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); });
@@ -4859,8 +4850,8 @@
 
         /* ── 5. Outer Faint Halo Shell — removed ── */
 
-        // Add tiny surrounding particles (or 5,000 on mobile)
-        const SMALL_PARTICLE_COUNT = isMobileDevice ? 5000 : 20000;
+        // Add tiny surrounding particles (20,000 across all devices)
+        const SMALL_PARTICLE_COUNT = 20000;
         const smallStarGeo = new THREE.BufferGeometry();
         const smallStarPos = new Float32Array(SMALL_PARTICLE_COUNT * 3);
         for (let i = 0; i < SMALL_PARTICLE_COUNT; i++) {
@@ -4873,12 +4864,11 @@
         }
         smallStarGeo.setAttribute('position', new THREE.BufferAttribute(smallStarPos, 3));
         const smallStarMat = new THREE.PointsMaterial({
-          color: 0xFFD700, size: 0.025, map: null,
-          transparent: false, opacity: 1.0,
+          color: 0xFFD700, size: 0.035, map: dotTex,
+          transparent: true, opacity: 0.7, alphaTest: 0.01,
           depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
         });
         const smallStars = new THREE.Points(smallStarGeo, smallStarMat);
-        smallStars.visible = !isMobileDevice;
         scene.add(smallStars);
 
         /* ── 10. Left Side Subtle Drift ── */
