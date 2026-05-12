@@ -318,9 +318,13 @@
     .nav-cta {
       background: var(--indigo) !important;
       color: #F8F4EE !important;
-      font-weight: 600 !important;
-      border-radius: 6px !important;
-      padding: 7px 16px !important;
+      font-family: var(--mono) !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      letter-spacing: .08em !important;
+      text-transform: uppercase !important;
+      border-radius: 5px !important;
+      padding: 5px 12px !important;
       transition: background .2s, transform .2s !important;
     }
 
@@ -461,17 +465,17 @@
         flex-direction: column;
         min-height: auto;
         padding: calc(var(--nav-h) + 16px) 16px 24px 16px;
-        overflow: visible;
+        overflow: hidden;
         margin: 0 auto;
       }
     }
 
     canvas#heroCanvas {
       position: absolute;
-      top: 0;
+      top: var(--nav-h);
       right: 0;
       width: 45%;
-      height: 100%;
+      height: calc(100% - var(--nav-h));
       z-index: 2;
       pointer-events: none;
     }
@@ -2473,7 +2477,7 @@
       }
 
       .hero-name {
-        font-size: clamp(32px, 10vw, 64px);
+        font-size: clamp(40px, 12vw, 72px);
       }
 
       .hero-eyebrow {
@@ -2555,7 +2559,7 @@
       }
 
       .hero-name {
-        font-size: clamp(28px, 9vw, 52px);
+        font-size: clamp(36px, 11vw, 60px);
         line-height: 1.2;
       }
 
@@ -2784,7 +2788,7 @@
 
       /* Name */
       .hero-name {
-        font-size: clamp(38px, 10vw, 56px) !important;
+        font-size: clamp(46px, 12vw, 68px) !important;
         white-space: normal !important;
         line-height: 1.0 !important;
         margin-bottom: 18px !important;
@@ -3029,7 +3033,7 @@
     .nav-links li:has(#themeToggle) {
       display: flex;
       align-items: center;
-      margin-left: 4px;
+      margin-left: 20px;
     }
     .theme-toggle-track {
       display: inline-flex;
@@ -3163,7 +3167,7 @@
       }
 
       .hero-name {
-        font-size: clamp(28px, 9vw, 46px) !important;
+        font-size: clamp(36px, 11vw, 58px) !important;
         white-space: normal;
       }
 
@@ -4725,10 +4729,10 @@
         const slimWireGeo = new THREE.WireframeGeometry(slimGeo);
         const slimMat = new THREE.LineDashedMaterial({
           color: new THREE.Color(0xffd700),
-          dashSize: 0.15,
-          gapSize: 0.28,
+          dashSize: 0.08,
+          gapSize: 0.55,
           transparent: true,
-          opacity: 0.70,
+          opacity: 0.38,
           linewidth: 1
         });
         const slimNetwork = new THREE.LineSegments(slimWireGeo, slimMat);
@@ -4737,10 +4741,10 @@
 
         const slimMat2 = new THREE.LineDashedMaterial({
           color: new THREE.Color(0xfff3c0),
-          dashSize: 0.08,
-          gapSize: 0.48,
+          dashSize: 0.04,
+          gapSize: 0.72,
           transparent: true,
-          opacity: 0.48,
+          opacity: 0.25,
           linewidth: 1
         });
         const slimNetwork2 = new THREE.LineSegments(slimWireGeo, slimMat2);
@@ -4783,8 +4787,10 @@
         }
 
         flowParticleGeo.setAttribute('position', new THREE.BufferAttribute(flowParticlePos, 3));
+        const C_INDIGO = new THREE.Color(0x2D3A8C);
+        const C_CYAN   = new THREE.Color(0xBF40FF); // vibrant purple in dark mode
         const flowParticleMat = new THREE.PointsMaterial({
-          color: 0x2D3A8C, // indigo color
+          color: C_INDIGO.clone(), // indigo color (updated per frame for dark mode)
           size: 0.08,
           map: dotTex,
           transparent: true,
@@ -5065,6 +5071,10 @@
           }
           flowPos.needsUpdate = true;
           flowParticles.material.size = 0.12 + Math.sin(t * 6) * 0.05;
+          // Switch particle color based on dark/light mode
+          flowParticles.material.color.set(
+            document.body.classList.contains('dark') ? C_CYAN : C_INDIGO
+          );
 
           // Animate surrounding particles — speed up when zoomed in
           const zoomFactor = 1 + (10 - camera.position.z) * 0.04;
