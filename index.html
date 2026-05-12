@@ -4890,6 +4890,7 @@
           transparent: true, opacity: 0.35, alphaTest: 0.01
         });
         const leftSide = new THREE.Points(leftGeo, leftMat);
+        leftSide.visible = !isMobileDevice;
         scene.add(leftSide);
 
         /* ── 11. Near-Text Focused Particles ── */
@@ -4907,6 +4908,7 @@
           transparent: true, opacity: 0.45, alphaTest: 0.01
         });
         const textNearParticles = new THREE.Points(textNearGeo, textNearMat);
+        textNearParticles.visible = !isMobileDevice;
         mainGroup.add(textNearParticles);
 
         /* ── 12. Deep-Left Content Particles ── */
@@ -4924,6 +4926,7 @@
           transparent: true, opacity: 0.4, alphaTest: 0.01
         });
         const deepLeftParticles = new THREE.Points(deepLeftGeo, deepLeftMat);
+        deepLeftParticles.visible = !isMobileDevice;
         mainGroup.add(deepLeftParticles);
 
 
