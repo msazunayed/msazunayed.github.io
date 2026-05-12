@@ -30,6 +30,7 @@
       --bg: #F8F4EE;
       --bg2: #F0EAE0;
       --bg3: #E6DDD0;
+      --bg-rgb: 248, 244, 238;
       --border: rgba(100, 70, 30, 0.10);
       --border2: rgba(100, 70, 30, 0.18);
       --text: #2C2018;
@@ -37,6 +38,7 @@
       --text3: #8C7055;
       --accent: #2C2018;
       --accent2: #3A2A1C;
+      --card-bg: #FDFAF6;
       --gold: #B8860B;
       --gold2: #D4A017;
       --indigo: #2D3A8C;
@@ -246,7 +248,7 @@
     }
 
     nav.scrolled {
-      background: rgba(248, 244, 238, 0.94);
+      background: rgba(var(--bg-rgb), 0.94);
       backdrop-filter: blur(16px);
       border-color: var(--border);
       box-shadow: 0 1px 0 var(--border);
@@ -351,8 +353,10 @@
 
     .hamburger span {
       display: block;
-      height: 1px;
+      width: 22px;
+      height: 2px;
       background: var(--text2);
+      border-radius: 2px;
       transition: all .25s;
     }
 
@@ -368,12 +372,52 @@
       transform: translateY(-6px) rotate(-45deg);
     }
 
+    .nav-mobile-right {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-mobile-right {
+        display: flex;
+      }
+    }
+
+    .nav-hire-mobile {
+      display: none;
+      background: var(--indigo);
+      color: #F8F4EE !important;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      padding: 8px 14px !important;
+      border-radius: 6px;
+      min-width: auto !important;
+      min-height: 36px !important;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-hire-mobile {
+        display: flex;
+      }
+      /* Hide the desktop hamburger (now inside nav-mobile-right) */
+      nav > .hamburger {
+        display: none;
+      }
+    }
+
     .mob-menu {
       display: none;
       position: fixed;
       inset: 0;
       top: var(--nav-h);
-      background: rgba(248, 244, 238, .98);
+      background: rgba(var(--bg-rgb), .98);
       backdrop-filter: blur(20px);
       flex-direction: column;
       align-items: center;
@@ -422,15 +466,6 @@
       }
     }
 
-    @media (max-width: 768px) {
-      .hero {
-        flex-direction: column;
-        min-height: auto;
-        padding: 0;
-        overflow: visible;
-      }
-    }
-
     canvas#heroCanvas {
       position: absolute;
       top: 0;
@@ -439,18 +474,6 @@
       height: 100%;
       z-index: 2;
       pointer-events: none;
-    }
-
-    @media (max-width: 768px) {
-      canvas#heroCanvas {
-        position: relative;
-        width: 100%;
-        height: 280px;
-        top: 0;
-        right: auto;
-        order: -1;
-        z-index: 1;
-      }
     }
 
     @media (max-width: 768px) {
@@ -544,7 +567,7 @@
    3. HERO TEXT ANIMATION — staggered letter reveal
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     .hero-name {
-      font-size: clamp(28px, 4.5vw, 72px);
+      font-size: clamp(32px, 4vw, 60px);
       font-weight: 700;
       line-height: .95;
       letter-spacing: -.04em;
@@ -745,6 +768,16 @@
       color: var(--text3);
     }
 
+    .hero-scroll-arrow {
+      color: var(--text3);
+      animation: bounce-down 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce-down {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
     .hero-scroll-bar {
       width: 1px;
       height: 40px;
@@ -809,7 +842,7 @@
 
     @media (max-width: 768px) {
       .section {
-        padding: 60px 16px;
+        padding: 60px 16px 60px 28px;
         max-width: 100%;
         margin: 0 auto;
       }
@@ -1138,7 +1171,7 @@
 
     /* Domain row — label + pill strip */
     .skill-domain {
-      background: #FDFAF6;
+      background: var(--card-bg);
       border: 1px solid rgba(100, 70, 30, 0.10);
       border-radius: 12px;
       padding: clamp(20px, 2.5vw, 28px);
@@ -1212,7 +1245,7 @@
     }
 
     .skill-name {
-      font-size: 17px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text);
       letter-spacing: -.025em;
@@ -1466,7 +1499,7 @@
 
     /* 8. PROJECT CARDS */
     .proj-card {
-      background: #FDFAF6;
+      background: var(--card-bg);
       padding: clamp(22px, 2.5vw, 32px);
       border: 1px solid rgba(100, 70, 30, 0.10);
       border-radius: 12px;
@@ -1901,7 +1934,7 @@
 
     /* 8. Form */
     .form-wrap {
-      background: #FDFAF6;
+      background: var(--card-bg);
       border: 1px solid rgba(100, 70, 30, 0.12);
       border-radius: 14px;
       padding: clamp(22px, 2.5vw, 32px);
@@ -2063,7 +2096,7 @@
     }
 
     .edu-card {
-      background: #FDFAF6;
+      background: var(--card-bg);
       border: 1px solid rgba(100, 70, 30, 0.10);
       border-radius: 12px;
       padding: clamp(22px, 2.5vw, 32px);
@@ -2634,6 +2667,523 @@
     }
 
     /* light mode removed */
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       MOBILE PHONE — COMPREHENSIVE FIXES
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+    /* ── Prevent ALL horizontal overflow on mobile ── */
+    @media (max-width: 768px) {
+      html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+
+      /* Fix mob-menu links to have proper tap targets */
+      .mob-menu a {
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 8px 32px;
+        -webkit-tap-highlight-color: rgba(45, 58, 140, 0.12);
+      }
+
+      /* ── HERO: professional mobile layout matching design ── */
+      .hero {
+        flex-direction: column !important;
+        padding: calc(var(--nav-h) + 24px) 0 0 0 !important;
+        gap: 0 !important;
+        align-items: stretch !important;
+        min-height: 100svh !important;
+        background: var(--bg) !important;
+      }
+
+      /* 1st: text content */
+      .hero-content {
+        order: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 24px 12px 24px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        position: relative !important;
+        z-index: 3 !important;
+      }
+
+      /* 2nd: 3D canvas */
+      canvas#heroCanvas {
+        order: 2 !important;
+        width: 100% !important;
+        height: 340px !important;
+        position: relative !important;
+        inset: auto !important;
+        border-radius: 0 !important;
+        margin-top: -15px !important;
+        margin-bottom: 0 !important;
+        display: block !important;
+        z-index: 1 !important;
+      }
+
+      /* 3rd: scroll indicator */
+      .hero-scroll {
+        order: 3 !important;
+        display: flex !important;
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px 0 24px !important;
+        gap: 6px !important;
+        opacity: 1 !important;
+        animation: none !important;
+        background: var(--bg) !important;
+      }
+
+      .hero-scroll-label {
+        font-family: var(--mono) !important;
+        font-size: 9px !important;
+        letter-spacing: .2em !important;
+        text-transform: uppercase !important;
+        color: var(--text3) !important;
+      }
+
+      .hero-scroll-bar {
+        display: none !important;
+      }
+
+      .hero-scroll-arrow {
+        display: block !important;
+      }
+
+      .hero-vignette { display: none !important; }
+
+      /* Availability badge */
+      .hero-avail {
+        font-size: 10px !important;
+        letter-spacing: .10em !important;
+        margin-bottom: 14px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+      }
+
+      /* Eyebrow label */
+      .hero-eyebrow {
+        font-size: 10px !important;
+        letter-spacing: .14em !important;
+        margin-bottom: 16px !important;
+        color: var(--text2) !important;
+        line-height: 1.6 !important;
+        max-width: 100% !important;
+      }
+
+      /* Name */
+      .hero-name {
+        font-size: clamp(38px, 10vw, 56px) !important;
+        white-space: normal !important;
+        line-height: 1.0 !important;
+        margin-bottom: 18px !important;
+        letter-spacing: -.03em !important;
+      }
+
+      /* Typewriter role */
+      .hero-role-wrap {
+        font-size: 11.5px !important;
+        letter-spacing: .12em !important;
+        margin-bottom: 18px !important;
+        color: var(--text2) !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+
+      /* Sub description */
+      .hero-sub {
+        font-size: 14px !important;
+        line-height: 1.7 !important;
+        color: var(--text2) !important;
+        margin-bottom: 28px !important;
+        max-width: 100% !important;
+        animation: none !important;
+        opacity: 1 !important;
+      }
+
+      /* Buttons */
+      .hero-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        align-items: flex-start !important;
+        opacity: 1 !important;
+        animation: none !important;
+      }
+
+      /* Primary button row */
+      .action-row:first-child {
+        display: flex !important;
+        flex-direction: row !important;
+        width: auto !important;
+      }
+
+      /* Secondary buttons row */
+      .action-row:last-child {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+      }
+
+      .action-row {
+        width: auto !important;
+      }
+
+      .magnetic {
+        display: inline-flex !important;
+      }
+
+      /* Inside the secondary row, each magnetic wrapper takes equal space */
+      .action-row:last-child .magnetic {
+        flex: 1 !important;
+        display: flex !important;
+      }
+
+      .action-row:last-child .magnetic .btn-g {
+        width: 100% !important;
+      }
+
+      /* Primary CTA — compact, left-aligned, NOT full width */
+      .btn-p {
+        width: auto !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        min-height: 52px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        padding: 14px 28px !important;
+        border-radius: 12px !important;
+        letter-spacing: .01em !important;
+        white-space: nowrap !important;
+      }
+
+      /* Secondary ghost buttons — separate, equal, proper gaps */
+      .btn-g {
+        flex: 1 !important;
+        justify-content: center !important;
+        min-height: 48px !important;
+        font-size: 11.5px !important;
+        font-weight: 500 !important;
+        padding: 11px 6px !important;
+        border-radius: 12px !important;
+        gap: 5px !important;
+        white-space: nowrap !important;
+        border: 1.5px solid var(--border2) !important;
+        background: transparent !important;
+      }
+
+      .btn-g svg {
+        width: 13px !important;
+        height: 13px !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* Section padding: more breathing room */
+      .section {
+        padding: 56px 20px !important;
+      }
+
+      /* Skills: single column, no overflow */
+      .skills-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+      }
+
+      .skills-viz {
+        position: static !important;
+        padding: 0;
+      }
+
+      .skill-pills {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      /* Skill pills: slightly larger text for readability */
+      .skill-pill {
+        font-size: 10px !important;
+        padding: 5px 10px !important;
+        white-space: nowrap;
+      }
+
+      /* Projects: single column */
+      .proj-track {
+        grid-template-columns: 1fr !important;
+        padding: 0 20px 48px !important;
+        gap: 16px !important;
+      }
+
+      .proj-card {
+        padding: 20px 18px !important;
+      }
+
+      /* Timeline: tighter left padding */
+      .tl-item {
+        padding: 24px 16px 24px 36px !important;
+      }
+
+      .tl-role {
+        font-size: 17px !important;
+      }
+
+      /* About photo: center it */
+      .about-grid {
+        grid-template-columns: 1fr !important;
+        gap: 32px;
+      }
+
+      .photo-wrap {
+        margin: 0 auto !important;
+        width: 120px !important;
+      }
+
+      /* Contact grid: stack */
+      .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 32px;
+      }
+
+      /* Education grid: single col */
+      .edu-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Footer: center everything */
+      footer {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+        padding: 24px 20px !important;
+      }
+
+      /* Form: full width inputs */
+      .form-wrap {
+        padding: 20px 16px !important;
+        animation: none !important; /* disable 3D float on mobile — too heavy */
+      }
+
+      .form-wrap:hover {
+        transform: none !important;
+        animation: none !important;
+      }
+
+      /* Nav logo text */
+      .nav-logo-3d {
+        font-size: 13px;
+      }
+
+      /* Exit overlay box: full width on small screens */
+      #exit-box {
+        padding: 28px 20px !important;
+        width: 95% !important;
+      }
+    }
+
+    /* ── THEME TOGGLE SWITCH ── */
+    .theme-toggle-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      outline: none;
+    }
+    .theme-toggle-btn:focus,
+    .theme-toggle-btn:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+
+    /* Remove focus outline box from nav and action buttons */
+    a:focus, a:focus-visible,
+    button:focus, button:focus-visible,
+    .nav-logo:focus, .nav-logo:focus-visible,
+    .hamburger:focus, .hamburger:focus-visible,
+    .btn-p:focus, .btn-p:focus-visible,
+    .btn-g:focus, .btn-g:focus-visible,
+    .nav-cta:focus, .nav-cta:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+    /* Make the li holding the toggle button flex-aligned */
+    .nav-links li:has(#themeToggle) {
+      display: flex;
+      align-items: center;
+      margin-left: 4px;
+    }
+    .theme-toggle-track {
+      display: inline-flex;
+      align-items: center;
+      width: 44px;
+      height: 24px;
+      border-radius: 99px;
+      background: var(--bg3);
+      border: 1.5px solid var(--border2);
+      position: relative;
+      transition: background .35s, border-color .35s;
+    }
+    .theme-toggle-thumb {
+      position: absolute;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), background .35s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.18);
+      color: #fff;
+    }
+    body.dark .theme-toggle-track {
+      background: #1a1612;
+      border-color: rgba(200,180,140,0.25);
+    }
+    body.dark .theme-toggle-thumb {
+      transform: translateX(20px);
+      background: #2D3A8C;
+    }
+    /* Smooth full-page theme transition */
+    body, body * {
+      transition-property: background-color, border-color, color, box-shadow;
+      transition-duration: 0.35s;
+      transition-timing-function: ease;
+    }
+    /* But keep animation-driven things from inheriting transition */
+    canvas, svg *, .letter, .hero-scroll-bar::after {
+      transition: none !important;
+    }
+
+    /* ── DARK MODE OVERRIDES ── */
+    body.dark {
+      background: var(--bg);
+      color: var(--text);
+    }
+    body.dark nav.scrolled {
+      background: rgba(14,12,10,0.94);
+    }
+    body.dark .mob-menu {
+      background: rgba(14,12,10,0.98);
+    }
+    body.dark .hero {
+      background: var(--bg);
+    }
+    body.dark .hero-vignette {
+      background:
+        radial-gradient(ellipse 100% 30% at 50% 100%, rgba(14,12,10,0.95) 0%, transparent 70%),
+        linear-gradient(to right, rgba(14,12,10,0.55) 0%, rgba(14,12,10,0.2) 40%, transparent 55%);
+    }
+    body.dark .btn-p {
+      background: #2D3A8C;
+      border-color: #2D3A8C;
+    }
+    body.dark .btn-g {
+      border-color: rgba(200,180,140,0.22);
+      color: var(--text2);
+    }
+    body.dark .btn-g:hover {
+      border-color: rgba(200,180,140,0.45);
+      color: var(--text);
+    }
+    body.dark .skill-pill {
+      background: rgba(200,180,140,0.07);
+      border-color: rgba(200,180,140,0.14);
+    }
+    body.dark .proj-card,
+    body.dark .edu-card,
+    body.dark .tl-item,
+    body.dark .form-wrap {
+      background: var(--card-bg);
+      border-color: rgba(200,180,140,0.12);
+    }
+    body.dark .form-input,
+    body.dark .form-textarea {
+      background: #1A1612;
+      border-color: rgba(200,180,140,0.15);
+      color: var(--text);
+    }
+    body.dark .form-input::placeholder,
+    body.dark .form-textarea::placeholder {
+      color: var(--text3);
+    }
+    body.dark footer {
+      background: var(--bg2);
+      border-color: rgba(200,180,140,0.10);
+    }
+    body.dark #exit-overlay {
+      background: rgba(14,12,10,0.92);
+    }
+    body.dark #exit-box {
+      background: var(--card-bg);
+      border-color: rgba(200,180,140,0.14);
+      color: var(--text);
+    }
+    body.dark #exit-box h2,
+    body.dark #exit-box p {
+      color: var(--text);
+    }
+    body.dark .nav-cta {
+      background: #2D3A8C !important;
+    }
+    body.dark ::selection {
+      background: var(--gold);
+      color: #0E0C0A;
+    }
+    body.dark ::-webkit-scrollbar-track { background: var(--bg); }
+
+    /* ── Extra-small phones (≤ 390px) ── */
+    @media (max-width: 390px) {
+      .hero {
+        padding: calc(var(--nav-h) + 12px) 16px 32px 16px !important;
+      }
+
+      canvas#heroCanvas {
+        height: 240px !important;
+      }
+
+      .hero-name {
+        font-size: clamp(28px, 9vw, 46px) !important;
+        white-space: normal;
+      }
+
+      .section {
+        padding: 44px 16px !important;
+      }
+
+      .proj-track {
+        padding: 0 16px 40px !important;
+      }
+
+      .btn-p, .btn-g {
+        font-size: 14px;
+        padding: 13px 16px;
+      }
+
+      .meta-k {
+        min-width: 80px !important;
+      }
+    }
   </style>
 
 </head>
@@ -2668,11 +3218,52 @@
       <li><a href="#projects">Projects</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#contact" class="nav-cta magnetic" data-magnetic>Hire Me</a></li>
+      <li>
+        <button id="themeToggle" aria-label="Toggle day/night" class="theme-toggle-btn">
+          <span class="theme-toggle-track">
+            <span class="theme-toggle-thumb">
+              <!-- Sun -->
+              <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              <!-- Moon -->
+              <svg id="iconMoon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </li>
     </ul>
 
-    <button class="hamburger" id="ham" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-mobile-right">
+      <button id="themeToggleMobile" aria-label="Toggle day/night" class="theme-toggle-btn">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-thumb" id="thumbMobile">
+            <svg id="iconSunMobile" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg id="iconMoonMobile" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+      <button class="hamburger" id="ham" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
   <div class="mob-menu" id="mob">
     <a href="#about">About</a>
@@ -2740,7 +3331,7 @@
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              CV
+              Download CV
             </a>
           </div>
           <div class="magnetic" data-magnetic>
@@ -2749,7 +3340,7 @@
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
               </svg>
-              Email
+              Email Me
             </a>
           </div>
         </div>
@@ -2757,7 +3348,7 @@
     </div>
     <div class="hero-scroll">
       <span class="hero-scroll-label">Scroll</span>
-      <div class="hero-scroll-bar"></div>
+      <svg class="hero-scroll-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg>
     </div>
   </section>
 
@@ -3551,6 +4142,62 @@
       ham?.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
       mob?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); }));
 
+      // Day / Night toggle — desktop + mobile
+      const themeToggle = document.getElementById('themeToggle');
+      const themeToggleMobile = document.getElementById('themeToggleMobile');
+      const iconSun = document.getElementById('iconSun');
+      const iconMoon = document.getElementById('iconMoon');
+      const iconSunMobile = document.getElementById('iconSunMobile');
+      const iconMoonMobile = document.getElementById('iconMoonMobile');
+
+      const DARK_VARS = {
+        '--bg': '#0E0C0A', '--bg2': '#161210', '--bg3': '#1E1814',
+        '--bg-rgb': '14, 12, 10', '--card-bg': '#1A1612',
+        '--text': '#F0E8DC', '--text2': '#C8B8A0', '--text3': '#8C7A60',
+        '--accent': '#F0E8DC', '--accent2': '#D4C4A8',
+        '--border': 'rgba(200,180,140,0.10)', '--border2': 'rgba(200,180,140,0.18)',
+      };
+      const LIGHT_VARS = {
+        '--bg': '#F8F4EE', '--bg2': '#F0EAE0', '--bg3': '#E6DDD0',
+        '--bg-rgb': '248, 244, 238', '--card-bg': '#FDFAF6',
+        '--text': '#2C2018', '--text2': '#4A3828', '--text3': '#8C7055',
+        '--accent': '#2C2018', '--accent2': '#3A2A1C',
+        '--border': 'rgba(100,70,30,0.10)', '--border2': 'rgba(100,70,30,0.18)',
+      };
+
+      function applyTheme(dark) {
+        const vars = dark ? DARK_VARS : LIGHT_VARS;
+        for (const [k, v] of Object.entries(vars)) {
+          document.documentElement.style.setProperty(k, v);
+        }
+        if (dark) {
+          document.body.classList.add('dark');
+          if (iconSun) iconSun.style.display = 'none';
+          if (iconMoon) iconMoon.style.display = 'block';
+          if (iconSunMobile) iconSunMobile.style.display = 'none';
+          if (iconMoonMobile) iconMoonMobile.style.display = 'block';
+        } else {
+          document.body.classList.remove('dark');
+          if (iconSun) iconSun.style.display = 'block';
+          if (iconMoon) iconMoon.style.display = 'none';
+          if (iconSunMobile) iconSunMobile.style.display = 'block';
+          if (iconMoonMobile) iconMoonMobile.style.display = 'none';
+        }
+        try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch(e) {}
+      }
+
+      // Init from saved preference or system preference
+      let isDark = false;
+      try {
+        const saved = localStorage.getItem('sa-theme');
+        if (saved) isDark = saved === 'dark';
+        else isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      } catch(e) {}
+      applyTheme(isDark);
+
+      themeToggle?.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); });
+      themeToggleMobile?.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); });
+
       /* ─────────────────────────────────────────────
          REVEAL ON SCROLL
       ───────────────────────────────────────────── */
@@ -3651,21 +4298,6 @@
         const cube = document.getElementById('skillCube');
         const scene = document.getElementById('cubeScene');
         if (!cube || !scene) return;
-
-        // Subtle background particles
-        for (let i = 0; i < 15; i++) {
-          const p = document.createElement('div');
-          p.className = 'cube-particle';
-          const tx = (Math.random() - 0.5) * 200;
-          const ty = (Math.random() - 0.5) * 200;
-          p.style.setProperty('--tx', `${tx}px`);
-          p.style.setProperty('--ty', `${ty}px`);
-          p.style.left = '50%'; p.style.top = '50%';
-          p.style.animation = `floatParticle ${2.5 + Math.random() * 3}s linear infinite`;
-          p.style.animationDelay = `${Math.random() * 5}s`;
-          scene.appendChild(p);
-        }
-
 
         let rotX = -22, rotY = 38;
         let isDragging = false, lastX = 0, lastY = 0;
@@ -3988,6 +4620,10 @@
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 100);
         camera.position.set(0, 0, 10);
+        if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(pointer: coarse)').matches) {
+          camera.position.set(0, 0.5, 10);
+          camera.lookAt(0, 0.5, 0);
+        }
 
         function resize() {
           const w = canvas.offsetWidth, h = canvas.offsetHeight;
@@ -4212,14 +4848,11 @@
 
         /* ── 5. Outer Faint Halo Shell — removed ── */
 
-
-
-        // Add 20,000 tiny surrounding particles (or 5,000 on mobile)
+        // Add tiny surrounding particles (or 5,000 on mobile)
         const SMALL_PARTICLE_COUNT = isMobileDevice ? 5000 : 20000;
         const smallStarGeo = new THREE.BufferGeometry();
         const smallStarPos = new Float32Array(SMALL_PARTICLE_COUNT * 3);
         for (let i = 0; i < SMALL_PARTICLE_COUNT; i++) {
-          // Spherical shell distribution (radius 5.5 to 8.5) to ensure particles surround, not overlap, the main object
           const r = 5.5 + Math.random() * 3;
           const theta = Math.random() * Math.PI * 2;
           const phi = Math.acos(2 * Math.random() - 1);
@@ -4229,39 +4862,26 @@
         }
         smallStarGeo.setAttribute('position', new THREE.BufferAttribute(smallStarPos, 3));
         const smallStarMat = new THREE.PointsMaterial({
-          color: 0xFFD700, // full rich gold
-          size: 0.025, // visible tiny particles
-          map: null, // solid color without texture
-          transparent: false,
-          opacity: 1.0,
-          depthWrite: false,
-          blending: THREE.AdditiveBlending,
-          sizeAttenuation: true
+          color: 0xFFD700, size: 0.025, map: null,
+          transparent: false, opacity: 1.0,
+          depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
         });
         const smallStars = new THREE.Points(smallStarGeo, smallStarMat);
         scene.add(smallStars);
-
-
-
-        // Removed big and other ambient particles, keeping only tiny gold particles
 
         /* ── 10. Left Side Subtle Drift ── */
         const leftCount = 1200;
         const leftGeo = new THREE.BufferGeometry();
         const leftPos = new Float32Array(leftCount * 3);
         for (let i = 0; i < leftCount; i++) {
-          leftPos[i * 3] = -16 + Math.random() * 8; // Deep left bias
+          leftPos[i * 3] = -16 + Math.random() * 8;
           leftPos[i * 3 + 1] = (Math.random() - 0.5) * 22;
           leftPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
         }
         leftGeo.setAttribute('position', new THREE.BufferAttribute(leftPos, 3));
         const leftMat = new THREE.PointsMaterial({
-          color: C_AMBER,
-          size: 0.08,
-          map: dotTex,
-          transparent: true,
-          opacity: 0.35,
-          alphaTest: 0.01
+          color: C_AMBER, size: 0.08, map: dotTex,
+          transparent: true, opacity: 0.35, alphaTest: 0.01
         });
         const leftSide = new THREE.Points(leftGeo, leftMat);
         scene.add(leftSide);
@@ -4271,18 +4891,14 @@
         const textNearGeo = new THREE.BufferGeometry();
         const textNearPos = new Float32Array(textNearCount * 3);
         for (let i = 0; i < textNearCount; i++) {
-          textNearPos[i * 3] = -6 + Math.random() * 6; // Centered-left bias
+          textNearPos[i * 3] = -6 + Math.random() * 6;
           textNearPos[i * 3 + 1] = -4 + Math.random() * 8;
           textNearPos[i * 3 + 2] = -2 + Math.random() * 4;
         }
         textNearGeo.setAttribute('position', new THREE.BufferAttribute(textNearPos, 3));
         const textNearMat = new THREE.PointsMaterial({
-          color: C_GOLD,
-          size: 0.06,
-          map: dotTex,
-          transparent: true,
-          opacity: 0.45,
-          alphaTest: 0.01
+          color: C_GOLD, size: 0.06, map: dotTex,
+          transparent: true, opacity: 0.45, alphaTest: 0.01
         });
         const textNearParticles = new THREE.Points(textNearGeo, textNearMat);
         mainGroup.add(textNearParticles);
@@ -4292,18 +4908,14 @@
         const deepLeftGeo = new THREE.BufferGeometry();
         const deepLeftPos = new Float32Array(deepLeftCount * 3);
         for (let i = 0; i < deepLeftCount; i++) {
-          deepLeftPos[i * 3] = -14 + Math.random() * 8; // Further left bias
+          deepLeftPos[i * 3] = -14 + Math.random() * 8;
           deepLeftPos[i * 3 + 1] = -10 + Math.random() * 20;
           deepLeftPos[i * 3 + 2] = -5 + Math.random() * 10;
         }
         deepLeftGeo.setAttribute('position', new THREE.BufferAttribute(deepLeftPos, 3));
         const deepLeftMat = new THREE.PointsMaterial({
-          color: C_AMBER,
-          size: 0.07,
-          map: dotTex,
-          transparent: true,
-          opacity: 0.4,
-          alphaTest: 0.01
+          color: C_AMBER, size: 0.07, map: dotTex,
+          transparent: true, opacity: 0.4, alphaTest: 0.01
         });
         const deepLeftParticles = new THREE.Points(deepLeftGeo, deepLeftMat);
         mainGroup.add(deepLeftParticles);
@@ -4316,69 +4928,152 @@
           mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         }, { passive: true });
 
+        // On mobile canvas is below text - center the globe with slight upward shift
+        if (isMobileDevice) {
+          mainGroup.position.y = 0.5;
+        }
+
+        /* ── Drag to Rotate ── */
+        let isDragging = false;
+        let prevDragX = 0, prevDragY = 0;
+        let dragVelX = 0, dragVelY = 0;
+        let userRotX = 0, userRotY = 0;
+        let autoSpin = true;
+
+        canvas.addEventListener('mousedown', e => {
+          isDragging = true;
+          autoSpin = false;
+          prevDragX = e.clientX;
+          prevDragY = e.clientY;
+          dragVelX = 0; dragVelY = 0;
+          canvas.style.cursor = 'grabbing';
+        });
+        window.addEventListener('mouseup', () => {
+          isDragging = false;
+          canvas.style.cursor = 'grab';
+        });
+        canvas.addEventListener('mousemove', e => {
+          if (!isDragging) return;
+          const dx = e.clientX - prevDragX;
+          const dy = e.clientY - prevDragY;
+          dragVelX = dx * 0.012;
+          dragVelY = dy * 0.012;
+          userRotY += dragVelX;
+          userRotX += dragVelY;
+          prevDragX = e.clientX;
+          prevDragY = e.clientY;
+        });
+
+        /* ── Touch drag ── */
+        let touchStartX = 0, touchStartY = 0;
+        let pinchStartDist = 0;
+        canvas.addEventListener('touchstart', e => {
+          autoSpin = false;
+          if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          } else if (e.touches.length === 2) {
+            pinchStartDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+          }
+        }, { passive: true });
+        canvas.addEventListener('touchmove', e => {
+          if (e.touches.length === 1) {
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            userRotY += dx * 0.012;
+            userRotX += dy * 0.012;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          } else if (e.touches.length === 2) {
+            const dist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            const delta = (dist - pinchStartDist) * 0.02;
+            targetZoom = Math.max(5, Math.min(18, targetZoom - delta));
+            pinchStartDist = dist;
+          }
+        }, { passive: true });
+
+        /* ── Scroll / Wheel Zoom ── */
+        let targetZoom = camera.position.z;
+        canvas.style.cursor = 'grab';
+        canvas.addEventListener('wheel', e => {
+          e.preventDefault();
+          targetZoom = Math.max(5, Math.min(18, targetZoom + e.deltaY * 0.02));
+        }, { passive: false });
+
+        /* ── Inertia decay when not dragging ── */
         let t = 0;
         function animate() {
           requestAnimationFrame(animate);
-          t += isMobileDevice ? 0.005 : 0.008; // slower animation on mobile for better performance
+          t += isMobileDevice ? 0.005 : 0.008;
 
-          // Smooth rotations (faster)
-          mainGroup.rotation.y = t * 0.35 + mouseX * 0.2;
-          mainGroup.rotation.x = t * 0.22 + mouseY * 0.2;
+          // Inertia
+          if (!isDragging) {
+            dragVelX *= 0.92;
+            dragVelY *= 0.92;
+            userRotY += dragVelX;
+            userRotX += dragVelY;
+          }
+
+          // Smooth zoom
+          camera.position.z += (targetZoom - camera.position.z) * 0.08;
+
+          // Auto spin when idle
+          const autoT = autoSpin ? t * 0.35 : 0;
+
+          // Combine user rotation with auto spin
+          mainGroup.rotation.y = userRotY + autoT + mouseX * 0.1;
+          mainGroup.rotation.x = userRotX + mouseY * 0.1;
 
           // Counter-orbital rotations
-          innerGroup.rotation.y = -t * 0.6; // Reverse direction
-          outerGroup.rotation.y = t * 0.4;  // Forward direction
-          slimGroup.rotation.y = -t * 0.3;  // Opposite to outerGroup
-          slimGroup.rotation.x = t * 0.15;  // Slight tilt rotation
+          innerGroup.rotation.y = -t * 0.6;
+          outerGroup.rotation.y = t * 0.4;
+          slimGroup.rotation.y = -t * 0.3;
+          slimGroup.rotation.x = t * 0.15;
 
-
-          network.material.dashOffset = -t * 1.5; // Faster spark flow
+          network.material.dashOffset = -t * 1.5;
           network2.material.dashOffset = -t * 2.2;
-          slimNetwork.material.dashOffset = -t * 0.9;  // Slow elegant flow
-          slimNetwork2.material.dashOffset = -t * 1.4; // Slightly faster secondary
-          innerGoldFlow.material.dashOffset = -t * 1.2; // Fast molten flow
-          innerHighlightFlow.material.dashOffset = -t * 3.5; // High-speed reflections
-          innerSparks.rotation.y = t * 1.2; // Fast swirling
+          slimNetwork.material.dashOffset = -t * 0.9;
+          slimNetwork2.material.dashOffset = -t * 1.4;
+          innerGoldFlow.material.dashOffset = -t * 1.2;
+          innerHighlightFlow.material.dashOffset = -t * 3.5;
+          innerSparks.rotation.y = t * 1.2;
           innerSparks.position.y = Math.sin(t) * 0.08;
-          innerSparks.material.size = 0.03 + Math.sin(t * 8) * 0.015; // Faster flickering
+          innerSparks.material.size = 0.03 + Math.sin(t * 8) * 0.015;
 
-          // Pulse neural nodes — removed
-          // neuralNodes.material.size = 0.12 + Math.sin(t * 3) * 0.04;
-
-          // Animate network flow particles (moving through neural lines)
+          // Animate network flow particles
           const flowPos = flowParticles.geometry.attributes.position;
           const wireframePos = wireGeo.attributes.position;
           const wireframeArray = wireframePos.array;
           const wireframeCount = wireframePos.count;
-          
           for (let i = 0; i < flowParticleData.length; i++) {
             const particle = flowParticleData[i];
-            // Traverse through all points sequentially with different starting offsets (slowed down)
             const phase = (t * particle.speed * 0.8 + particle.offset * wireframeCount) % wireframeCount;
             const idx = Math.floor(phase) * 3;
-            
-            // Linear interpolation between consecutive wireframe points
             const nextIdx = ((Math.floor(phase) + 1) % wireframeCount) * 3;
             const lerp = phase - Math.floor(phase);
-            
-            const x = wireframeArray[idx] * (1 - lerp) + wireframeArray[nextIdx] * lerp;
-            const y = wireframeArray[idx + 1] * (1 - lerp) + wireframeArray[nextIdx + 1] * lerp;
-            const z = wireframeArray[idx + 2] * (1 - lerp) + wireframeArray[nextIdx + 2] * lerp;
-            
-            flowPos.setXYZ(i, x, y, z);
+            flowPos.setXYZ(i,
+              wireframeArray[idx] * (1 - lerp) + wireframeArray[nextIdx] * lerp,
+              wireframeArray[idx + 1] * (1 - lerp) + wireframeArray[nextIdx + 1] * lerp,
+              wireframeArray[idx + 2] * (1 - lerp) + wireframeArray[nextIdx + 2] * lerp
+            );
           }
           flowPos.needsUpdate = true;
           flowParticles.material.size = 0.12 + Math.sin(t * 6) * 0.05;
 
-
-
-          // Animate small surrounding particles
-          smallStars.rotation.y = t * 0.07;
-          smallStars.rotation.z = t * 0.03;
+          // Animate surrounding particles — speed up when zoomed in
+          const zoomFactor = 1 + (10 - camera.position.z) * 0.04;
+          smallStars.rotation.y = t * 0.07 * zoomFactor;
+          smallStars.rotation.z = t * 0.03 * zoomFactor;
           leftSide.rotation.y = t * 0.06;
-          leftSide.position.x = Math.sin(t * 0.5) * 0.2; // Faster sway
-          textNearParticles.rotation.y = -t * 0.08;
-          textNearParticles.rotation.z = t * 0.05;
+          leftSide.position.x = Math.sin(t * 0.5) * 0.2;
+          textNearParticles.rotation.y = -t * 0.08 * zoomFactor;
+          textNearParticles.rotation.z = t * 0.05 * zoomFactor;
           deepLeftParticles.rotation.y = t * 0.07;
           deepLeftParticles.position.x = -1 + Math.sin(t * 0.4) * 0.3;
 
@@ -4386,7 +5081,7 @@
           const breathe = 1 + Math.sin(t * 1.5) * 0.02;
           mainGroup.scale.setScalar(breathe);
 
-          // Dynamic Camera (disabled on mobile for performance)
+          // Dynamic Camera (disabled on mobile)
           if (!isMobileDevice) {
             camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
             camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.05;
@@ -4487,7 +5182,7 @@
     }
 
     #exit-box {
-      background: #FDFAF6;
+      background: var(--card-bg);
       border: 1px solid rgba(100, 70, 30, 0.14);
       border-radius: 16px;
       padding: 40px 36px;
