@@ -2477,7 +2477,7 @@
       }
 
       .hero-name {
-        font-size: clamp(40px, 12vw, 72px);
+        font-size: clamp(46px, 13vw, 80px);
       }
 
       .hero-eyebrow {
@@ -2559,7 +2559,7 @@
       }
 
       .hero-name {
-        font-size: clamp(36px, 11vw, 60px);
+        font-size: clamp(40px, 12vw, 66px);
         line-height: 1.2;
       }
 
@@ -2788,7 +2788,7 @@
 
       /* Name */
       .hero-name {
-        font-size: clamp(46px, 12vw, 68px) !important;
+        font-size: clamp(52px, 13vw, 76px) !important;
         white-space: normal !important;
         line-height: 1.0 !important;
         margin-bottom: 18px !important;
@@ -3167,7 +3167,7 @@
       }
 
       .hero-name {
-        font-size: clamp(36px, 11vw, 58px) !important;
+        font-size: clamp(40px, 12vw, 64px) !important;
         white-space: normal;
       }
 
@@ -4650,6 +4650,19 @@
         }
         const dotTex = getDotTexture();
 
+        // Create a completely solid circle texture (no gradient, no fuzzy edges)
+        function getSolidDotTexture() {
+          const canvas = document.createElement('canvas');
+          canvas.width = 64; canvas.height = 64;
+          const ctx = canvas.getContext('2d');
+          ctx.beginPath();
+          ctx.arc(32, 32, 30, 0, Math.PI * 2);
+          ctx.fillStyle = 'white';
+          ctx.fill();
+          return new THREE.CanvasTexture(canvas);
+        }
+        const solidDotTex = getSolidDotTexture();
+
         /* ── 1. Warm "Neural Gold" Palette ── */
         const C_GOLD = new THREE.Color(0xb8860b); // Richer Gold
         const C_AMBER = new THREE.Color(0xcd7f32); // Amber glow
@@ -4788,10 +4801,10 @@
         const flowParticleMat = new THREE.PointsMaterial({
           color: C_INDIGO.clone(), // indigo color (updated per frame for dark mode)
           size: 0.08,
-          map: dotTex,
+          map: solidDotTex,
           transparent: true,
-          opacity: 0.9,
-          alphaTest: 0.01,
+          opacity: 1.0,
+          alphaTest: 0.5,
           sizeAttenuation: true
         });
         const flowParticles = new THREE.Points(flowParticleGeo, flowParticleMat);
@@ -4842,7 +4855,7 @@
         }
         sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
         const sparkMat = new THREE.PointsMaterial({
-          color: 0xFFC857, size: 0.04, map: dotTex, transparent: true, opacity: 0.8, alphaTest: 0.01
+          color: 0xFFC857, size: 0.04, map: solidDotTex, transparent: true, opacity: 1.0, alphaTest: 0.5
         });
         const innerSparks = new THREE.Points(sparkGeo, sparkMat);
         innerGroup.add(innerSparks);
@@ -4864,9 +4877,9 @@
         }
         smallStarGeo.setAttribute('position', new THREE.BufferAttribute(smallStarPos, 3));
         const smallStarMat = new THREE.PointsMaterial({
-          color: 0xFFD700, size: 0.03, map: dotTex,
-          transparent: true, opacity: 1.0, alphaTest: 0.01,
-          depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
+          color: 0xFFD700, size: 0.03, map: solidDotTex,
+          transparent: true, opacity: 1.0, alphaTest: 0.5,
+          depthWrite: false, sizeAttenuation: true
         });
         const smallStars = new THREE.Points(smallStarGeo, smallStarMat);
         scene.add(smallStars);
