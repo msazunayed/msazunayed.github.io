@@ -4194,8 +4194,13 @@
       let isDark = false;
       try {
         const saved = localStorage.getItem('sa-theme');
-        if (saved) isDark = saved === 'dark';
-        else isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved) {
+          isDark = saved === 'dark';
+        } else {
+          // Default to dark mode at night (6 PM - 6 AM), white theme in the day
+          const hour = new Date().getHours();
+          isDark = (hour >= 18 || hour < 6);
+        }
       } catch(e) {}
       applyTheme(isDark);
 
@@ -4873,6 +4878,7 @@
           depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
         });
         const smallStars = new THREE.Points(smallStarGeo, smallStarMat);
+        smallStars.visible = !isMobileDevice;
         scene.add(smallStars);
 
         /* ── 10. Left Side Subtle Drift ── */
