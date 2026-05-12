@@ -4821,7 +4821,7 @@
         outerGroup.add(network2);
 
         /* ── 4d. Slim Outer Connected Neural Network ── */
-        const slimGeo = new THREE.IcosahedronGeometry(3.2, 4);
+        const slimGeo = new THREE.IcosahedronGeometry(4.2, 4);
         const slimPos = slimGeo.attributes.position;
         for (let i = 0; i < slimPos.count; i++) {
           slimPos.setX(i, slimPos.getX(i) + (Math.random() - 0.5) * 0.04);
@@ -4831,10 +4831,10 @@
         const slimWireGeo = new THREE.WireframeGeometry(slimGeo);
         const slimMat = new THREE.LineDashedMaterial({
           color: new THREE.Color(0xffd700),
-          dashSize: 0.08,
-          gapSize: 0.55,
+          dashSize: 0.20,
+          gapSize: 0.40,
           transparent: true,
-          opacity: 0.38,
+          opacity: 0.52,
           linewidth: 1
         });
         const slimNetwork = new THREE.LineSegments(slimWireGeo, slimMat);
@@ -4843,15 +4843,26 @@
 
         const slimMat2 = new THREE.LineDashedMaterial({
           color: new THREE.Color(0xfff3c0),
-          dashSize: 0.04,
-          gapSize: 0.72,
+          dashSize: 0.12,
+          gapSize: 0.55,
           transparent: true,
-          opacity: 0.25,
+          opacity: 0.32,
           linewidth: 1
         });
         const slimNetwork2 = new THREE.LineSegments(slimWireGeo, slimMat2);
         slimNetwork2.computeLineDistances();
         slimGroup.add(slimNetwork2);
+
+        /* ── Glow pass — slightly scaled copy for bloom thickness ── */
+        const slimMatGlow = new THREE.LineBasicMaterial({
+          color: new THREE.Color(0xffb300),
+          transparent: true,
+          opacity: 0.08,
+          linewidth: 1
+        });
+        const slimNetworkGlow = new THREE.LineSegments(slimWireGeo, slimMatGlow);
+        slimNetworkGlow.scale.setScalar(1.008);
+        slimGroup.add(slimNetworkGlow);
 
         /* ── 4c. Neural Nodes (Glowing Connection Points) — removed ── */
         // const nodeMat = new THREE.PointsMaterial({
@@ -4955,83 +4966,257 @@
         innerGroup.add(innerSparks);
 
 
-        /* ── 5. Outer Faint Halo Shell — removed ── */
-
-        // Add tiny surrounding particles (20,000 across all devices)
-        const SMALL_PARTICLE_COUNT = 20000;
-        const smallStarGeo = new THREE.BufferGeometry();
-        const smallStarPos = new Float32Array(SMALL_PARTICLE_COUNT * 3);
-        for (let i = 0; i < SMALL_PARTICLE_COUNT; i++) {
-          const r = 5.5 + Math.random() * 3;
+        /* ── 5. Nano Particle Cloud — tiny dots surrounding all sides ── */
+        const NANO_COUNT = isMobileDevice ? 15000 : 60000;
+        const nanoGeo = new THREE.BufferGeometry();
+        const nanoPos = new Float32Array(NANO_COUNT * 3);
+        for (let i = 0; i < NANO_COUNT; i++) {
+          const r = 3.2 + Math.random() * 2.0;
           const theta = Math.random() * Math.PI * 2;
           const phi = Math.acos(2 * Math.random() - 1);
-          smallStarPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-          smallStarPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-          smallStarPos[i * 3 + 2] = r * Math.cos(phi);
+          nanoPos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          nanoPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          nanoPos[i * 3 + 2] = r * Math.cos(phi);
         }
-        smallStarGeo.setAttribute('position', new THREE.BufferAttribute(smallStarPos, 3));
-        const smallStarMat = new THREE.PointsMaterial({
-          color: 0xFFD700, size: 0.03, map: solidDotTex,
-          transparent: true, opacity: 1.0, alphaTest: 0.5,
-          depthWrite: false, sizeAttenuation: true
+        nanoGeo.setAttribute('position', new THREE.BufferAttribute(nanoPos, 3));
+        const nanoMat = new THREE.PointsMaterial({
+          color: 0xFFD700,
+          size: 0.022,
+          transparent: true,
+          opacity: 0.55,
+          depthWrite: false,
+          sizeAttenuation: true
         });
-        const smallStars = new THREE.Points(smallStarGeo, smallStarMat);
-        scene.add(smallStars);
+        const nanoCloud = new THREE.Points(nanoGeo, nanoMat);
+        scene.add(nanoCloud);
 
-        /* ── 10. Left Side Subtle Drift ── */
-        const leftCount = 1200;
-        const leftGeo = new THREE.BufferGeometry();
-        const leftPos = new Float32Array(leftCount * 3);
-        for (let i = 0; i < leftCount; i++) {
-          leftPos[i * 3] = -16 + Math.random() * 8;
-          leftPos[i * 3 + 1] = (Math.random() - 0.5) * 22;
-          leftPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
+        /* ── 5b. Nano Inner Ring — denser close-in layer ── */
+        const NANO2_COUNT = isMobileDevice ? 10000 : 40000;
+        const nano2Geo = new THREE.BufferGeometry();
+        const nano2Pos = new Float32Array(NANO2_COUNT * 3);
+        for (let i = 0; i < NANO2_COUNT; i++) {
+          const r = 2.3 + Math.random() * 1.0;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          nano2Pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          nano2Pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          nano2Pos[i * 3 + 2] = r * Math.cos(phi);
         }
-        leftGeo.setAttribute('position', new THREE.BufferAttribute(leftPos, 3));
-        const leftMat = new THREE.PointsMaterial({
-          color: C_AMBER, size: 0.08, map: dotTex,
-          transparent: true, opacity: 0.35, alphaTest: 0.01
+        nano2Geo.setAttribute('position', new THREE.BufferAttribute(nano2Pos, 3));
+        const nano2Mat = new THREE.PointsMaterial({
+          color: 0xFFF3C0,
+          size: 0.018,
+          transparent: true,
+          opacity: 0.45,
+          depthWrite: false,
+          sizeAttenuation: true
         });
-        const leftSide = new THREE.Points(leftGeo, leftMat);
-        leftSide.visible = !isMobileDevice;
-        scene.add(leftSide);
+        const nanoCloud2 = new THREE.Points(nano2Geo, nano2Mat);
+        scene.add(nanoCloud2);
 
-        /* ── 11. Near-Text Focused Particles ── */
-        const textNearCount = 800;
-        const textNearGeo = new THREE.BufferGeometry();
-        const textNearPos = new Float32Array(textNearCount * 3);
-        for (let i = 0; i < textNearCount; i++) {
-          textNearPos[i * 3] = -6 + Math.random() * 6;
-          textNearPos[i * 3 + 1] = -4 + Math.random() * 8;
-          textNearPos[i * 3 + 2] = -2 + Math.random() * 4;
+        /* ── 5c. Void Nano Particles — filling ALL empty spaces between shells ── */
+
+        // Gap 1: Between inner core (r≈1.5) and mid shell (r≈2.1) — dense interstitial
+        const VOID1_COUNT = isMobileDevice ? 8000 : 28000;
+        const void1Geo = new THREE.BufferGeometry();
+        const void1Pos = new Float32Array(VOID1_COUNT * 3);
+        const void1Speeds = new Float32Array(VOID1_COUNT);
+        const void1Phases = new Float32Array(VOID1_COUNT);
+        for (let i = 0; i < VOID1_COUNT; i++) {
+          const r = 1.55 + Math.random() * 0.52; // fills gap between inner & mid
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          void1Pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          void1Pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          void1Pos[i * 3 + 2] = r * Math.cos(phi);
+          void1Speeds[i] = 0.3 + Math.random() * 0.7;
+          void1Phases[i] = Math.random() * Math.PI * 2;
         }
-        textNearGeo.setAttribute('position', new THREE.BufferAttribute(textNearPos, 3));
-        const textNearMat = new THREE.PointsMaterial({
-          color: C_GOLD, size: 0.06, map: dotTex,
-          transparent: true, opacity: 0.45, alphaTest: 0.01
+        void1Geo.setAttribute('position', new THREE.BufferAttribute(void1Pos, 3));
+        const void1Mat = new THREE.PointsMaterial({
+          color: 0xFFE680,
+          size: isMobileDevice ? 0.028 : 0.020,
+          transparent: true,
+          opacity: 0.70,
+          depthWrite: false,
+          sizeAttenuation: true
         });
-        const textNearParticles = new THREE.Points(textNearGeo, textNearMat);
-        textNearParticles.visible = !isMobileDevice;
-        mainGroup.add(textNearParticles);
+        const voidCloud1 = new THREE.Points(void1Geo, void1Mat);
+        outerGroup.add(voidCloud1);
 
-        /* ── 12. Deep-Left Content Particles ── */
-        const deepLeftCount = 1000;
-        const deepLeftGeo = new THREE.BufferGeometry();
-        const deepLeftPos = new Float32Array(deepLeftCount * 3);
-        for (let i = 0; i < deepLeftCount; i++) {
-          deepLeftPos[i * 3] = -14 + Math.random() * 8;
-          deepLeftPos[i * 3 + 1] = -10 + Math.random() * 20;
-          deepLeftPos[i * 3 + 2] = -5 + Math.random() * 10;
+        // Gap 2: Between mid shell (r≈2.1) and outer slim shell (r≈4.2) — wide interstitial
+        const VOID2_COUNT = isMobileDevice ? 12000 : 45000;
+        const void2Geo = new THREE.BufferGeometry();
+        const void2Pos = new Float32Array(VOID2_COUNT * 3);
+        const void2Speeds = new Float32Array(VOID2_COUNT);
+        const void2Phases = new Float32Array(VOID2_COUNT);
+        for (let i = 0; i < VOID2_COUNT; i++) {
+          const r = 2.15 + Math.random() * 1.95; // fills mid→outer gap
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          void2Pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          void2Pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          void2Pos[i * 3 + 2] = r * Math.cos(phi);
+          void2Speeds[i] = 0.2 + Math.random() * 0.5;
+          void2Phases[i] = Math.random() * Math.PI * 2;
         }
-        deepLeftGeo.setAttribute('position', new THREE.BufferAttribute(deepLeftPos, 3));
-        const deepLeftMat = new THREE.PointsMaterial({
-          color: C_AMBER, size: 0.07, map: dotTex,
-          transparent: true, opacity: 0.4, alphaTest: 0.01
+        void2Geo.setAttribute('position', new THREE.BufferAttribute(void2Pos, 3));
+        const void2Mat = new THREE.PointsMaterial({
+          color: 0xC8A0FF,
+          size: isMobileDevice ? 0.022 : 0.016,
+          transparent: true,
+          opacity: 0.55,
+          depthWrite: false,
+          sizeAttenuation: true
         });
-        const deepLeftParticles = new THREE.Points(deepLeftGeo, deepLeftMat);
-        deepLeftParticles.visible = !isMobileDevice;
-        mainGroup.add(deepLeftParticles);
+        const voidCloud2 = new THREE.Points(void2Geo, void2Mat);
+        outerGroup.add(voidCloud2);
 
+        // Gap 3: Deep interior void nano-dust (r < 1.5 inner core interior)
+        const VOID3_COUNT = isMobileDevice ? 3000 : 10000;
+        const void3Geo = new THREE.BufferGeometry();
+        const void3Pos = new Float32Array(VOID3_COUNT * 3);
+        const void3Phases = new Float32Array(VOID3_COUNT);
+        for (let i = 0; i < VOID3_COUNT; i++) {
+          const r = 0.15 + Math.random() * 1.25; // inside the inner sphere
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          void3Pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          void3Pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          void3Pos[i * 3 + 2] = r * Math.cos(phi);
+          void3Phases[i] = Math.random() * Math.PI * 2;
+        }
+        void3Geo.setAttribute('position', new THREE.BufferAttribute(void3Pos, 3));
+        const void3Mat = new THREE.PointsMaterial({
+          color: 0xFFD060,
+          size: isMobileDevice ? 0.018 : 0.013,
+          transparent: true,
+          opacity: 0.80,
+          depthWrite: false,
+          sizeAttenuation: true
+        });
+        const voidCloud3 = new THREE.Points(void3Geo, void3Mat);
+        innerGroup.add(voidCloud3);
+
+        // Gap 4: Scattered sparse nano-wisps at random angles throughout volume (0→5.5r)
+        const VOID4_COUNT = isMobileDevice ? 5000 : 18000;
+        const void4Geo = new THREE.BufferGeometry();
+        const void4Pos = new Float32Array(VOID4_COUNT * 3);
+        const void4Phases = new Float32Array(VOID4_COUNT);
+        for (let i = 0; i < VOID4_COUNT; i++) {
+          // Random shell-style distribution across ALL radii
+          const r = 0.3 + Math.pow(Math.random(), 0.6) * 5.2;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          void4Pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          void4Pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          void4Pos[i * 3 + 2] = r * Math.cos(phi);
+          void4Phases[i] = Math.random() * Math.PI * 2;
+        }
+        void4Geo.setAttribute('position', new THREE.BufferAttribute(void4Pos, 3));
+        const void4Mat = new THREE.PointsMaterial({
+          color: 0xFFECA0,
+          size: isMobileDevice ? 0.012 : 0.008,
+          transparent: true,
+          opacity: 0.35,
+          depthWrite: false,
+          sizeAttenuation: true
+        });
+        const voidCloud4 = new THREE.Points(void4Geo, void4Mat);
+        scene.add(voidCloud4);
+
+
+
+
+
+
+
+
+
+
+        /* ── 6. Corner & Side Nano Particles — populate all 4 corners + edges of the canvas ── */
+        // Camera is at z=10, FOV=65°. At z=0 the frustum half-height ≈ tan(32.5°)*10 ≈ 6.37
+        // We spread particles in the corners and along all 4 sides of that view rectangle.
+
+        function makeCornerCloud(positions) {
+          const geo = new THREE.BufferGeometry();
+          geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+          return geo;
+        }
+
+        function boxRegion(xMin, xMax, yMin, yMax, zMin, zMax, count) {
+          const arr = [];
+          for (let i = 0; i < count; i++) {
+            arr.push(
+              xMin + Math.random() * (xMax - xMin),
+              yMin + Math.random() * (yMax - yMin),
+              zMin + Math.random() * (zMax - zMin)
+            );
+          }
+          return arr;
+        }
+
+        const CS = isMobileDevice ? 1200 : 4000; // per corner count
+        const SS = isMobileDevice ? 1500 : 5000; // per side count
+
+        // --- 4 CORNERS (dense gold clusters) ---
+        const tlGeo = makeCornerCloud(boxRegion(-9, -5.5, 5.5, 8.5, -4, 4, CS));
+        const cornerMat_TL = new THREE.PointsMaterial({ color: 0xFFD700, size: 0.060, transparent: true, opacity: 0.65, depthWrite: false, sizeAttenuation: true });
+        const cornerTL = new THREE.Points(tlGeo, cornerMat_TL);
+        scene.add(cornerTL);
+
+        const trGeo = makeCornerCloud(boxRegion(5.5, 9, 5.5, 8.5, -4, 4, CS));
+        const cornerMat_TR = new THREE.PointsMaterial({ color: 0xFFD700, size: 0.060, transparent: true, opacity: 0.65, depthWrite: false, sizeAttenuation: true });
+        const cornerTR = new THREE.Points(trGeo, cornerMat_TR);
+        scene.add(cornerTR);
+
+        const blGeo = makeCornerCloud(boxRegion(-9, -5.5, -8.5, -5.5, -4, 4, CS));
+        const cornerMat_BL = new THREE.PointsMaterial({ color: 0xFFD700, size: 0.060, transparent: true, opacity: 0.65, depthWrite: false, sizeAttenuation: true });
+        const cornerBL = new THREE.Points(blGeo, cornerMat_BL);
+        scene.add(cornerBL);
+
+        const brGeo = makeCornerCloud(boxRegion(5.5, 9, -8.5, -5.5, -4, 4, CS));
+        const cornerMat_BR = new THREE.PointsMaterial({ color: 0xFFD700, size: 0.060, transparent: true, opacity: 0.65, depthWrite: false, sizeAttenuation: true });
+        const cornerBR = new THREE.Points(brGeo, cornerMat_BR);
+        scene.add(cornerBR);
+
+        // --- 4 SIDES (strips along each edge, purple/soft tones) ---
+        const lsGeo = makeCornerCloud(boxRegion(-9, -5.8, -5.5, 5.5, -4, 4, SS));
+        const sideMat_L = new THREE.PointsMaterial({ color: 0xC8A0FF, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
+        const sideL = new THREE.Points(lsGeo, sideMat_L);
+        scene.add(sideL);
+
+        const rsGeo = makeCornerCloud(boxRegion(5.8, 9, -5.5, 5.5, -4, 4, SS));
+        const sideMat_R = new THREE.PointsMaterial({ color: 0xC8A0FF, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
+        const sideR = new THREE.Points(rsGeo, sideMat_R);
+        scene.add(sideR);
+
+        const tsGeo = makeCornerCloud(boxRegion(-5.5, 5.5, 5.8, 8.5, -4, 4, SS));
+        const sideMat_T = new THREE.PointsMaterial({ color: 0xFFE090, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
+        const sideT = new THREE.Points(tsGeo, sideMat_T);
+        scene.add(sideT);
+
+        const bsGeo = makeCornerCloud(boxRegion(-5.5, 5.5, -8.5, -5.8, -4, 4, SS));
+        const sideMat_B = new THREE.PointsMaterial({ color: 0xFFE090, size: 0.040, transparent: true, opacity: 0.50, depthWrite: false, sizeAttenuation: true });
+        const sideB = new THREE.Points(bsGeo, sideMat_B);
+        scene.add(sideB);
+
+        // --- Full-canvas micro-dust (everywhere except near the globe) ---
+        const BG_COUNT = isMobileDevice ? 3000 : 12000;
+        const bgArr = [];
+        let bgAttempts = 0;
+        while (bgArr.length / 3 < BG_COUNT && bgAttempts < BG_COUNT * 6) {
+          bgAttempts++;
+          const x = (Math.random() - 0.5) * 20;
+          const y = (Math.random() - 0.5) * 18;
+          const z = (Math.random() - 0.5) * 8;
+          if (Math.sqrt(x*x + y*y + z*z) < 5.5) continue; // skip central zone
+          bgArr.push(x, y, z);
+        }
+        const bgGeo = makeCornerCloud(bgArr);
+        const bgMat = new THREE.PointsMaterial({ color: 0xFFD700, size: 0.022, transparent: true, opacity: 0.28, depthWrite: false, sizeAttenuation: true });
+        const bgDust = new THREE.Points(bgGeo, bgMat);
+        scene.add(bgDust);
 
         /* ── Interaction & Animation ── */
         let mouseX = 0, mouseY = 0;
@@ -5182,19 +5367,101 @@
           flowParticles.material.color.set(isDark ? C_CYAN : C_INDIGO);
 
           // Make outer network lines visually thicker/stronger in light mode
-          slimMat.opacity = isDark ? 0.38 : 0.70;
-          slimMat2.opacity = isDark ? 0.25 : 0.55;
+          slimMat.opacity = isDark ? 0.42 : 0.62;
+          slimMat2.opacity = isDark ? 0.28 : 0.45;
 
-          // Animate surrounding particles — speed up when zoomed in
-          const zoomFactor = 1 + (10 - camera.position.z) * 0.04;
-          smallStars.rotation.y = t * 0.07 * zoomFactor;
-          smallStars.rotation.z = t * 0.03 * zoomFactor;
-          leftSide.rotation.y = t * 0.06;
-          leftSide.position.x = Math.sin(t * 0.5) * 0.2;
-          textNearParticles.rotation.y = -t * 0.08 * zoomFactor;
-          textNearParticles.rotation.z = t * 0.05 * zoomFactor;
-          deepLeftParticles.rotation.y = t * 0.07;
-          deepLeftParticles.position.x = -1 + Math.sin(t * 0.4) * 0.3;
+          // Animate nano cloud — gentle slow drift all around
+          nanoCloud.rotation.y = t * 0.04;
+          nanoCloud.rotation.x = t * 0.02;
+          nanoCloud.rotation.z = -t * 0.015;
+          nanoMat.color.set(isDark ? 0xBF8FFF : 0x2D3A8C);
+          nanoMat.opacity = isDark ? 0.38 : 0.55;
+
+          // Animate inner nano ring — counter-rotates for depth
+          nanoCloud2.rotation.y = -t * 0.05;
+          nanoCloud2.rotation.x = -t * 0.03;
+          nanoCloud2.rotation.z = t * 0.02;
+          nano2Mat.color.set(isDark ? 0xE0C8FF : 0x3D4FA0);
+          nano2Mat.opacity = isDark ? 0.30 : 0.45;
+
+          // Animate void nano particles filling empty spaces between shells
+          // Void 1: inner-mid gap — gentle orbital drift + breathing size
+          voidCloud1.rotation.y = t * 0.055;
+          voidCloud1.rotation.x = -t * 0.028;
+          voidCloud1.rotation.z = t * 0.018;
+          void1Mat.color.set(isDark ? 0xAA80FF : 0x2D3A8C);
+          void1Mat.opacity = isDark ? 0.55 : 0.70;
+          void1Mat.size = (isMobileDevice ? 0.028 : 0.020) + Math.sin(t * 2.3) * 0.004;
+
+          // Void 2: mid-outer gap — slow counter-drift
+          voidCloud2.rotation.y = -t * 0.038;
+          voidCloud2.rotation.x = t * 0.019;
+          voidCloud2.rotation.z = -t * 0.025;
+          void2Mat.color.set(isDark ? 0x9060FF : 0x3D4FA0);
+          void2Mat.opacity = isDark ? 0.42 : 0.55;
+          void2Mat.size = (isMobileDevice ? 0.022 : 0.016) + Math.sin(t * 1.7 + 1.0) * 0.003;
+
+          // Void 3: deep interior dust — fast spin, sparkle
+          voidCloud3.rotation.y = t * 0.14;
+          voidCloud3.rotation.x = t * 0.09;
+          voidCloud3.rotation.z = -t * 0.06;
+          void3Mat.color.set(isDark ? 0xFF9900 : 0x2D3A8C);
+          void3Mat.opacity = isDark ? 0.65 : 0.80;
+          void3Mat.size = (isMobileDevice ? 0.018 : 0.013) + Math.sin(t * 4.5 + 2.1) * 0.004;
+
+          // Void 4: sparse nano wisps across full volume — very slow drift
+          voidCloud4.rotation.y = t * 0.018;
+          voidCloud4.rotation.x = -t * 0.011;
+          voidCloud4.rotation.z = t * 0.007;
+          void4Mat.color.set(isDark ? 0xD0A0FF : 0x3D4FA0);
+          void4Mat.opacity = isDark ? 0.22 : 0.35;
+
+          // Animate corner & side nano clouds — slow independent drifts
+          const cornerPulse = 1 + Math.sin(t * 0.9) * 0.008;
+          cornerTL.rotation.z = t * 0.012;
+          cornerTL.rotation.y = -t * 0.008;
+          cornerMat_TL.color.set(isDark ? 0xBB8FFF : 0x2D3A8C);
+          cornerMat_TL.opacity = (isDark ? 0.50 : 0.65) + Math.sin(t * 1.3) * 0.08;
+          cornerMat_TL.size = 0.060 * cornerPulse;
+
+          cornerTR.rotation.z = -t * 0.011;
+          cornerTR.rotation.y = t * 0.009;
+          cornerMat_TR.color.set(isDark ? 0xBB8FFF : 0x2D3A8C);
+          cornerMat_TR.opacity = (isDark ? 0.50 : 0.65) + Math.sin(t * 1.1 + 1.0) * 0.08;
+          cornerMat_TR.size = 0.060 * cornerPulse;
+
+          cornerBL.rotation.z = t * 0.010;
+          cornerBL.rotation.x = t * 0.007;
+          cornerMat_BL.color.set(isDark ? 0xBB8FFF : 0x2D3A8C);
+          cornerMat_BL.opacity = (isDark ? 0.50 : 0.65) + Math.sin(t * 1.5 + 2.0) * 0.08;
+          cornerMat_BL.size = 0.060 * cornerPulse;
+
+          cornerBR.rotation.z = -t * 0.013;
+          cornerBR.rotation.x = -t * 0.006;
+          cornerMat_BR.color.set(isDark ? 0xBB8FFF : 0x2D3A8C);
+          cornerMat_BR.opacity = (isDark ? 0.50 : 0.65) + Math.sin(t * 1.7 + 3.0) * 0.08;
+          cornerMat_BR.size = 0.060 * cornerPulse;
+
+          sideMat_L.color.set(isDark ? 0x9060EE : 0x2D3A8C);
+          sideMat_L.opacity = isDark ? 0.38 : 0.50;
+          sideL.rotation.y = t * 0.006;
+
+          sideMat_R.color.set(isDark ? 0x9060EE : 0x2D3A8C);
+          sideMat_R.opacity = isDark ? 0.38 : 0.50;
+          sideR.rotation.y = -t * 0.006;
+
+          sideMat_T.color.set(isDark ? 0xFFAA30 : 0x3D4FA0);
+          sideMat_T.opacity = isDark ? 0.38 : 0.50;
+          sideT.rotation.x = -t * 0.006;
+
+          sideMat_B.color.set(isDark ? 0xFFAA30 : 0x3D4FA0);
+          sideMat_B.opacity = isDark ? 0.38 : 0.50;
+          sideB.rotation.x = t * 0.006;
+
+          bgMat.color.set(isDark ? 0xAA80FF : 0x2D3A8C);
+          bgMat.opacity = isDark ? 0.18 : 0.28;
+          bgDust.rotation.y = t * 0.003;
+          bgDust.rotation.x = -t * 0.002;
 
           // Breathing effect
           const breathe = 1 + Math.sin(t * 1.5) * 0.02;
