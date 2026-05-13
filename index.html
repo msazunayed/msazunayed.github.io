@@ -455,33 +455,6 @@
       color: var(--text);
     }
 
-    /* ── MOB-MENU: Hire Me CTA button ── */
-    .mob-menu .nav-cta {
-      background: var(--indigo) !important;
-      color: #F8F4EE !important;
-      font-family: var(--mono) !important;
-      font-size: 13px !important;
-      font-weight: 700 !important;
-      letter-spacing: .10em !important;
-      text-transform: uppercase !important;
-      border: none !important;
-      border-radius: 8px !important;
-      padding: 16px 48px !important;
-      min-width: 200px !important;
-      min-height: 52px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: opacity .2s, transform .2s !important;
-      margin-top: 8px !important;
-    }
-
-    .mob-menu .nav-cta:hover {
-      opacity: 0.85 !important;
-      transform: translateY(-2px) !important;
-      background: var(--indigo) !important;
-    }
-
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    HERO
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -2822,6 +2795,12 @@
         width: 100%;
         padding: 8px 32px;
         -webkit-tap-highlight-color: rgba(45, 58, 140, 0.12);
+      }
+
+      .mob-menu a.nav-cta {
+        width: auto;
+        min-width: 200px;
+        padding: 12px 48px !important;
       }
 
       /* ── HERO: professional mobile layout matching design ── */
