@@ -2872,6 +2872,7 @@
         margin-bottom: 0 !important;
         display: block !important;
         z-index: 1 !important;
+        touch-action: none !important;
       }
 
       /* 3rd: scroll indicator — hidden on mobile */
@@ -5380,36 +5381,43 @@
           e.preventDefault();
         });
 
-        /* ── Touch interaction — rotation + pinch zoom ──
-           On mobile the canvas is full-width so all touches on it should
-           control the orbit. The invisible hit-sphere is kept for reference
-           but touchOnObject is set true for any touch on the canvas. */
+        /* ── Touch interaction — precise hit-test on the 3D orbit only ──
+           An invisible sphere (radius 3.6, slightly larger than the outermost orbit
+           at r=3.2) is raycasted on every touchstart. Only touches that land ON the
+           sphere trigger rotation/zoom; all other touches fall through to the page so
+           the user can still scroll normally. The sphere radius is expressed in world
+           units and automatically scales with camera zoom, so it always matches the
+           visible orbit regardless of how far the user has zoomed in or out. */
+
+        // Invisible hit-sphere — slightly larger than outermost orbit (3.2) so the
+        // whole visible orbit area is touchable; added to mainGroup so it follows rotation.
         const _hitSphere = new THREE.Mesh(
-          new THREE.SphereGeometry(3.2, 16, 12),
-          new THREE.MeshBasicMaterial({ visible: false, side: THREE.FrontSide })
+          new THREE.SphereGeometry(3.6, 24, 18),
+          new THREE.MeshBasicMaterial({ visible: false, side: THREE.DoubleSide })
         );
-        mainGroup.add(_hitSphere); // follows mainGroup rotation/position exactly
+        mainGroup.add(_hitSphere);
 
         const _raycaster = new THREE.Raycaster();
 
         function _touchHitsOrbit(clientX, clientY) {
-          // On mobile (full-width canvas) always treat touch as on-orbit
-          if (isMobileDevice) return true;
           const rect = canvas.getBoundingClientRect();
-          // Convert client coords → NDC [-1, 1]
           const ndcX =  ((clientX - rect.left)  / rect.width)  * 2 - 1;
           const ndcY = -((clientY - rect.top)   / rect.height) * 2 + 1;
           _raycaster.setFromCamera({ x: ndcX, y: ndcY }, camera);
-          return _raycaster.intersectObject(_hitSphere).length > 0;
+          // intersectObject checks against the invisible sphere in world space —
+          // automatically correct at any zoom level because camera.position.z changes.
+          return _raycaster.intersectObject(_hitSphere, false).length > 0;
         }
 
-        /* ── Touch drag — fast 360 + pinch zoom ── */
+        /* ── Touch state ── */
         let touchStartX = 0, touchStartY = 0;
         let pinchStartDist = 0;
         let touchOnObject = false;
+        let pinchOnObject = false;
 
         canvas.addEventListener('touchstart', e => {
           if (e.touches.length === 1) {
+            // Single finger: only rotate if landing on the orbit sphere
             touchOnObject = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
             if (touchOnObject) {
               autoSpin = false;
@@ -5419,12 +5427,13 @@
               e.preventDefault();
             }
           } else if (e.touches.length === 2) {
-            // Pinch-zoom — always active on mobile canvas
+            // Two fingers: pinch-zoom only if at least one finger hits the orbit
             const hit0 = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
             const hit1 = _touchHitsOrbit(e.touches[1].clientX, e.touches[1].clientY);
-            touchOnObject = hit0 || hit1;
-            if (touchOnObject) {
+            pinchOnObject = hit0 || hit1;
+            if (pinchOnObject) {
               autoSpin = false;
+              touchOnObject = false; // suspend single-finger rotation during pinch
               pinchStartDist = Math.hypot(
                 e.touches[0].clientX - e.touches[1].clientX,
                 e.touches[0].clientY - e.touches[1].clientY
@@ -5435,34 +5444,44 @@
         }, { passive: false });
 
         canvas.addEventListener('touchmove', e => {
-          if (!touchOnObject) return; // empty space → let page scroll
-          if (e.touches.length === 1) {
+          if (e.touches.length === 1 && touchOnObject) {
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
-            // Increased sensitivity on mobile for snappier feel
-            const sens = isMobileDevice ? 0.032 : 0.022;
+            const sens = 0.028; // tuned for natural rotation speed
             dragVelX = dx * sens;
             dragVelY = dy * sens;
             userRotY += dragVelX;
             userRotX += dragVelY;
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
-          } else if (e.touches.length === 2) {
+            e.preventDefault();
+          } else if (e.touches.length === 2 && pinchOnObject) {
             const dist = Math.hypot(
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
-            const delta = (dist - pinchStartDist) * 0.025;
-            // On mobile: raise min zoom so orbit (r=3.2) never clips the canvas edge
-            // minZoom is enforced each frame in animate(); just clamp the max here
-            targetZoom = Math.min(18, targetZoom - delta);
+            // Pinch sensitivity: 0.03 gives a natural 1:1 feel
+            const delta = (dist - pinchStartDist) * 0.03;
+            targetZoom = Math.min(16, targetZoom - delta);
+            // minZoom clamped each frame in animate()
             pinchStartDist = dist;
+            e.preventDefault();
           }
-          e.preventDefault();
         }, { passive: false });
 
         canvas.addEventListener('touchend', e => {
-          if (e.touches.length === 0) touchOnObject = false;
+          if (e.touches.length === 0) {
+            touchOnObject = false;
+            pinchOnObject = false;
+          } else if (e.touches.length === 1) {
+            // One finger lifted from pinch → check if remaining finger is on orbit
+            pinchOnObject = false;
+            touchOnObject = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
+            if (touchOnObject) {
+              touchStartX = e.touches[0].clientX;
+              touchStartY = e.touches[0].clientY;
+            }
+          }
         }, { passive: true });
 
         /* ── Scroll / Wheel Zoom ── */
@@ -5498,15 +5517,16 @@
           const _minZoomW = 3.2 / _halfW;  // z needed so orbit fits horizontally
           // use the larger (more restrictive) on mobile; desktop keeps original 3.5 floor
           const _minZoom = isMobileDevice
-            ? Math.max(_minZoomH, _minZoomW) * 1.08   // 8% breathing room on mobile
+            ? Math.max(_minZoomH, _minZoomW) * 1.05   // 5% breathing room on mobile
             : 3.5;
           if (targetZoom < _minZoom) targetZoom = _minZoom;
           camera.position.z += (targetZoom - camera.position.z) * 0.10;
 
-          // On mobile: keep the globe centred as zoom changes so no edge clips.
+          // On mobile: keep the globe perfectly centred at every zoom level.
+          // The camera lookAt target is (0, 0.5, 0); we keep mainGroup.position.y
+          // fixed at _mobileBaseY so the orbit never drifts off-screen when zoomed.
           if (isMobileDevice) {
-            const zoomRatio = camera.position.z / 7.5;
-            mainGroup.position.y = _mobileBaseY * zoomRatio;
+            mainGroup.position.y = _mobileBaseY; // constant — no zoom-ratio shift
           }
 
           // Auto spin when idle
