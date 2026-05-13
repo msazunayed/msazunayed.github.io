@@ -4808,10 +4808,11 @@
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 100);
         camera.position.set(0, 0, 10);
-        if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(pointer: coarse)').matches) {
-          camera.position.set(0, 0.5, 7.5);
-          camera.lookAt(0, 0.5, 0);
-        }
+        // Mobile: centre camera on the orbit (mainGroup.position.y = 0.5)
+        const _camTarget = isMobileDevice
+          ? new THREE.Vector3(0, 0.5, 0)
+          : new THREE.Vector3(0, 0, 0);
+        camera.lookAt(_camTarget);
 
         function resize() {
           const w = canvas.offsetWidth, h = canvas.offsetHeight;
@@ -5343,6 +5344,8 @@
         // On mobile canvas is below text - center the globe with slight upward shift
         if (isMobileDevice) {
           mainGroup.position.y = 0.5;
+          camera.position.set(0, 0, 7.5);
+          camera.lookAt(_camTarget);
         }
         // Track the base Y so we can restore it each frame
         const _mobileBaseY = isMobileDevice ? 0.5 : 0;
@@ -5462,7 +5465,7 @@
             );
             // Pinch sensitivity: 0.03 gives a natural 1:1 feel
             const delta = (dist - pinchStartDist) * 0.03;
-            targetZoom = Math.min(16, targetZoom - delta);
+            targetZoom = Math.min(12, targetZoom - delta); // full range: zoom in deep to see particles
             // minZoom clamped each frame in animate()
             pinchStartDist = dist;
             e.preventDefault();
@@ -5489,7 +5492,8 @@
         canvas.style.cursor = 'grab';
         canvas.addEventListener('wheel', e => {
           e.preventDefault();
-          targetZoom = Math.max(3.5, Math.min(18, targetZoom + e.deltaY * 0.018));
+          // Allow zooming all the way in to 1.5 on desktop too
+          targetZoom = Math.max(1.5, Math.min(18, targetZoom + e.deltaY * 0.018));
         }, { passive: false });
 
         /* ── Inertia decay when not dragging ── */
@@ -5506,27 +5510,35 @@
             userRotX += dragVelY;
           }
 
-          // Smooth zoom — clamp so the orbit never clips any canvas edge.
-          // Compute the minimum camera-z that keeps the orbit (radius 3.2) fully visible
-          // on BOTH axes (width and height) of the canvas.
+          // ── Smooth zoom with full range ──────────────────────────────────
+          // Mobile: allow zooming in very close (1.2) so particles are clearly
+          // visible, and out to 12 for context. Camera always looks at the orbit
+          // centre so zoom expands/contracts equally in all directions.
+          //
+          // The minimum is computed dynamically so the orbit is never clipped
+          // at max zoom-out, but the user can always zoom in well past the orbit.
           const _fovRad = (camera.fov * Math.PI) / 180;
-          const _halfH  = Math.tan(_fovRad / 2);         // half-height at z=1
-          const _halfW  = _halfH * camera.aspect;        // half-width  at z=1
-          // orbit must fit: 3.2 / (halfDim * z) <= 1  →  z >= 3.2 / halfDim
-          const _minZoomH = 3.2 / _halfH;  // z needed so orbit fits vertically
-          const _minZoomW = 3.2 / _halfW;  // z needed so orbit fits horizontally
-          // use the larger (more restrictive) on mobile; desktop keeps original 3.5 floor
-          const _minZoom = isMobileDevice
-            ? Math.max(_minZoomH, _minZoomW) * 1.05   // 5% breathing room on mobile
+          const _halfH  = Math.tan(_fovRad / 2);
+          const _halfW  = _halfH * camera.aspect;
+          // Zoom-out floor: orbit (r 3.2) just fits with 5% breathing room
+          const _minZoomH = 3.2 / _halfH;
+          const _minZoomW = 3.2 / _halfW;
+          const _zoomOutFloor = isMobileDevice
+            ? Math.max(_minZoomH, _minZoomW) * 1.05
             : 3.5;
-          if (targetZoom < _minZoom) targetZoom = _minZoom;
+          // Zoom-in ceiling: 1.2 lets user see individual particle layers up close
+          const _zoomInCeil  = isMobileDevice ? 1.2 : 1.5;
+          // Max zoom-out: don't let globe shrink to a dot
+          const _zoomMax     = isMobileDevice ? 12 : 18;
+
+          if (targetZoom < _zoomInCeil)  targetZoom = _zoomInCeil;
+          if (targetZoom > _zoomMax)     targetZoom = _zoomMax;
+
           camera.position.z += (targetZoom - camera.position.z) * 0.10;
 
-          // On mobile: keep the globe perfectly centred at every zoom level.
-          // The camera lookAt target is (0, 0.5, 0); we keep mainGroup.position.y
-          // fixed at _mobileBaseY so the orbit never drifts off-screen when zoomed.
+          // On mobile: keep orbit perfectly centred (fixed Y offset, never shifts)
           if (isMobileDevice) {
-            mainGroup.position.y = _mobileBaseY; // constant — no zoom-ratio shift
+            mainGroup.position.y = _mobileBaseY;
           }
 
           // Auto spin when idle
@@ -5708,7 +5720,7 @@
             camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
             camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.05;
           }
-          camera.lookAt(0, 0, 0);
+          camera.lookAt(_camTarget);
 
           renderer.render(scene, camera);
         }
