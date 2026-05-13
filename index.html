@@ -5559,9 +5559,6 @@
     })();
 
 
-    document.addEventListener('DOMContentLoaded', initHero3D);
-    initHero3D();
-
 
     /* ── CV DOWNLOAD ── */
     (function () {
@@ -5576,7 +5573,7 @@
         var blob = new Blob([arr], { type: 'application/pdf' });
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
-        a.href = url; a.download = 'Shakil_Ahmed_Resume.pdf';
+        a.href = url; a.download = 'Shakil_Ahmed_Zunayed_Resume.pdf';
         document.body.appendChild(a); a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
