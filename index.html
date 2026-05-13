@@ -5373,23 +5373,23 @@
         let pinchStartDist = 0;
         let touchOnObject = false; // tracks whether the touch started on a 3D object
 
-        /* Helper: returns true if the screen-space point (cx, cy) is over the 3D globe.
-           Projects mainGroup's world centre to NDC, then compares pixel distance against
-           the globe's approximate screen radius so we only intercept touches on the object. */
+        /* Hit-test: only returns true when the touch lands INSIDE the outermost orbit
+           shell (slimGroup, IcosahedronGeometry radius 3.2 world units).
+           Ambient particles, corner clouds and side nebulae extend far beyond that
+           radius — they are excluded so touches on empty space scroll the page. */
         function isTouchOnGlobe(cx, cy) {
           const rect = canvas.getBoundingClientRect();
-          // Project the group's world position to screen space
           const worldPos = new THREE.Vector3();
           mainGroup.getWorldPosition(worldPos);
           worldPos.project(camera);
           const screenX = (worldPos.x * 0.5 + 0.5) * rect.width  + rect.left;
           const screenY = (-worldPos.y * 0.5 + 0.5) * rect.height + rect.top;
-          // Approximate globe screen radius: globe world-radius ≈ 5 units, camera z ≈ targetZoom
-          const approxWorldRadius = 5.2;
+          // Outermost orbit = slimGroup geometry, radius 3.2 world units
+          const ORBIT_WORLD_RADIUS = 3.2;
           const fovRad = (camera.fov * Math.PI) / 180;
           const halfH = Math.tan(fovRad / 2) * targetZoom;
           const pixelsPerUnit = (rect.height / 2) / halfH;
-          const screenRadius = approxWorldRadius * pixelsPerUnit * 1.15; // 15% hit-area buffer
+          const screenRadius = ORBIT_WORLD_RADIUS * pixelsPerUnit; // exact boundary, no padding
           const dx = cx - screenX;
           const dy = cy - screenY;
           return (dx * dx + dy * dy) <= (screenRadius * screenRadius);
