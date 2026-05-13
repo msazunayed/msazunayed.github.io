@@ -3385,132 +3385,7 @@
       }
     }
 
-    /* ── Mobile Scroll Cue — bottom-right of hero, touch screens only ── */
-    #mob-scroll-cue {
-      display: none;
-    }
-    @media (pointer: coarse) and (max-width: 768px) {
-      #mob-scroll-cue {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        position: absolute;
-        bottom: 18px;
-        right: 16px;
-        z-index: 10;
-        pointer-events: none;
-        opacity: 0;
-        animation: mscFadeIn .6s ease 2.2s forwards;
-      }
-      @keyframes mscFadeIn {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: translateY(0);   }
-      }
 
-      /* Hide once user scrolls — handled by JS */
-      #mob-scroll-cue.hidden {
-        opacity: 0;
-        transition: opacity .4s ease;
-      }
-
-      /* 3-D scene container — perspective gives the phone its tilt */
-      .msc-scene {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-        perspective: 120px;
-      }
-
-      /* The tiny phone body */
-      .msc-phone {
-        width: 18px;
-        height: 28px;
-        border: 1.8px solid var(--gold);
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(184,134,11,.08);
-        transform: rotateX(18deg) rotateY(-10deg);
-        box-shadow:
-          2px 3px 8px rgba(184,134,11,.18),
-          inset 0 0 4px rgba(184,134,11,.06);
-        position: relative;
-      }
-
-      /* Tiny home-button notch at bottom of phone */
-      .msc-phone::after {
-        content: '';
-        position: absolute;
-        bottom: 3px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 5px;
-        height: 1.5px;
-        border-radius: 2px;
-        background: var(--gold);
-        opacity: .55;
-      }
-
-      /* Screen glass */
-      .msc-screen {
-        width: 11px;
-        height: 17px;
-        background: rgba(184,134,11,.07);
-        border-radius: 2px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding-top: 3px;
-        overflow: hidden;
-      }
-
-      /* Scrolling dot inside screen */
-      .msc-dot {
-        width: 3.5px;
-        height: 3.5px;
-        border-radius: 50%;
-        background: var(--gold);
-        box-shadow: 0 0 4px rgba(184,134,11,.7);
-        animation: mscDotSlide 1.5s cubic-bezier(.4,0,.2,1) infinite;
-      }
-      @keyframes mscDotSlide {
-        0%   { transform: translateY(0);    opacity: 1;   }
-        60%  { transform: translateY(10px); opacity: .3;  }
-        61%  { transform: translateY(0);    opacity: 0;   }
-        70%  { opacity: 1; }
-        100% { transform: translateY(0);    opacity: 1;   }
-      }
-
-      /* Cascading chevron arrows below phone */
-      .msc-arrow {
-        color: var(--gold);
-        opacity: 0;
-        line-height: 1;
-        animation: mscArrowPop 1.5s ease infinite;
-      }
-      .msc-a1 { animation-delay: 0.1s; }
-      .msc-a2 { animation-delay: 0.3s; }
-
-      @keyframes mscArrowPop {
-        0%   { opacity: 0;   transform: translateY(-2px); }
-        30%  { opacity: .8;  transform: translateY(0);    }
-        70%  { opacity: .3;  transform: translateY(2px);  }
-        100% { opacity: 0;   transform: translateY(4px);  }
-      }
-
-      /* Label beneath */
-      .msc-label {
-        font-family: var(--mono);
-        font-size: 8px;
-        letter-spacing: .18em;
-        text-transform: uppercase;
-        color: var(--text3);
-        opacity: .75;
-      }
-    }
   </style>
 
 </head>
@@ -3611,34 +3486,12 @@
     <a href="#contact" class="nav-cta">Hire Me</a>
   </div>
 
-  <!-- HERO -->
+    <!-- HERO -->
   <section class="hero" id="top">
     <canvas id="heroCanvas"></canvas>
     <div class="hero-canvas-hint" aria-hidden="true">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="15"/></svg>
       Drag · Scroll to zoom
-    </div>
-
-    <!-- Mobile-only 3D scroll indicator — bottom-right corner -->
-    <div id="mob-scroll-cue" aria-hidden="true">
-      <div class="msc-scene">
-        <div class="msc-phone">
-          <div class="msc-screen">
-            <div class="msc-dot"></div>
-          </div>
-        </div>
-        <div class="msc-arrow msc-a1">
-          <svg width="8" height="10" viewBox="0 0 8 10" fill="none">
-            <polyline points="2,2 4,8 6,2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="msc-arrow msc-a2">
-          <svg width="8" height="10" viewBox="0 0 8 10" fill="none">
-            <polyline points="2,2 4,8 6,2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-      <span class="msc-label">scroll</span>
     </div>
 
     <div class="hero-vignette"></div>
@@ -4946,19 +4799,6 @@
         });
       });
 
-      /* Hide mobile scroll cue once user starts scrolling */
-      (function () {
-        const cue = document.getElementById('mob-scroll-cue');
-        if (!cue) return;
-        function hideCue() {
-          if (window.scrollY > 30) {
-            cue.classList.add('hidden');
-            window.removeEventListener('scroll', hideCue, { passive: true });
-          }
-        }
-        window.addEventListener('scroll', hideCue, { passive: true });
-      })();
-
     })();
   </script>
 
@@ -5588,82 +5428,88 @@
         let pinchStartDist = 0;
         let touchOnObject = false;
         let pinchOnObject = false;
+        // Track initial gesture direction so we don't fight native vertical scroll
+        let gestureDecided = false;
+        let gestureIsScroll = false;
+
+        // Canvas is always pan-y — never lock scroll, even on the orbit.
+        // Rotation still works because we handle it in JS without preventDefault.
+        canvas.style.touchAction = 'pan-y';
 
         canvas.addEventListener('touchstart', e => {
+          gestureDecided = false;
+          gestureIsScroll = false;
           if (e.touches.length === 1) {
-            // Single finger: only rotate if landing on the orbit sphere
             touchOnObject = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
             if (touchOnObject) {
-              canvas.style.touchAction = 'none'; // lock scrolling while rotating orbit
               autoSpin = false;
               touchStartX = e.touches[0].clientX;
               touchStartY = e.touches[0].clientY;
               dragVelX = 0; dragVelY = 0;
-              e.preventDefault();
-            } else {
-              canvas.style.touchAction = 'pan-y'; // let page scroll through empty canvas areas
             }
           } else if (e.touches.length === 2) {
-            // Two fingers: pinch-zoom only if at least one finger hits the orbit
             const hit0 = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
             const hit1 = _touchHitsOrbit(e.touches[1].clientX, e.touches[1].clientY);
             pinchOnObject = hit0 || hit1;
             if (pinchOnObject) {
-              canvas.style.touchAction = 'none'; // lock scrolling during pinch-zoom
               autoSpin = false;
-              touchOnObject = false; // suspend single-finger rotation during pinch
+              touchOnObject = false;
               pinchStartDist = Math.hypot(
                 e.touches[0].clientX - e.touches[1].clientX,
                 e.touches[0].clientY - e.touches[1].clientY
               );
-              e.preventDefault();
-            } else {
-              canvas.style.touchAction = 'pan-y';
             }
           }
-        }, { passive: false });
+        }, { passive: true });
 
         canvas.addEventListener('touchmove', e => {
           if (e.touches.length === 1 && touchOnObject) {
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
-            const sens = 0.028; // tuned for natural rotation speed
-            dragVelX = dx * sens;
-            dragVelY = dy * sens;
-            userRotY += dragVelX;
-            userRotX += dragVelY;
+
+            // First move: decide if this gesture is a vertical scroll or horizontal rotation.
+            // Once decided, stick with it for the whole gesture so scroll and rotation
+            // never fight each other.
+            if (!gestureDecided && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+              gestureDecided = true;
+              // Vertical-dominant → let native scroll handle it, don't rotate
+              gestureIsScroll = Math.abs(dy) > Math.abs(dx);
+            }
+
+            if (!gestureIsScroll) {
+              const sens = 0.028;
+              dragVelX = dx * sens;
+              dragVelY = dy * sens;
+              userRotY += dragVelX;
+              userRotX += dragVelY;
+            }
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
-            e.preventDefault();
+            // No preventDefault — let the browser scroll vertically
           } else if (e.touches.length === 2 && pinchOnObject) {
             const dist = Math.hypot(
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
-            // Pinch sensitivity: 0.03 gives a natural 1:1 feel
             const delta = (dist - pinchStartDist) * 0.03;
-            targetZoom = Math.min(12, targetZoom - delta); // full range: zoom in deep to see particles
-            // minZoom clamped each frame in animate()
+            targetZoom = Math.min(12, targetZoom - delta);
             pinchStartDist = dist;
-            e.preventDefault();
+            // No preventDefault — pinch-zoom on the orbit works without blocking page scroll
           }
-        }, { passive: false });
+        }, { passive: true });
 
         canvas.addEventListener('touchend', e => {
+          gestureDecided = false;
+          gestureIsScroll = false;
           if (e.touches.length === 0) {
             touchOnObject = false;
             pinchOnObject = false;
-            canvas.style.touchAction = 'pan-y'; // restore scroll-through when no fingers on canvas
           } else if (e.touches.length === 1) {
-            // One finger lifted from pinch → check if remaining finger is on orbit
             pinchOnObject = false;
             touchOnObject = _touchHitsOrbit(e.touches[0].clientX, e.touches[0].clientY);
             if (touchOnObject) {
-              canvas.style.touchAction = 'none';
               touchStartX = e.touches[0].clientX;
               touchStartY = e.touches[0].clientY;
-            } else {
-              canvas.style.touchAction = 'pan-y';
             }
           }
         }, { passive: true });
