@@ -528,7 +528,7 @@
       canvas#heroCanvas {
         position: relative;
         width: 100%;
-        height: 420px;
+        height: 360px;
         top: 0;
         right: auto;
         order: -1;
@@ -536,6 +536,46 @@
         pointer-events: auto;
         touch-action: pan-y; /* allow scroll; JS sets none only when finger is on the orbit */
         margin-top: 10px;
+      }
+    }
+
+    /* ── Mobile Scroll Hint (below canvas) ── */
+    .mobile-scroll-hint {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-scroll-hint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 6px 0 2px;
+        order: 0; /* sits between canvas (order:-1) and hero-content (order:2) */
+        z-index: 5;
+        pointer-events: none;
+        animation: mobileHintFade 5s ease 1.8s forwards;
+      }
+      @keyframes mobileHintFade {
+        0%   { opacity: 1; }
+        70%  { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      .mobile-scroll-hint span {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--text3);
+        opacity: 0.65;
+      }
+      .mobile-scroll-hint svg {
+        opacity: 0.5;
+        animation: mobileChevronBounce 1.4s ease-in-out infinite;
+      }
+      @keyframes mobileChevronBounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(5px); }
       }
     }
 
@@ -3494,6 +3534,12 @@
       Drag · Scroll to zoom
     </div>
 
+    <!-- Mobile only: scroll-down nudge shown briefly below the 3D canvas -->
+    <div class="mobile-scroll-hint" aria-hidden="true">
+      <span>Scroll down</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
     <div class="hero-vignette"></div>
 
     <!-- hero-top removed to prevent overlap -->
@@ -5435,6 +5481,7 @@
         // Canvas is always pan-y — never lock scroll, even on the orbit.
         // Rotation still works because we handle it in JS without preventDefault.
         canvas.style.touchAction = 'pan-y';
+        canvas.style.overscrollBehavior = 'none';
 
         canvas.addEventListener('touchstart', e => {
           gestureDecided = false;
@@ -5470,10 +5517,11 @@
             // First move: decide if this gesture is a vertical scroll or horizontal rotation.
             // Once decided, stick with it for the whole gesture so scroll and rotation
             // never fight each other.
-            if (!gestureDecided && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+            if (!gestureDecided && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
               gestureDecided = true;
               // Vertical-dominant → let native scroll handle it, don't rotate
-              gestureIsScroll = Math.abs(dy) > Math.abs(dx);
+              // Use 1.2x bias toward scroll so accidental vertical drags always scroll
+              gestureIsScroll = Math.abs(dy) * 1.2 > Math.abs(dx);
             }
 
             if (!gestureIsScroll) {
