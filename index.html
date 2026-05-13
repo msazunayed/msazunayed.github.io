@@ -591,9 +591,10 @@
       }
 
       .hero-name {
-        font-size: clamp(160px, 42vw, 200px);
+        font-size: clamp(28px, 8vw, 50px);
         white-space: normal;
-        line-height: 0.9;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
       }
     }
 
@@ -623,6 +624,8 @@
       margin-bottom: clamp(16px, 2vw, 24px);
       display: block;
       text-shadow: 0 2px 16px rgba(248, 244, 238, 0.8);
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .hero-name .letter {
@@ -630,6 +633,12 @@
       opacity: 0;
       transform: translateY(30px) rotate(5deg);
       transition: opacity .4s var(--ease), transform .4s var(--ease);
+    }
+
+    @media (max-width: 900px) {
+      .hero-name .letter {
+        white-space: normal;
+      }
     }
 
     .hero-name .letter.space {
@@ -2544,7 +2553,10 @@
       }
 
       .hero-name {
-        font-size: clamp(48px, 14vw, 84px);
+        font-size: clamp(28px, 8vw, 48px);
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: break-word;
       }
 
       .hero-eyebrow {
@@ -2629,8 +2641,11 @@
       }
 
       .hero-name {
-        font-size: clamp(42px, 13vw, 70px);
+        font-size: clamp(24px, 7.5vw, 42px);
         line-height: 1.2;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: break-word;
       }
 
       p,
@@ -2878,11 +2893,13 @@
 
       /* Name */
       .hero-name {
-        font-size: clamp(54px, 14vw, 80px) !important;
+        font-size: clamp(22px, 7vw, 38px) !important;
         white-space: normal !important;
-        line-height: 1.0 !important;
+        line-height: 1.15 !important;
         margin-bottom: 18px !important;
-        letter-spacing: -.03em !important;
+        letter-spacing: -.02em !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
       }
 
       /* Typewriter role */
@@ -3298,9 +3315,11 @@
       }
 
       .hero-name {
-        font-size: clamp(60px, 18vw, 88px) !important;
+        font-size: clamp(28px, 7.5vw, 40px) !important;
         white-space: normal;
-        line-height: 0.9;
+        line-height: 1.1;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
       }
 
       .section {
@@ -3326,18 +3345,22 @@
   <style>
     @media (max-width: 768px) {
       .hero-name {
-        font-size: clamp(80px, 24vw, 125px) !important;
+        font-size: clamp(26px, 7vw, 38px) !important;
         white-space: normal !important;
-        line-height: 0.88 !important;
-        margin-top: -16px !important;
+        line-height: 1.15 !important;
+        margin-top: 0 !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
       }
     }
     @media (max-width: 390px) {
       .hero-name {
-        font-size: clamp(76px, 24vw, 112px) !important;
+        font-size: clamp(22px, 6.5vw, 32px) !important;
         white-space: normal !important;
-        line-height: 0.88 !important;
-        margin-top: -20px !important;
+        line-height: 1.15 !important;
+        margin-top: 0 !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
       }
     }
   </style>
@@ -3459,7 +3482,7 @@
       <div class="hero-eyebrow">Software Engineer | AI/ML &amp; Computer Vision</div>
 
       <!-- 3. STAGGERED LETTER ANIMATION -->
-      <h1 class="hero-name" id="heroName" aria-label="Shakil Ahmed">
+      <h1 class="hero-name" id="heroName" aria-label="Shakil Ahmed Zunayed">
         <span class="solid"></span><span class="outline"></span>
       </h1>
 
@@ -4209,32 +4232,8 @@
         const solidSpan = container.querySelector('.solid');
         const outlineSpan = container.querySelector('.outline');
 
-        const firstName = 'Shakil';
-        const lastName = 'Ahmed';
-
-        let solidHTML = '';
-        firstName.split('').forEach((ch, i) => {
-          solidHTML += `<span class="letter" style="transition-delay:${0.35 + i * 0.06}s">${ch}</span>`;
-        });
-        // space
-        solidHTML += `<span class="letter space" style="display:inline-block;width:0.3em;transition-delay:${0.35 + firstName.length * 0.06}s">&nbsp;</span>`;
-        solidSpan.innerHTML = solidHTML;
-
-        let outlineHTML = '';
-        lastName.split('').forEach((ch, i) => {
-          outlineHTML += `<span class="letter" style="transition-delay:${0.35 + (firstName.length + 1 + i) * 0.06}s">${ch}</span>`;
-        });
-        outlineSpan.innerHTML = outlineHTML;
-
-        // Trigger after a frame
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            container.querySelectorAll('.letter').forEach(el => {
-              el.style.opacity = '1';
-              el.style.transform = 'none';
-            });
-          });
-        });
+        solidSpan.innerHTML = 'Shakil Ahmed Zunayed';
+        outlineSpan.innerHTML = '';
       }
       buildLetterSpans();
 
