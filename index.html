@@ -826,22 +826,60 @@
       color: var(--text3);
     }
 
-    .hero-scroll-arrow {
+    /* ── Scroll mouse icon ── */
+    .scroll-mouse {
+      width: 22px;
+      height: 34px;
+      border: 1.5px solid var(--text3);
+      border-radius: 11px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      padding-top: 5px;
+      opacity: 0.7;
+    }
+
+    .scroll-mouse-wheel {
+      width: 3px;
+      height: 6px;
+      background: var(--text3);
+      border-radius: 2px;
+      animation: mouse-wheel 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+    }
+
+    @keyframes mouse-wheel {
+      0%   { opacity: 1; transform: translateY(0); }
+      60%  { opacity: 0; transform: translateY(10px); }
+      61%  { opacity: 0; transform: translateY(0); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Triple-chevron cascade ── */
+    .scroll-chevrons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0px;
+      margin-top: 2px;
+    }
+
+    .scroll-chev {
+      display: block;
       color: var(--text3);
-      animation: bounce-down 2s ease-in-out infinite;
     }
 
-    @keyframes bounce-down {
+    .scroll-chev-1 { animation: chev-fade 1.8s ease-in-out infinite 0s; }
+    .scroll-chev-2 { animation: chev-fade 1.8s ease-in-out infinite 0.2s; }
+    .scroll-chev-3 { animation: chev-fade 1.8s ease-in-out infinite 0.4s; }
 
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(5px);
-      }
+    @keyframes chev-fade {
+      0%   { opacity: 0.15; }
+      40%  { opacity: 0.85; }
+      80%  { opacity: 0.15; }
+      100% { opacity: 0.15; }
     }
+
+    .hero-scroll-arrow { display: none; }
 
     .hero-scroll-bar {
       width: 1px;
@@ -863,17 +901,9 @@
     }
 
     @keyframes drop {
-      0% {
-        top: -100%
-      }
-
-      60% {
-        top: 100%
-      }
-
-      100% {
-        top: 100%
-      }
+      0%   { top: -100% }
+      60%  { top: 100% }
+      100% { top: 100% }
     }
 
     @keyframes up {
@@ -2870,9 +2900,9 @@
         display: none !important;
       }
 
-      .hero-scroll-arrow {
-        display: block !important;
-      }
+      .hero-scroll-arrow { display: none !important; }
+      .scroll-mouse { opacity: 0.65 !important; }
+      .scroll-chevrons { display: flex !important; }
 
       .hero-vignette {
         display: none !important;
@@ -3549,11 +3579,16 @@
     </div>
     <div class="hero-scroll">
       <span class="hero-scroll-label">Scroll</span>
-      <svg class="hero-scroll-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-        stroke-width="1.5">
-        <line x1="12" y1="5" x2="12" y2="19" />
-        <polyline points="6 13 12 19 18 13" />
-      </svg>
+      <!-- Mouse scroll icon -->
+      <div class="scroll-mouse">
+        <div class="scroll-mouse-wheel"></div>
+      </div>
+      <!-- Triple chevron cascade -->
+      <div class="scroll-chevrons">
+        <svg viewBox="0 0 20 10" width="20" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="scroll-chev scroll-chev-1"><polyline points="2 2 10 8 18 2"/></svg>
+        <svg viewBox="0 0 20 10" width="20" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="scroll-chev scroll-chev-2"><polyline points="2 2 10 8 18 2"/></svg>
+        <svg viewBox="0 0 20 10" width="20" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="scroll-chev scroll-chev-3"><polyline points="2 2 10 8 18 2"/></svg>
+      </div>
     </div>
   </section>
 
@@ -5333,6 +5368,8 @@
         if (isMobileDevice) {
           mainGroup.position.y = 0.5;
         }
+        // Track the base Y so we can restore it each frame
+        const _mobileBaseY = isMobileDevice ? 0.5 : 0;
 
         /* ── Drag to Rotate — fast 360 ── */
         let isDragging = false;
@@ -5436,7 +5473,9 @@
               e.touches[0].clientY - e.touches[1].clientY
             );
             const delta = (dist - pinchStartDist) * 0.025;
-            targetZoom = Math.max(3.5, Math.min(18, targetZoom - delta));
+            // On mobile: raise min zoom so orbit (r=3.2) never clips the canvas edge
+            const minZoom = isMobileDevice ? 6.0 : 3.5;
+            targetZoom = Math.max(minZoom, Math.min(18, targetZoom - delta));
             pinchStartDist = dist;
           }
           e.preventDefault();
@@ -5469,7 +5508,18 @@
           }
 
           // Smooth zoom — wider range now (3.5 to 18)
+          const _minZoom = isMobileDevice ? 6.0 : 3.5;
+          if (targetZoom < _minZoom) targetZoom = _minZoom;
           camera.position.z += (targetZoom - camera.position.z) * 0.10;
+
+          // On mobile: keep the globe vertically centred within the canvas as zoom changes.
+          // As camera moves closer, the globe appears larger; shift it down slightly so
+          // the top never clips against the canvas boundary.
+          if (isMobileDevice) {
+            // At default zoom (7.5) keep baseY. As we zoom in (smaller z), push down.
+            const zoomRatio = camera.position.z / 7.5; // >1 = zoomed out, <1 = zoomed in
+            mainGroup.position.y = _mobileBaseY * zoomRatio;
+          }
 
           // Auto spin when idle
           const autoT = autoSpin ? t * 0.35 : 0;
