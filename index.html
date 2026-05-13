@@ -526,7 +526,7 @@
         order: -1;
         z-index: 1;
         pointer-events: auto;
-        touch-action: none;
+        touch-action: pan-y;
         margin-top: 10px;
       }
     }
@@ -5371,21 +5371,52 @@
         /* ── Touch drag — fast 360 + pinch zoom ── */
         let touchStartX = 0, touchStartY = 0;
         let pinchStartDist = 0;
+        let touchOnObject = false; // tracks whether the touch started on a 3D object
+
+        /* Helper: returns true if the screen-space point (cx, cy) is over the 3D globe.
+           Projects mainGroup's world centre to NDC, then compares pixel distance against
+           the globe's approximate screen radius so we only intercept touches on the object. */
+        function isTouchOnGlobe(cx, cy) {
+          const rect = canvas.getBoundingClientRect();
+          // Project the group's world position to screen space
+          const worldPos = new THREE.Vector3();
+          mainGroup.getWorldPosition(worldPos);
+          worldPos.project(camera);
+          const screenX = (worldPos.x * 0.5 + 0.5) * rect.width  + rect.left;
+          const screenY = (-worldPos.y * 0.5 + 0.5) * rect.height + rect.top;
+          // Approximate globe screen radius: globe world-radius ≈ 5 units, camera z ≈ targetZoom
+          const approxWorldRadius = 5.2;
+          const fovRad = (camera.fov * Math.PI) / 180;
+          const halfH = Math.tan(fovRad / 2) * targetZoom;
+          const pixelsPerUnit = (rect.height / 2) / halfH;
+          const screenRadius = approxWorldRadius * pixelsPerUnit * 1.15; // 15% hit-area buffer
+          const dx = cx - screenX;
+          const dy = cy - screenY;
+          return (dx * dx + dy * dy) <= (screenRadius * screenRadius);
+        }
+
         canvas.addEventListener('touchstart', e => {
-          autoSpin = false;
           if (e.touches.length === 1) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            dragVelX = 0; dragVelY = 0;
+            touchOnObject = isTouchOnGlobe(e.touches[0].clientX, e.touches[0].clientY);
+            if (touchOnObject) {
+              autoSpin = false;
+              touchStartX = e.touches[0].clientX;
+              touchStartY = e.touches[0].clientY;
+              dragVelX = 0; dragVelY = 0;
+              e.preventDefault();
+            }
           } else if (e.touches.length === 2) {
+            touchOnObject = true; // always handle pinch-zoom on canvas
             pinchStartDist = Math.hypot(
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
+            e.preventDefault();
           }
-          e.preventDefault();
         }, { passive: false });
+
         canvas.addEventListener('touchmove', e => {
+          if (!touchOnObject) return; // let scroll pass through
           if (e.touches.length === 1) {
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
@@ -5406,7 +5437,9 @@
           }
           e.preventDefault();
         }, { passive: false });
+
         canvas.addEventListener('touchend', () => {
+          touchOnObject = false;
           // inertia continues from dragVelX/Y
         }, { passive: true });
 
