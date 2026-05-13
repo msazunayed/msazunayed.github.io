@@ -481,8 +481,34 @@
       width: 45%;
       height: calc(100% - var(--nav-h));
       z-index: 2;
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: grab;
+      touch-action: none;
     }
+
+    .hero-canvas-hint {
+      position: absolute;
+      bottom: 28px;
+      right: 18px;
+      z-index: 10;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .10em;
+      color: var(--text3);
+      opacity: 0.7;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      animation: fadeHint 4s ease 1.5s forwards;
+    }
+    @keyframes fadeHint {
+      0% { opacity: 0.7; }
+      70% { opacity: 0.7; }
+      100% { opacity: 0; }
+    }
+    .hero-canvas-hint svg { opacity: 0.6; }
 
     @media (max-width: 768px) {
       canvas#heroCanvas {
@@ -493,6 +519,8 @@
         right: auto;
         order: -1;
         z-index: 1;
+        pointer-events: auto;
+        touch-action: none;
       }
     }
 
@@ -3369,6 +3397,10 @@
   <!-- HERO -->
   <section class="hero" id="top">
     <canvas id="heroCanvas"></canvas>
+    <div class="hero-canvas-hint" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="15"/></svg>
+      Drag · Scroll to zoom
+    </div>
     <div class="hero-vignette"></div>
 
     <!-- hero-top removed to prevent overlap -->
@@ -4960,7 +4992,7 @@
         }
         sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
         const sparkMat = new THREE.PointsMaterial({
-          color: 0xFFC857, size: 0.04, map: solidDotTex, transparent: true, opacity: 1.0, alphaTest: 0.5
+          color: 0xFFC857, size: 0.07, map: solidDotTex, transparent: true, opacity: 1.0, alphaTest: 0.5
         });
         const innerSparks = new THREE.Points(sparkGeo, sparkMat);
         innerGroup.add(innerSparks);
@@ -5250,7 +5282,7 @@
           mainGroup.position.y = 0.5;
         }
 
-        /* ── Drag to Rotate ── */
+        /* ── Drag to Rotate — fast 360 ── */
         let isDragging = false;
         let prevDragX = 0, prevDragY = 0;
         let dragVelX = 0, dragVelY = 0;
@@ -5264,6 +5296,7 @@
           prevDragY = e.clientY;
           dragVelX = 0; dragVelY = 0;
           canvas.style.cursor = 'grabbing';
+          e.preventDefault();
         });
         window.addEventListener('mouseup', () => {
           isDragging = false;
@@ -5273,15 +5306,17 @@
           if (!isDragging) return;
           const dx = e.clientX - prevDragX;
           const dy = e.clientY - prevDragY;
-          dragVelX = dx * 0.012;
-          dragVelY = dy * 0.012;
+          // Fast 360: high sensitivity factor (0.022 = ~16 deg/100px — full spin in ~400px)
+          dragVelX = dx * 0.022;
+          dragVelY = dy * 0.022;
           userRotY += dragVelX;
           userRotX += dragVelY;
           prevDragX = e.clientX;
           prevDragY = e.clientY;
+          e.preventDefault();
         });
 
-        /* ── Touch drag ── */
+        /* ── Touch drag — fast 360 + pinch zoom ── */
         let touchStartX = 0, touchStartY = 0;
         let pinchStartDist = 0;
         canvas.addEventListener('touchstart', e => {
@@ -5289,19 +5324,23 @@
           if (e.touches.length === 1) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
+            dragVelX = 0; dragVelY = 0;
           } else if (e.touches.length === 2) {
             pinchStartDist = Math.hypot(
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
           }
-        }, { passive: true });
+          e.preventDefault();
+        }, { passive: false });
         canvas.addEventListener('touchmove', e => {
           if (e.touches.length === 1) {
             const dx = e.touches[0].clientX - touchStartX;
             const dy = e.touches[0].clientY - touchStartY;
-            userRotY += dx * 0.012;
-            userRotX += dy * 0.012;
+            dragVelX = dx * 0.022;
+            dragVelY = dy * 0.022;
+            userRotY += dragVelX;
+            userRotX += dragVelY;
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
           } else if (e.touches.length === 2) {
@@ -5309,10 +5348,14 @@
               e.touches[0].clientX - e.touches[1].clientX,
               e.touches[0].clientY - e.touches[1].clientY
             );
-            const delta = (dist - pinchStartDist) * 0.02;
-            targetZoom = Math.max(5, Math.min(18, targetZoom - delta));
+            const delta = (dist - pinchStartDist) * 0.025;
+            targetZoom = Math.max(3.5, Math.min(18, targetZoom - delta));
             pinchStartDist = dist;
           }
+          e.preventDefault();
+        }, { passive: false });
+        canvas.addEventListener('touchend', () => {
+          // inertia continues from dragVelX/Y
         }, { passive: true });
 
         /* ── Scroll / Wheel Zoom ── */
@@ -5320,7 +5363,7 @@
         canvas.style.cursor = 'grab';
         canvas.addEventListener('wheel', e => {
           e.preventDefault();
-          targetZoom = Math.max(5, Math.min(18, targetZoom + e.deltaY * 0.02));
+          targetZoom = Math.max(3.5, Math.min(18, targetZoom + e.deltaY * 0.018));
         }, { passive: false });
 
         /* ── Inertia decay when not dragging ── */
@@ -5329,16 +5372,16 @@
           requestAnimationFrame(animate);
           t += isMobileDevice ? 0.005 : 0.008;
 
-          // Inertia
+          // Inertia — smooth glide after release (0.96 = slow decay for long spin feel)
           if (!isDragging) {
-            dragVelX *= 0.92;
-            dragVelY *= 0.92;
+            dragVelX *= 0.96;
+            dragVelY *= 0.96;
             userRotY += dragVelX;
             userRotX += dragVelY;
           }
 
-          // Smooth zoom
-          camera.position.z += (targetZoom - camera.position.z) * 0.08;
+          // Smooth zoom — wider range now (3.5 to 18)
+          camera.position.z += (targetZoom - camera.position.z) * 0.10;
 
           // Auto spin when idle
           const autoT = autoSpin ? t * 0.35 : 0;
@@ -5347,21 +5390,27 @@
           mainGroup.rotation.y = userRotY + autoT + mouseX * 0.1;
           mainGroup.rotation.x = userRotX + mouseY * 0.1;
 
-          // Counter-orbital rotations
-          innerGroup.rotation.y = -t * 0.6;
-          outerGroup.rotation.y = t * 0.4;
-          slimGroup.rotation.y = -t * 0.3;
-          slimGroup.rotation.x = t * 0.15;
+          // Counter-orbital rotations — faster inner orbit for visible particle movement
+          innerGroup.rotation.y = -t * 1.6;    // was 0.6 — much faster
+          innerGroup.rotation.x = t * 0.8;     // added X axis tilt
+          innerGroup.rotation.z = t * 0.4;     // added Z axis for 3D feel
+          outerGroup.rotation.y = t * 0.5;     // was 0.4
+          outerGroup.rotation.x = -t * 0.12;   // slight tilt
+          slimGroup.rotation.y = -t * 0.35;    // was 0.3
+          slimGroup.rotation.x = t * 0.18;
 
-          network.material.dashOffset = -t * 1.5;
-          network2.material.dashOffset = -t * 2.2;
-          slimNetwork.material.dashOffset = -t * 0.9;
-          slimNetwork2.material.dashOffset = -t * 1.4;
-          innerGoldFlow.material.dashOffset = -t * 1.2;
-          innerHighlightFlow.material.dashOffset = -t * 3.5;
-          innerSparks.rotation.y = t * 1.2;
-          innerSparks.position.y = Math.sin(t) * 0.08;
-          innerSparks.material.size = 0.03 + Math.sin(t * 8) * 0.015;
+          network.material.dashOffset = -t * 2.2;      // was 1.5 — faster flow
+          network2.material.dashOffset = -t * 3.5;     // was 2.2
+          slimNetwork.material.dashOffset = -t * 1.4;
+          slimNetwork2.material.dashOffset = -t * 2.1;
+          innerGoldFlow.material.dashOffset = -t * 2.8;  // was 1.2 — much faster
+          innerHighlightFlow.material.dashOffset = -t * 6.0; // was 3.5
+
+          // Inner sparks: fast spin + pulsing size
+          innerSparks.rotation.y = t * 3.0;   // was 1.2 — fast spin
+          innerSparks.rotation.x = t * 1.5;
+          innerSparks.position.y = Math.sin(t * 1.8) * 0.12;
+          innerSparks.material.size = 0.05 + Math.sin(t * 12) * 0.025; // was 0.03 — bigger
 
           // Animate network flow particles
           const flowPos = flowParticles.geometry.attributes.position;
@@ -5381,7 +5430,7 @@
             );
           }
           flowPos.needsUpdate = true;
-          flowParticles.material.size = 0.12 + Math.sin(t * 6) * 0.05;
+          flowParticles.material.size = 0.14 + Math.sin(t * 8) * 0.06; // was 0.12 — bigger
           const isDark = document.body.classList.contains('dark');
           // Switch particle color based on dark/light mode
           flowParticles.material.color.set(isDark ? C_CYAN : C_INDIGO);
