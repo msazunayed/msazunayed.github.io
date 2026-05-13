@@ -583,6 +583,12 @@
         padding: 32px 16px 24px 16px;
         order: 2;
       }
+
+      .hero-name {
+        font-size: clamp(80px, 24vw, 120px);
+        white-space: normal;
+        line-height: 0.9;
+      }
     }
 
     .hero-eyebrow {
@@ -603,7 +609,7 @@
    3. HERO TEXT ANIMATION — staggered letter reveal
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     .hero-name {
-      font-size: clamp(32px, 4vw, 60px);
+      font-size: clamp(16px, 1.6vw, 26px);
       font-weight: 700;
       line-height: .95;
       letter-spacing: -.04em;
@@ -885,7 +891,7 @@
 
     @media (max-width: 768px) {
       .section {
-        padding: 60px 16px 60px 28px;
+        padding: 60px 16px 60px 16px;
         max-width: 100%;
         margin: 0 auto;
       }
@@ -977,10 +983,11 @@
     @media (max-width: 850px) {
       .about-grid {
         grid-template-columns: 1fr;
+        gap: 32px;
       }
 
       .photo-wrap {
-        margin: 0 auto 40px;
+        margin: 0 auto 0;
       }
     }
 
@@ -1017,7 +1024,7 @@
 
     .meta-row {
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       gap: 16px;
       padding: 12px 0;
       border-bottom: 1px solid var(--border);
@@ -1030,12 +1037,24 @@
       text-transform: uppercase;
       color: var(--text3);
       min-width: 110px;
+      flex-shrink: 0;
+      padding-top: 2px;
     }
 
     .meta-v {
       font-size: 13px;
       color: var(--text);
       font-weight: 500;
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    @media (max-width: 480px) {
+      .meta-k {
+        min-width: 90px;
+        font-size: 9px;
+      }
     }
 
     .meta-v a {
@@ -3272,8 +3291,9 @@
       }
 
       .hero-name {
-        font-size: clamp(42px, 13vw, 68px) !important;
+        font-size: clamp(60px, 18vw, 88px) !important;
         white-space: normal;
+        line-height: 0.9;
       }
 
       .section {
@@ -3292,6 +3312,23 @@
 
       .meta-k {
         min-width: 80px !important;
+        font-size: 9px !important;
+      }
+    }
+  </style>
+  <style>
+    @media (max-width: 768px) {
+      .hero-name {
+        font-size: clamp(72px, 22vw, 110px) !important;
+        white-space: normal !important;
+        line-height: 0.88 !important;
+      }
+    }
+    @media (max-width: 390px) {
+      .hero-name {
+        font-size: clamp(68px, 21vw, 100px) !important;
+        white-space: normal !important;
+        line-height: 0.88 !important;
       }
     }
   </style>
