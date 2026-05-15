@@ -528,11 +528,10 @@
         height: 220px;
         top: 0;
         right: auto;
-        order: 2;
         z-index: 1;
-        pointer-events: none !important; /* corners must scroll — #orbit-touch-zone handles orbit */
+        pointer-events: none !important;
         touch-action: pan-y;
-        margin-top: -70px;
+        margin-top: 8px;
       }
     }
 
@@ -596,9 +595,6 @@
         width: 100%;
         padding: 8px 16px 0px 16px;
         order: 1;
-        white-space: normal;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
       }
     }
 
@@ -2587,7 +2583,7 @@
       canvas#heroCanvas {
         height: 220px !important;
         margin-bottom: 0;
-        margin-top: -70px;
+        margin-top: 8px;
       }
 
       .hero-name {
@@ -3485,13 +3481,7 @@
 
     <!-- HERO -->
   <section class="hero" id="top">
-    <canvas id="heroCanvas"></canvas>
-    <!-- Circular touch zone: on mobile, only this circle captures touch for orbit interaction.
-         Corners of the canvas rectangle remain fully scrollable. -->
     <div id="orbit-touch-zone" aria-hidden="true"></div>
-
-
-
 
     <div class="hero-vignette"></div>
 
@@ -3563,6 +3553,7 @@
         </div>
       </div>
     </div>
+    <canvas id="heroCanvas"></canvas>
     <div class="hero-scroll">
       <span class="hero-scroll-label">Scroll</span>
       <!-- Golden mouse scroll icon -->
