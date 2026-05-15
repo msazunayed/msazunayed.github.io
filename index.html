@@ -528,10 +528,10 @@
         height: 160px;
         top: 0;
         right: auto;
-        z-index: 1;
+        z-index: 0;
         pointer-events: none !important;
         touch-action: pan-y;
-        margin-top: 0px;
+        margin-top: -100px;
       }
     }
 
@@ -2583,7 +2583,7 @@
       canvas#heroCanvas {
         height: 160px !important;
         margin-bottom: 0;
-        margin-top: 0;
+        margin-top: -100px;
       }
 
       .hero-name {
@@ -2888,7 +2888,7 @@
       .hero-avail {
         font-size: 10px !important;
         letter-spacing: .10em !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 10px !important;
         display: inline-flex !important;
         align-items: center !important;
         gap: 6px !important;
@@ -2898,7 +2898,7 @@
       .hero-eyebrow {
         font-size: 10px !important;
         letter-spacing: .14em !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 10px !important;
         color: var(--text2) !important;
         line-height: 1.6 !important;
         max-width: 100% !important;
@@ -2909,7 +2909,7 @@
         font-size: clamp(22px, 7vw, 38px) !important;
         white-space: normal !important;
         line-height: 1.15 !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 10px !important;
         letter-spacing: -.02em !important;
         word-break: break-word !important;
         overflow-wrap: break-word !important;
@@ -2919,7 +2919,7 @@
       .hero-role-wrap {
         font-size: 11.5px !important;
         letter-spacing: .12em !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 10px !important;
         color: var(--text2) !important;
         display: flex !important;
         align-items: center !important;
@@ -2930,7 +2930,7 @@
         font-size: 14px !important;
         line-height: 1.7 !important;
         color: var(--text2) !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 16px !important;
         max-width: 100% !important;
         animation: none !important;
         opacity: 1 !important;
@@ -2946,6 +2946,8 @@
         opacity: 1 !important;
         animation: none !important;
         margin-bottom: 0 !important;
+        position: relative !important;
+        z-index: 5 !important;
       }
 
       /* Primary button row */
