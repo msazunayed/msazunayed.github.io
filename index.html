@@ -473,8 +473,8 @@
     @media (max-width: 768px) {
       .hero {
         flex-direction: column;
-        min-height: 100svh;
-        padding: calc(var(--nav-h) + 4px) 16px 8px 16px;
+        min-height: unset;
+        padding: calc(var(--nav-h) + 4px) 16px 0px 16px;
         overflow: visible;
         margin: 0 auto;
       }
@@ -2459,7 +2459,7 @@
         position: relative !important;
         right: auto !important;
         top: auto !important;
-        margin-bottom: 30px;
+        margin-bottom: 0;
       }
 
       .about-grid {
@@ -2535,7 +2535,7 @@
         right: auto !important;
         top: auto !important;
         z-index: auto !important;
-        margin-bottom: 30px;
+        margin-bottom: 0;
       }
 
       .hero-content {
@@ -2888,7 +2888,7 @@
         padding: calc(var(--nav-h) + 24px) 0 0 0 !important;
         gap: 0 !important;
         align-items: stretch !important;
-        min-height: 100svh !important;
+        min-height: unset !important;
         background: var(--bg) !important;
       }
 
@@ -2897,7 +2897,7 @@
         order: 1 !important;
         width: 100% !important;
         max-width: 100% !important;
-        padding: 0 24px 12px 24px !important;
+        padding: 0 24px 0 24px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
@@ -2909,12 +2909,13 @@
       canvas#heroCanvas {
         order: 2 !important;
         width: 100% !important;
-        height: 440px !important;
+        height: 360px !important;
         position: relative !important;
         inset: auto !important;
         border-radius: 0 !important;
-        margin-top: 20px !important;
+        margin-top: 0 !important;
         margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
         display: block !important;
         z-index: 1 !important;
         touch-action: none !important;
@@ -5329,7 +5330,32 @@
 
 
           const isDark = document.body.classList.contains('dark');
-          // Make outer network lines visually thicker/stronger in light mode
+
+          // ── Theme-reactive colors ──
+          // White theme → full black; Dark theme → original gold palette
+          const C_THEME_MAIN   = isDark ? new THREE.Color(0xb8860b) : new THREE.Color(0x000000);
+          const C_THEME_WIRE1  = isDark ? new THREE.Color(0xffd700) : new THREE.Color(0x111111);
+          const C_THEME_WIRE2  = isDark ? new THREE.Color(0xfff7e6) : new THREE.Color(0x333333);
+          const C_THEME_SLIM1  = isDark ? new THREE.Color(0xffd700) : new THREE.Color(0x000000);
+          const C_THEME_SLIM2  = isDark ? new THREE.Color(0xfff3c0) : new THREE.Color(0x222222);
+          const C_THEME_GLOW   = isDark ? new THREE.Color(0xffb300) : new THREE.Color(0x000000);
+          const C_THEME_TUBE   = isDark ? new THREE.Color(0xffffff) : new THREE.Color(0x000000);
+          const C_THEME_FLOW   = isDark ? new THREE.Color(0xFFD700) : new THREE.Color(0x000000);
+          const C_THEME_HI     = isDark ? new THREE.Color(0xfff7e6) : new THREE.Color(0x444444);
+          const C_THEME_BLOOM  = isDark ? new THREE.Color(0xFFB300) : new THREE.Color(0x000000);
+
+          midMat.color.set(C_THEME_MAIN);
+          wireMat.color.set(C_THEME_WIRE1);
+          wireMat2.color.set(C_THEME_WIRE2);
+          slimMat.color.set(C_THEME_SLIM1);
+          slimMat2.color.set(C_THEME_SLIM2);
+          slimMatGlow.color.set(C_THEME_GLOW);
+          tubeMat.color.set(C_THEME_TUBE);
+          goldFlowMat.color.set(C_THEME_FLOW);
+          highlightFlowMat.color.set(C_THEME_HI);
+          bloomFlowMat.color.set(C_THEME_BLOOM);
+
+          // Opacity tweaks per theme
           slimMat.opacity = isDark ? 0.42 : 0.62;
           slimMat2.opacity = isDark ? 0.28 : 0.45;
 
