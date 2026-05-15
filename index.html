@@ -730,14 +730,17 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 20px;
-      background: var(--indigo);
-      color: #F8F4EE;
+      padding: 10px 22px;
+      background: transparent;
+      color: var(--indigo);
+      font-family: var(--mono);
       font-weight: 600;
-      font-size: 13px;
-      border-radius: 8px;
+      font-size: 11px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      border-radius: 6px;
       border: 1.5px solid var(--indigo);
-      transition: background .2s, color .2s;
+      transition: background .2s, color .2s, transform .2s, border-color .2s;
       position: relative;
       overflow: hidden;
     }
@@ -746,7 +749,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(45, 58, 140, 0.08);
       opacity: 0;
       transition: opacity .2s;
     }
@@ -755,9 +758,14 @@
       opacity: 1;
     }
 
+    .btn-p:hover {
+      background: rgba(45, 58, 140, 0.10);
+      transform: translateY(-1px);
+    }
+
     .btn-p svg {
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       stroke: currentColor;
       fill: none;
       stroke-width: 2;
@@ -816,6 +824,11 @@
       gap: 8px;
       opacity: 0;
       animation: fadein 1s ease 1.8s forwards;
+      --hs-color: #000000;
+    }
+
+    body.dark .hero-scroll {
+      --hs-color: var(--gold);
     }
 
     .hero-scroll-label {
@@ -823,30 +836,34 @@
       font-size: 8px;
       letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--hs-color);
       opacity: 0.75;
     }
 
-    /* ── Golden scroll mouse icon ── */
+    /* ── Scroll mouse icon ── */
     .scroll-mouse {
       width: 20px;
       height: 32px;
-      border: 1.5px solid var(--gold);
+      border: 1.5px solid var(--hs-color);
       border-radius: 10px;
       position: relative;
       display: flex;
       justify-content: center;
       padding-top: 5px;
       opacity: 0.85;
-      box-shadow: 0 0 8px rgba(184, 134, 11, 0.18);
     }
 
     .scroll-mouse-wheel {
       width: 3px;
       height: 6px;
-      background: var(--gold);
+      background: var(--hs-color);
       border-radius: 2px;
       animation: mouse-wheel 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .scroll-chev {
+      display: block;
+      color: var(--hs-color);
     }
 
     @keyframes mouse-wheel {
@@ -871,7 +888,7 @@
       }
     }
 
-    /* ── Triple-chevron cascade — golden ── */
+    /* ── Triple-chevron cascade ── */
     .scroll-chevrons {
       display: flex;
       flex-direction: column;
@@ -882,8 +899,7 @@
 
     .scroll-chev {
       display: block;
-      color: var(--gold);
-      filter: drop-shadow(0 0 3px rgba(184, 134, 11, 0.35));
+      color: var(--hs-color);
     }
 
     .scroll-chev-1 {
@@ -972,6 +988,92 @@
 
       to {
         opacity: 1;
+      }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ORBIT SCROLL INDICATOR (mobile only)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #orbit-scroll {
+      display: none; /* hidden on desktop */
+    }
+
+    @media (max-width: 768px) {
+      #orbit-scroll {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        position: absolute;
+        bottom: 18px;
+        right: 18px;
+        z-index: 10;
+        pointer-events: none;
+        opacity: 0;
+        animation: fadein 1s ease 2s forwards;
+        /* White theme = black; dark theme handled via body.dark below */
+        --os-color: #000000;
+        color: var(--os-color);
+      }
+
+      body.dark #orbit-scroll {
+        --os-color: #B8860B;
+        color: var(--os-color);
+      }
+
+      .os-label {
+        font-family: var(--mono);
+        font-size: 7px;
+        letter-spacing: .20em;
+        text-transform: uppercase;
+        color: var(--os-color);
+        opacity: 0.7;
+      }
+
+      .os-mouse {
+        width: 17px;
+        height: 27px;
+        border: 1.5px solid var(--os-color);
+        border-radius: 9px;
+        display: flex;
+        justify-content: center;
+        padding-top: 4px;
+        opacity: 0.85;
+      }
+
+      .os-wheel {
+        width: 2.5px;
+        height: 5px;
+        background: var(--os-color);
+        border-radius: 2px;
+        animation: os-wheel-anim 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes os-wheel-anim {
+        0%   { opacity: 1; transform: translateY(0); }
+        60%  { opacity: 0; transform: translateY(8px); }
+        61%  { opacity: 0; transform: translateY(0); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .os-chevrons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+      }
+
+      .os-chev { color: var(--os-color); }
+
+      .os-chev-1 { animation: os-chev-fade 1.8s ease-in-out infinite 0s; }
+      .os-chev-2 { animation: os-chev-fade 1.8s ease-in-out infinite 0.22s; }
+      .os-chev-3 { animation: os-chev-fade 1.8s ease-in-out infinite 0.44s; }
+
+      @keyframes os-chev-fade {
+        0%   { opacity: 0.1; }
+        40%  { opacity: 0.9; }
+        80%  { opacity: 0.1; }
+        100% { opacity: 0.1; }
       }
     }
 
@@ -1688,6 +1790,255 @@
       opacity: 1;
     }
 
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       ULTRA ANIMATION SYSTEM — PROJ CARDS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+    /* Override base card — 3D tilt via JS, richer transitions */
+    .proj-card {
+      transform-style: preserve-3d;
+      transition: border-color .35s ease, box-shadow .35s ease, transform .12s ease !important;
+      will-change: transform, box-shadow;
+      overflow: visible !important; /* allow particles to escape */
+    }
+
+    /* Inner content wrapper keeps overflow hidden */
+    .proj-card-inner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 11px;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* shimmer sweep removed */
+    .proj-card::before { display: none; }
+
+    /* ── 2. TOP EDGE LASER LINE ── */
+    .proj-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--gold) 40%,
+        rgba(255,220,100,0.9) 50%,
+        var(--gold) 60%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      opacity: 0;
+      transition: opacity .3s ease;
+      z-index: 3;
+      border-radius: 12px 12px 0 0;
+      animation: laser-slide 2.5s linear infinite;
+      animation-delay: var(--shimmer-delay, 0s);
+      animation-play-state: paused;
+    }
+
+    .proj-card.card-visible::after {
+      opacity: 1;
+      animation-play-state: running;
+    }
+
+    .proj-card:hover::after {
+      opacity: 1;
+      height: 2.5px;
+      box-shadow: 0 0 8px var(--gold), 0 0 20px rgba(184,134,11,0.5);
+    }
+
+    @keyframes laser-slide {
+      0%   { background-position: -100% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ── 3. HOVER: DRAMATIC LIFT + GLOW ── */
+    .proj-card:hover {
+      border-color: rgba(184, 134, 11, 0.55) !important;
+      transform: translateY(-10px) scale(1.02) !important;
+      box-shadow:
+        0 0 0 1px rgba(184,134,11,0.25),
+        0 8px 24px rgba(100,70,30,0.15),
+        0 20px 60px rgba(184,134,11,0.18),
+        0 0 80px rgba(184,134,11,0.08) !important;
+    }
+
+    @keyframes badge-levitate {
+      0%,100% { transform: translate(-50%, -50%) scale(1);        box-shadow: 0 4px 20px rgba(184,134,11,0.35), 0 0 0 4px rgba(184,134,11,0.08); }
+      50%      { transform: translate(-50%, -56%) scale(1.04);     box-shadow: 0 10px 32px rgba(184,134,11,0.45), 0 0 0 8px rgba(184,134,11,0.06); }
+    }
+
+    @keyframes click-icon-pulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.25); }
+    }
+
+    /* ── 5. CARD ENTRY RIPPLE RINGS (triple) ── */
+    .card-entry-ripple,
+    .card-entry-ripple-2,
+    .card-entry-ripple-3 {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 2px solid rgba(184, 134, 11, 0.5);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .proj-card.card-visible .card-entry-ripple {
+      animation: entry-ripple .9s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: var(--ripple-delay, 0.05s);
+    }
+    .proj-card.card-visible .card-entry-ripple-2 {
+      animation: entry-ripple .9s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: calc(var(--ripple-delay, 0.05s) + 0.18s);
+    }
+    .proj-card.card-visible .card-entry-ripple-3 {
+      animation: entry-ripple .9s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: calc(var(--ripple-delay, 0.05s) + 0.36s);
+    }
+
+    @keyframes entry-ripple {
+      0%   { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 0;   transform: scale(1.10); }
+    }
+
+    /* ── 6. SPRING ENTRANCE ── */
+    .proj-card.reveal {
+      opacity: 0;
+      transform: translateY(40px) scale(0.94) rotateX(8deg);
+      transition: opacity .6s var(--ease), transform .7s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .proj-card.reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── 7. PROJ NUM — animated counter feel ── */
+    .proj-num {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .proj-num::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      width: 0;
+      transition: width .5s var(--ease);
+      display: inline-block;
+      min-width: 0;
+    }
+
+    .proj-card.card-visible .proj-num::after,
+    .proj-card:hover .proj-num::after {
+      width: 40px;
+    }
+
+    /* ── 8. TITLE UNDERLINE WIPE ── */
+    .proj-title {
+      position: relative;
+      display: inline-block;
+    }
+
+    .proj-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      height: 1.5px;
+      width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--indigo));
+      border-radius: 2px;
+      transition: width .45s cubic-bezier(0.34,1.2,0.64,1);
+    }
+
+    .proj-card:hover .proj-title::after {
+      width: 100%;
+    }
+
+    /* ── 9. TAG STAGGER HOVER ── */
+    .proj-tag {
+      transition: transform .2s var(--ease), color .2s, border-color .2s, background .2s, box-shadow .2s !important;
+    }
+
+    .proj-card:hover .proj-tag:nth-child(1) { transition-delay: 0s !important;    transform: translateY(-2px); box-shadow: 0 4px 10px rgba(184,134,11,0.15); }
+    .proj-card:hover .proj-tag:nth-child(2) { transition-delay: .04s !important;  transform: translateY(-2px); box-shadow: 0 4px 10px rgba(184,134,11,0.15); }
+    .proj-card:hover .proj-tag:nth-child(3) { transition-delay: .08s !important;  transform: translateY(-2px); box-shadow: 0 4px 10px rgba(184,134,11,0.15); }
+    .proj-card:hover .proj-tag:nth-child(4) { transition-delay: .12s !important;  transform: translateY(-2px); box-shadow: 0 4px 10px rgba(184,134,11,0.15); }
+    .proj-card:hover .proj-tag:nth-child(5) { transition-delay: .16s !important;  transform: translateY(-2px); box-shadow: 0 4px 10px rgba(184,134,11,0.15); }
+
+    /* ── 10. METRIC NUMBERS SCALE UP ON HOVER ── */
+    .metric-n {
+      transition: transform .3s cubic-bezier(0.34,1.56,0.64,1), color .3s ease;
+    }
+    .proj-card:hover .metric-n {
+      transform: scale(1.12);
+      color: var(--gold);
+    }
+
+    /* ── 11. PROJ LINK — morphing button on hover ── */
+    .proj-link {
+      position: relative;
+      overflow: hidden;
+      transition: gap .25s, border-color .25s, color .25s, padding .25s, background .25s, border-radius .25s !important;
+    }
+
+    .proj-card:hover .proj-link {
+      gap: 10px;
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(184,134,11,0.07);
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(184,134,11,0.3);
+    }
+
+    .proj-link svg {
+      animation: link-arrow-idle 2s ease-in-out infinite;
+      animation-delay: var(--arrow-delay, .5s);
+      transition: transform .25s var(--ease);
+    }
+
+    .proj-card:hover .proj-link svg {
+      animation: none;
+      transform: translate(3px, -3px);
+    }
+
+    @keyframes link-arrow-idle {
+      0%,65%,100% { transform: translate(0,0); }
+      75%          { transform: translate(3px,-3px); }
+      85%          { transform: translate(1px,-1px); }
+    }
+
+    /* ── 12. BORDER GLOW BREATHE ── */
+    .proj-card.card-visible:not(.card-interacted):not(.siblings-active) {
+      animation: border-breathe 2.8s ease-in-out infinite;
+      animation-delay: var(--breathe-delay, 0.2s);
+    }
+
+    /* Pause breathing on all cards while any card in the grid is hovered */
+    .proj-track:hover .proj-card.card-visible:not(.card-interacted) {
+      animation: none !important;
+    }
+    /* …except the one actually being hovered — it gets the hover lift instead */
+
+    @keyframes border-breathe {
+      0%,100% { box-shadow: 0 1px 4px rgba(100,70,30,0.06); border-color: rgba(100,70,30,0.10); }
+      50%      { box-shadow: 0 6px 30px rgba(184,134,11,0.18), 0 0 0 1.5px rgba(184,134,11,0.18); border-color: rgba(184,134,11,0.28); }
+    }
+
+    .proj-card.card-interacted { animation: none !important; }
+
+    /* particles removed */
+
+    /* corner accents removed */
+    .card-corner { display: none; }
+
     .proj-num {
       font-family: var(--mono);
       font-size: 10px;
@@ -1799,92 +2150,214 @@
 
     /* Horizontal scroll progress indicator — removed */
 
-    /* ── GITHUB "+" CARD ── */
+    /* ── GITHUB FLIP CARD ── */
+
+    @keyframes gh-stat-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Outer wrapper — sets the 3-D stage */
     .proj-card-plus {
       background: transparent;
-      border: 1px dashed rgba(0, 0, 0, 0.15);
-      border-radius: 12px;
+      border: none;
+      border-radius: 14px;
+      cursor: none;
+      text-decoration: none;
+      position: relative;
+      min-height: 200px;
+      perspective: 900px;
+      display: block;
+    }
+
+    /* The flipping inner container */
+    .gh-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 14px;
+    }
+
+    .proj-card-plus:hover .gh-flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Shared face styles */
+    .gh-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+    }
+
+    /* ── FRONT ── */
+    .gh-front {
+      background: var(--card-bg);
+      border: 1px solid var(--border2);
       gap: 16px;
-      cursor: none;
-      text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      transition: border-color .25s ease, background .25s ease, transform .25s ease;
-      min-height: 200px;
     }
 
-    .proj-card-plus::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 13px;
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity .4s;
-    }
-
-    .proj-card-plus:hover {
-      border-color: rgba(0, 0, 0, 0.25);
-      background: rgba(0, 0, 0, 0.02);
-      transform: translateY(-4px);
-    }
-
-    .proj-card-plus:hover::before {
-      opacity: 1;
-    }
-
-    .proj-plus-icon {
+    .gh-front-icon {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      border: 1.5px solid rgba(0, 0, 0, 0.15);
+      border: 1.5px solid rgba(100,70,30,0.18);
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: border-color .3s, transform .3s var(--ease), box-shadow .3s;
-      position: relative;
-      z-index: 1;
     }
 
-    .proj-card-plus:hover .proj-plus-icon {
-      border-color: var(--text);
-      transform: rotate(90deg) scale(1.1);
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.10);
-    }
-
-    .proj-plus-icon svg {
+    .gh-front-icon svg {
       width: 22px;
       height: 22px;
-      stroke: var(--text2);
+      stroke: var(--text3);
       fill: none;
       stroke-width: 1.5;
-      transition: stroke .3s;
     }
 
-    .proj-card-plus:hover .proj-plus-icon svg {
-      stroke: var(--text);
-    }
-
-    .proj-plus-label {
+    .gh-front-label {
       font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: .18em;
+      font-size: 9.5px;
+      letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--text3);
       text-align: center;
-      line-height: 1.7;
-      transition: color .3s;
-      position: relative;
-      z-index: 1;
+      line-height: 1.85;
     }
 
-    .proj-card-plus:hover .proj-plus-label {
-      color: var(--text);
+    /* ── BACK ── */
+    .gh-back {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      transform: rotateY(180deg);
+      gap: 0;
+      padding: 24px 20px;
+      justify-content: space-between;
+      box-shadow: 0 12px 40px rgba(100,70,30,0.12);
     }
+
+    .gh-back-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    .gh-back-header svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text);
+      flex-shrink: 0;
+    }
+
+    .gh-back-name {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .10em;
+      color: var(--text2);
+      text-transform: uppercase;
+    }
+
+    .gh-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .gh-stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      animation: gh-stat-in 0s both;
+    }
+
+    .gh-stat-val {
+      font-family: var(--mono);
+      font-size: clamp(11px, 2.2vw, 16px);
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .gh-stat-key {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    .gh-back-cta {
+      margin-top: 16px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: var(--text3);
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+
+    .gh-back-cta svg {
+      width: 10px;
+      height: 10px;
+      stroke: var(--text3);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .gh-tap-hint {
+      display: none;
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text3);
+      opacity: 0.6;
+      margin-top: -4px;
+    }
+
+    .gh-cta-mobile { display: none; }
+    .gh-cta-desktop { display: inline; }
+
+    /* clickable rows on back face */
+    .gh-link-row {
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .gh-link-row:hover { opacity: 0.75; }
+    .gh-link-row:active { opacity: 0.5; }
+
+    .proj-card-plus:hover .gh-stat:nth-child(1) { animation: gh-stat-in .35s .32s var(--ease) both; }
+    .proj-card-plus:hover .gh-stat:nth-child(2) { animation: gh-stat-in .35s .40s var(--ease) both; }
+    .proj-card-plus:hover .gh-stat:nth-child(3) { animation: gh-stat-in .35s .48s var(--ease) both; }
+    .proj-card-plus:hover .gh-stat:nth-child(4) { animation: gh-stat-in .35s .56s var(--ease) both; }
 
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    EXPERIENCE
@@ -2156,22 +2629,33 @@
     }
 
     .form-btn {
-      width: 100%;
-      padding: 13px;
-      background: var(--indigo);
-      color: #F8F4EE;
-      border: none;
-      border-radius: 7px;
-      font-family: var(--r);
-      font-size: 13px;
-      font-weight: 700;
-      transition: all .2s var(--ease);
-      letter-spacing: -.01em;
+      width: auto;
+      display: block;
+      margin: 0 auto;
+      padding: 10px 28px;
+      background: transparent;
+      color: var(--indigo);
+      border: 1.5px solid var(--indigo);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: background .2s var(--ease), transform .2s var(--ease), border-color .2s;
     }
 
     .form-btn:hover {
-      background: #3D4FA0;
+      background: rgba(45, 58, 140, 0.10);
       transform: translateY(-1px);
+    }
+
+    /* Always centre the button on every screen size */
+    .form-wrap .magnetic[style*="display:block"],
+    .btn-center {
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
     }
 
     .form-st {
@@ -2574,6 +3058,50 @@
         transform: none;
       }
 
+      /* ── flip card mobile ── */
+      .proj-card-plus {
+        min-height: 220px;
+      }
+
+      .gh-flip-inner {
+        min-height: 220px;
+      }
+
+      /* on mobile, flip is triggered by .flipped class (via touch JS) not :hover */
+      .proj-card-plus.flipped .gh-flip-inner {
+        transform: rotateY(180deg);
+      }
+
+      /* stat animations on touch flip */
+      .proj-card-plus.flipped .gh-stat:nth-child(1) { animation: gh-stat-in .35s .32s var(--ease) both; }
+      .proj-card-plus.flipped .gh-stat:nth-child(2) { animation: gh-stat-in .35s .40s var(--ease) both; }
+      .proj-card-plus.flipped .gh-stat:nth-child(3) { animation: gh-stat-in .35s .48s var(--ease) both; }
+      .proj-card-plus.flipped .gh-stat:nth-child(4) { animation: gh-stat-in .35s .56s var(--ease) both; }
+
+      /* tap hint label on front face */
+      .gh-tap-hint {
+        display: block;
+      }
+
+      .gh-cta-desktop { display: none; }
+      .gh-cta-mobile  { display: inline; }
+
+      .gh-back {
+        padding: 18px 14px;
+      }
+
+      .gh-stats-grid {
+        gap: 7px;
+      }
+
+      .gh-stat {
+        padding: 8px 10px;
+      }
+
+      .gh-back-header {
+        margin-bottom: 12px;
+      }
+
       .skill-domain {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -2913,7 +3441,7 @@
         position: relative !important;
         inset: auto !important;
         border-radius: 0 !important;
-        margin-top: 0 !important;
+        margin-top: -40px !important;
         margin-bottom: 0 !important;
         padding-bottom: 0 !important;
         display: block !important;
@@ -3037,12 +3565,15 @@
         display: inline-flex !important;
         justify-content: center !important;
         min-height: 52px !important;
-        font-size: 15px !important;
-        font-weight: 700 !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
         padding: 14px 28px !important;
-        border-radius: 12px !important;
-        letter-spacing: .01em !important;
+        border-radius: 6px !important;
+        letter-spacing: .10em !important;
         white-space: nowrap !important;
+        background: transparent !important;
+        color: var(--indigo) !important;
+        border: 1.5px solid var(--indigo) !important;
       }
 
       /* Secondary ghost buttons — separate, equal, proper gaps */
@@ -3157,6 +3688,17 @@
         animation: none !important;
       }
 
+      .form-btn {
+        padding: 10px 28px !important;
+        font-size: 10px !important;
+      }
+
+      /* Centre the Send Message button wrapper */
+      .form-wrap .magnetic[style*="display:block"] {
+        display: flex !important;
+        justify-content: center !important;
+      }
+
       /* Nav logo text */
       .nav-logo-3d {
         font-size: 13px;
@@ -3255,9 +3797,9 @@
     /* Smooth full-page theme transition */
     body,
     body * {
-      transition-property: background-color, border-color, color, box-shadow;
-      transition-duration: 0.35s;
-      transition-timing-function: ease;
+      transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+      transition-duration: 0.6s;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* But keep animation-driven things from inheriting transition */
@@ -3266,6 +3808,31 @@
     .letter,
     .hero-scroll-bar::after {
       transition: none !important;
+    }
+
+    /* ── Theme ripple overlay ── */
+    #theme-ripple {
+      position: fixed;
+      inset: 0;
+      z-index: 99990;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #theme-ripple::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0.18;
+      transition: none;
+    }
+
+    #theme-ripple.expanding::after {
+      transform: scale(1);
+      opacity: 0;
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* ── DARK MODE OVERRIDES ── */
@@ -3293,8 +3860,13 @@
     }
 
     body.dark .btn-p {
-      background: #2D3A8C;
-      border-color: #2D3A8C;
+      background: transparent;
+      color: #8BA3FF;
+      border-color: #8BA3FF;
+    }
+
+    body.dark .btn-p:hover {
+      background: rgba(139, 163, 255, 0.12);
     }
 
     body.dark .btn-g {
@@ -3365,6 +3937,62 @@
     body.dark ::-webkit-scrollbar-track {
       background: var(--bg);
     }
+
+    /* ── GITHUB FLIP CARD — dark mode ── */
+    body.dark .gh-front {
+      background: var(--card-bg);
+      border-color: rgba(200,180,140,0.12);
+    }
+
+    body.dark .gh-front-icon {
+      background: #0E0C0A;
+      border-color: rgba(200,180,140,0.18);
+    }
+
+    body.dark .gh-front-icon svg {
+      stroke: var(--text3);
+    }
+
+    body.dark .gh-front-label {
+      color: var(--text3);
+    }
+
+    body.dark .gh-back {
+      background: #0A0806;
+      border-color: rgba(200,180,140,0.10);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    }
+
+    body.dark .gh-back-header svg {
+      fill: rgba(240,232,220,0.85);
+    }
+
+    body.dark .gh-back-name {
+      color: rgba(240,232,220,0.75);
+    }
+
+    body.dark .gh-stat {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(200,180,140,0.10);
+    }
+
+    body.dark .gh-stat-val {
+      color: var(--gold2, #D4A017);
+    }
+
+    body.dark .gh-stat-key {
+      color: rgba(200,180,140,0.40);
+    }
+
+    body.dark .gh-back-cta {
+      color: rgba(200,180,140,0.40);
+      border-top-color: rgba(200,180,140,0.08);
+    }
+
+    body.dark .gh-back-cta svg {
+      stroke: rgba(200,180,140,0.40);
+    }
+
 
     /* ── Extra-small phones (≤ 390px) ── */
     @media (max-width: 390px) {
@@ -3438,6 +4066,7 @@
 
   <!-- 6. Grain overlay -->
   <div id="grain-overlay" aria-hidden="true"></div>
+  <div id="theme-ripple" aria-hidden="true"></div>
 
   <!-- Scroll progress -->
   <div id="scroll-progress"></div>
@@ -3602,6 +4231,20 @@
       </div>
     </div>
     <canvas id="heroCanvas"></canvas>
+
+    <!-- Scroll indicator overlaid on bottom-right of 3D orbit (mobile only) -->
+    <div id="orbit-scroll" aria-hidden="true">
+      <span class="os-label">Scroll</span>
+      <div class="os-mouse">
+        <div class="os-wheel"></div>
+      </div>
+      <div class="os-chevrons">
+        <svg viewBox="0 0 20 10" width="16" height="8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="os-chev os-chev-1"><polyline points="2 2 10 8 18 2"/></svg>
+        <svg viewBox="0 0 20 10" width="16" height="8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="os-chev os-chev-2"><polyline points="2 2 10 8 18 2"/></svg>
+        <svg viewBox="0 0 20 10" width="16" height="8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="os-chev os-chev-3"><polyline points="2 2 10 8 18 2"/></svg>
+      </div>
+    </div>
+
     <div class="hero-scroll">
       <span class="hero-scroll-label">Scroll</span>
       <!-- Golden mouse scroll icon -->
@@ -3844,7 +4487,14 @@
     <div class="proj-sticky-container" id="projStickyContainer">
       <div class="proj-track" id="projTrack">
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:0s;--hint-delay:1.2s;--ripple-delay:.1s;--breathe-delay:.1s;--arrow-delay:.4s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">01</div>
           <div class="proj-title">Retail Shelf Analytics System</div>
           <p class="proj-desc">Fine-tuned YOLOv11n on 44 retail shelf images with advanced augmentation at 640×640. Full
@@ -3876,7 +4526,14 @@
           </a>
         </div>
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:0.8s;--hint-delay:1.6s;--ripple-delay:.2s;--breathe-delay:.3s;--arrow-delay:.7s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">02</div>
           <div class="proj-title">Amazon Review Sentiment Classifier</div>
           <p class="proj-desc">Three-class sentiment model using BiLSTM with Bahdanau attention on 60K Amazon reviews.
@@ -3903,7 +4560,14 @@
           </a>
         </div>
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:1.6s;--hint-delay:2.0s;--ripple-delay:.3s;--breathe-delay:.5s;--arrow-delay:1.0s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">03</div>
           <div class="proj-title">Credit Card Fraud Detection</div>
           <p class="proj-desc">FraudNet — a PyTorch MLP trained on 284K transactions with SMOTE oversampling to tackle
@@ -3935,7 +4599,14 @@
           </a>
         </div>
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:2.4s;--hint-delay:2.4s;--ripple-delay:.4s;--breathe-delay:.7s;--arrow-delay:1.3s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">04</div>
           <div class="proj-title">Bank Churn Intelligence Platform</div>
           <p class="proj-desc">A professional FastAPI-powered analytics dashboard for bank customer churn prediction and
@@ -3969,7 +4640,14 @@
           </a>
         </div>
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:3.2s;--hint-delay:2.8s;--ripple-delay:.5s;--breathe-delay:.9s;--arrow-delay:1.6s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">05</div>
           <div class="proj-title">Multi-Label Toxic Content Classifier</div>
           <p class="proj-desc">PyTorch pipeline for multi-label toxicity detection across six categories on the Jigsaw
@@ -3997,7 +4675,14 @@
           </a>
         </div>
 
-        <div class="proj-card">
+        <div class="proj-card reveal" style="--shimmer-delay:4.0s;--hint-delay:3.2s;--ripple-delay:.6s;--breathe-delay:1.1s;--arrow-delay:1.9s">
+          <div class="card-entry-ripple"></div>
+          <div class="card-entry-ripple-2"></div>
+          <div class="card-entry-ripple-3"></div>
+          <div class="card-corner card-corner--tl"></div>
+          <div class="card-corner card-corner--tr"></div>
+          <div class="card-corner card-corner--bl"></div>
+          <div class="card-corner card-corner--br"></div>
           <div class="proj-num">06</div>
           <div class="proj-title">LLM-Powered Agentic Search Engine</div>
           <p class="proj-desc">AI-driven search agent with multi-step reasoning and contextual memory across multi-turn
@@ -4021,15 +4706,66 @@
           </a>
         </div>
 
-        <!-- GitHub "+" card -->
+        <!-- GitHub flip card -->
         <a class="proj-card-plus" href="https://github.com/msazunayed" target="_blank" rel="noopener noreferrer">
-          <div class="proj-plus-icon">
-            <svg viewBox="0 0 24 24">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
+          <div class="gh-flip-inner">
+
+            <!-- FRONT -->
+            <div class="gh-face gh-front">
+              <div class="gh-front-icon">
+                <svg viewBox="0 0 24 24">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </div>
+              <div class="gh-front-label">More projects<br>on GitHub</div>
+              <span class="gh-tap-hint">tap to explore</span>
+            </div>
+
+            <!-- BACK -->
+            <div class="gh-face gh-back" onclick="window.open('https://github.com/msazunayed','_blank')">
+              <!-- header: GitHub icon + name → profile -->
+              <div class="gh-back-header gh-link-row" data-href="https://github.com/msazunayed">
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                    0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                    -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                    .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+                    -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+                    .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+                    .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                    0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                <span class="gh-back-name">msazunayed</span>
+              </div>
+
+              <div class="gh-stats-grid">
+                <div class="gh-stat gh-link-row" data-href="https://github.com/msazunayed?tab=repositories">
+                  <span class="gh-stat-val">20+</span>
+                  <span class="gh-stat-key">Repositories</span>
+                </div>
+                <div class="gh-stat gh-link-row" data-href="https://github.com/msazunayed?tab=repositories&q=&type=&language=python">
+                  <span class="gh-stat-val">AI/ML</span>
+                  <span class="gh-stat-key">Focus area</span>
+                </div>
+                <div class="gh-stat gh-link-row" data-href="https://github.com/msazunayed?tab=repositories">
+                  <span class="gh-stat-val">CV</span>
+                  <span class="gh-stat-key">Vision systems</span>
+                </div>
+                <div class="gh-stat gh-link-row" data-href="https://github.com/msazunayed?tab=repositories">
+                  <span class="gh-stat-val">Production</span>
+                  <span class="gh-stat-key">Grade code</span>
+                </div>
+              </div>
+
+              <div class="gh-back-cta">
+                <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                <span class="gh-cta-desktop">view all repos</span>
+                <span class="gh-cta-mobile">tap again to visit</span>
+              </div>
+            </div>
+
           </div>
-          <div class="proj-plus-label">More projects<br>on GitHub</div>
         </a>
 
       </div>
@@ -4209,7 +4945,7 @@
             <label class="form-label" for="fMsg">Message</label>
             <textarea id="fMsg" class="form-textarea" placeholder="Tell me about the opportunity…"></textarea>
           </div>
-          <div class="magnetic" data-magnetic style="display:block">
+          <div class="magnetic btn-center" data-magnetic style="display:block">
             <button class="form-btn" id="sendBtn" type="button">Send Message</button>
           </div>
           <div class="form-st" id="formSt" aria-live="polite"></div>
@@ -4415,7 +5151,51 @@
         '--border': 'rgba(100,70,30,0.10)', '--border2': 'rgba(100,70,30,0.18)',
       };
 
-      function applyTheme(dark) {
+      function applyTheme(dark, originEl) {
+        // ── 1. Ripple burst from toggle button ──
+        const ripple = document.getElementById('theme-ripple');
+        if (ripple && originEl) {
+          const rect = originEl.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const maxR = Math.hypot(Math.max(cx, window.innerWidth - cx), Math.max(cy, window.innerHeight - cy)) * 2.2;
+          const size = maxR * 2;
+          const pseudo = ripple;
+          pseudo.style.cssText = '';
+          // Set the pseudo-element via a style tag trick using a real div
+          const burst = document.createElement('div');
+          burst.style.cssText = `
+            position: absolute;
+            border-radius: 50%;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${cx - size / 2}px;
+            top: ${cy - size / 2}px;
+            background: ${dark ? '#B8860B' : '#2C2018'};
+            opacity: 0.13;
+            transform: scale(0);
+            pointer-events: none;
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1);
+          `;
+          ripple.appendChild(burst);
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            burst.style.transform = 'scale(1)';
+            burst.style.opacity = '0';
+            setTimeout(() => burst.remove(), 800);
+          }));
+        }
+
+        // ── 2. Toggle button spin ──
+        if (originEl) {
+          originEl.style.transition = 'transform 0.45s cubic-bezier(0.34,1.56,0.64,1)';
+          originEl.style.transform = 'rotate(360deg) scale(1.18)';
+          setTimeout(() => {
+            originEl.style.transform = '';
+            setTimeout(() => { originEl.style.transition = ''; }, 450);
+          }, 450);
+        }
+
+        // ── 3. Apply CSS vars & class ──
         const vars = dark ? DARK_VARS : LIGHT_VARS;
         for (const [k, v] of Object.entries(vars)) {
           document.documentElement.style.setProperty(k, v);
@@ -4441,8 +5221,8 @@
 
       applyTheme(isDark);
 
-      themeToggle?.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); });
-      themeToggleMobile?.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); });
+      themeToggle?.addEventListener('click', function() { isDark = !isDark; applyTheme(isDark, this); });
+      themeToggleMobile?.addEventListener('click', function() { isDark = !isDark; applyTheme(isDark, this); });
 
       /* ─────────────────────────────────────────────
          REVEAL ON SCROLL
@@ -4557,7 +5337,7 @@
         let autoAngle = rotY;
         function autoRotate() {
           if (!autoRot) return;
-          autoAngle += 0.25;
+          autoAngle += 0.9;
           rotY = autoAngle;
           setRot();
           requestAnimationFrame(autoRotate);
@@ -5579,6 +6359,132 @@
     }
   </style>
   </script>
+  </script>
+
+  <!-- Project card ultra-animation controller -->
+  <script>
+    (function () {
+      var cards = document.querySelectorAll('.proj-card.reveal');
+      if (!cards.length) return;
+
+      /* ── IntersectionObserver: reveal + card-visible ── */
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var card = entry.target;
+            card.classList.add('in');
+            setTimeout(function () { card.classList.add('card-visible'); }, 550);
+            io.unobserve(card);
+          }
+        });
+      }, { threshold: 0.15 });
+      cards.forEach(function (c) { io.observe(c); });
+
+      /* ── 3D Tilt on mouse move ── */
+      var MAX_TILT = 12;   // degrees
+      var MAX_SHIFT = 6;   // px for the inner shine
+
+      cards.forEach(function (card) {
+
+        /* Mark interacted on first hover */
+        card.addEventListener('mouseenter', function () {
+          card.classList.add('card-interacted');
+        }, { once: true });
+
+        /* ── TILT ── */
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width  - 0.5;   // -0.5 → 0.5
+          var y = (e.clientY - r.top)  / r.height - 0.5;
+          var rotX = -y * MAX_TILT;
+          var rotY =  x * MAX_TILT;
+          card.style.transform =
+            'translateY(-10px) scale(1.02) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+
+          /* Move shimmer/shine with cursor */
+          var px = (x + 0.5) * 100;
+          var py = (y + 0.5) * 100;
+          card.style.setProperty('--mx', px + '%');
+          card.style.setProperty('--my', py + '%');
+        });
+
+        card.addEventListener('mouseleave', function () {
+          card.style.transform = '';
+          card.style.removeProperty('--mx');
+          card.style.removeProperty('--my');
+        });
+
+
+      });
+
+    })();
+  </script>
+
+  <!-- GitHub flip card — touch + click support -->
+  <script>
+    (function () {
+      var card = document.querySelector('.proj-card-plus');
+      if (!card) return;
+
+      var ghUrl = 'https://github.com/msazunayed';
+      var flipped = false;
+      var isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+      /* ── Desktop: clicking .gh-link-row elements opens their href ── */
+      card.querySelectorAll('.gh-link-row').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          window.open(el.getAttribute('data-href') || ghUrl, '_blank');
+        });
+      });
+
+      /* ── Desktop: whole back face click opens GitHub ── */
+      var back = card.querySelector('.gh-back');
+      if (back) {
+        back.addEventListener('click', function (e) {
+          // only fire if not clicking a link-row (those handle themselves)
+          if (!e.target.closest('.gh-link-row')) {
+            e.stopPropagation();
+            e.preventDefault();
+            window.open(ghUrl, '_blank');
+          }
+        });
+      }
+
+      /* ── Mobile only: two-tap flip flow ── */
+      if (!isTouch) return;
+
+      card.addEventListener('click', function (e) {
+        if (!flipped) {
+          // First tap → flip, stop navigation
+          e.preventDefault();
+          e.stopPropagation();
+          flipped = true;
+          card.classList.add('flipped');
+          return;
+        }
+
+        // Second tap — check what was tapped
+        var linkRow = e.target.closest('.gh-link-row');
+        if (linkRow) {
+          e.preventDefault();
+          window.open(linkRow.getAttribute('data-href') || ghUrl, '_blank');
+          return;
+        }
+
+        // Tapped anywhere else on back → go to GitHub
+        window.open(ghUrl, '_blank');
+      });
+
+      // Tap outside → flip back
+      document.addEventListener('touchstart', function (e) {
+        if (flipped && !card.contains(e.target)) {
+          flipped = false;
+          card.classList.remove('flipped');
+        }
+      }, { passive: true });
+    })();
   </script>
 
 </body>
