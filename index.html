@@ -4809,9 +4809,9 @@
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 100);
         camera.position.set(0, 0, 10);
-        // Mobile: centre camera on the orbit (mainGroup.position.y = -1.8)
+        // Mobile: centre camera on the orbit (mainGroup.position.y = -3.5)
         const _camTarget = isMobileDevice
-          ? new THREE.Vector3(0, -1.8, 0)
+          ? new THREE.Vector3(0, -3.5, 0)
           : new THREE.Vector3(0, 0, 0);
         camera.lookAt(_camTarget);
 
@@ -5409,12 +5409,12 @@
 
         // On mobile canvas is below text - shift globe to top of canvas to sit near buttons
         if (isMobileDevice) {
-          mainGroup.position.y = -1.8;
+          mainGroup.position.y = -3.5;
           camera.position.set(0, 0, 22);
           camera.lookAt(_camTarget);
         }
         // Track the base Y so we can restore it each frame
-        const _mobileBaseY = isMobileDevice ? -1.8 : 0;
+        const _mobileBaseY = isMobileDevice ? -3.5 : 0;
 
         /* ── Drag to Rotate — fast 360 ── */
         let isDragging = false;
