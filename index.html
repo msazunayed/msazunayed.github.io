@@ -21,7 +21,7 @@
     type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Shakil Ahmed","jobTitle":"Software Engineer | AI/ML & Computer Vision","email":"msazunayed@gmail.com","sameAs":["https://github.com/msazunayed","https://www.linkedin.com/in/shakilahmedzunayed/"]}</script>
   <meta name="description"
     content="Software Engineer | AI/ML & Computer Vision. Building end-to-end intelligent vision systems for production.">
-  <!-- ⚡ Early theme init — runs synchronously before first paint to prevent flash of wrong theme -->
+  <!-- ⚡ Early theme init — runs synchronously before first paint. Works on ALL devices / countries -->
   <script>
     (function () {
       var STORAGE_KEY = 'portfolio-theme-preference';
@@ -34,25 +34,39 @@
       } else if (stored === 'manual-light') {
         isDark = false;
       } else {
-        // Time-based: Bangladesh time UTC+6; day = 6:00–18:00 → light, else dark
-        var now = new Date();
-        var bdHour = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })).getHours();
-        isDark = (bdHour >= 18 || bdHour < 6);
+        // Use visitor's own local clock — automatically correct for every country
+        var localHour = new Date().getHours();
+        isDark = (localHour >= 18 || localHour < 6);
       }
+
+      var root = document.documentElement;
 
       if (isDark) {
-        document.documentElement.classList.add('dark-init');
-        document.documentElement.style.setProperty('--bg', '#0E0C0A');
-        document.documentElement.style.setProperty('--bg-rgb', '14, 12, 10');
+        // Stamp ALL dark CSS variables on <html> immediately — zero flash on mobile
+        root.classList.add('dark-init');
+        root.style.setProperty('--bg',      '#0E0C0A');
+        root.style.setProperty('--bg2',     '#161210');
+        root.style.setProperty('--bg3',     '#1E1814');
+        root.style.setProperty('--bg-rgb',  '14, 12, 10');
+        root.style.setProperty('--card-bg', '#1A1612');
+        root.style.setProperty('--text',    '#F0E8DC');
+        root.style.setProperty('--text2',   '#C8B8A0');
+        root.style.setProperty('--text3',   '#8C7A60');
+        root.style.setProperty('--accent',  '#F0E8DC');
+        root.style.setProperty('--accent2', '#D4C4A8');
+        root.style.setProperty('--border',  'rgba(200,180,140,0.10)');
+        root.style.setProperty('--border2', 'rgba(200,180,140,0.18)');
       }
 
-      // Update theme-color meta immediately for browser chrome / status bar
+      // Once DOM ready: stamp body.dark, update status-bar meta, clean up html class
       document.addEventListener('DOMContentLoaded', function () {
+        // Android status bar + iOS PWA chrome color
         var meta = document.getElementById('meta-theme-color');
         if (meta) meta.setAttribute('content', isDark ? '#0E0C0A' : '#F8F4EE');
-        // Migrate html class to body once body exists
+        // body.dark drives all CSS selectors
         if (isDark) document.body.classList.add('dark');
-        document.documentElement.classList.remove('dark-init');
+        // Remove temporary html class — body.dark now owns the cascade
+        root.classList.remove('dark-init');
       });
     })();
   </script>
@@ -63,8 +77,12 @@
   <style>
     /* ── Early dark-init: applied by inline head script before first paint ── */
     html.dark-init,
-    html.dark-init body {
+    html.dark-init body,
+    html.dark-init nav,
+    html.dark-init .hero,
+    html.dark-init .mob-menu {
       background: #0E0C0A !important;
+      color: #F0E8DC !important;
     }
 
     /* ── ROOT TOKENS ── */
@@ -5608,32 +5626,28 @@
           localStorage.setItem(this.STORAGE_KEY, theme === 'dark' ? 'manual-dark' : 'manual-light');
         },
 
-        // Get current time in Bangladesh timezone (UTC+6)
-        getBangladeshHour() {
-          const now = new Date();
-          // Bangladesh timezone offset is UTC+6
-          const bangladeshTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-          return bangladeshTime.getHours();
+        // Get visitor's local hour (browser's own clock — already in their timezone)
+        getLocalHour() {
+          return new Date().getHours();
         },
 
-        // Determine if it's day or night in Bangladesh
-        // Day: 6 AM to 6 PM (6-18)
-        // Night: 6 PM to 6 AM (18-6 next day)
-        isBangladeshNight() {
-          const hour = this.getBangladeshHour();
+        // Determine if it's night in the visitor's local timezone
+        // Day: 6 AM to 6 PM (6–18) → light theme
+        // Night: 6 PM to 6 AM (18–6) → dark theme
+        isLocalNight() {
+          const hour = this.getLocalHour();
           return (hour >= 18 || hour < 6);
         },
 
         // Determine initial theme
         getInitialTheme() {
-          // Priority: user manual override (stored) > Bangladesh time-based
-          // System preference is intentionally ignored — Bangladesh time is the default.
+          // Priority: user manual override (stored) > visitor's local time
           const stored = this.getStoredPreference();
           if (stored === 'manual-dark') return true;
           if (stored === 'manual-light') return false;
 
-          // Default: Bangladesh time-based (6 AM–6 PM = light, 6 PM–6 AM = dark)
-          return this.isBangladeshNight();
+          // Default: visitor's local time (6 AM–6 PM = light, 6 PM–6 AM = dark)
+          return this.isLocalNight();
         },
 
         // Update ARIA attributes
@@ -5766,7 +5780,7 @@
         requestAnimationFrame(step);
       }
 
-      // Initialize theme based on Bangladesh time
+      // Initialize theme based on visitor's local time
       let isDark = ThemeManager.getInitialTheme();
 
       applyTheme(isDark);
@@ -5798,10 +5812,10 @@
       });
 
       // ── System color scheme changes are intentionally ignored ──
-      // Theme default is determined by Bangladesh time (day/night), not OS preference.
+      // Theme default is determined by the visitor's local time (day/night), not OS preference.
       // Users can still manually toggle at any time.
 
-      // ── Auto-switch theme at 6 AM / 6 PM Bangladesh time ──
+      // ── Auto-switch theme at 6 AM / 6 PM in the visitor's local timezone ──
       // Only fires if the user has NOT manually overridden the theme.
       (function scheduleAutoSwitch() {
         var CHECK_INTERVAL = 10 * 1000; // check every 10 seconds
@@ -5810,7 +5824,7 @@
           var stored = ThemeManager.getStoredPreference();
           if (stored === 'manual-dark' || stored === 'manual-light') return;
 
-          var shouldBeDark = ThemeManager.isBangladeshNight();
+          var shouldBeDark = ThemeManager.isLocalNight();
           if (shouldBeDark !== isDark) {
             isDark = shouldBeDark;
             applyTheme(isDark);
