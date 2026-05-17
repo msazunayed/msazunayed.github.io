@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0, user-scalable=yes">
-  <meta name="theme-color" content="#050608">
+  <meta name="theme-color" id="meta-theme-color" content="#F8F4EE">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Shakil Ahmed — Software Engineer | AI/ML & Computer Vision</title>
   <meta property="og:title" content="Shakil Ahmed — Software Engineer | AI/ML & Computer Vision">
   <meta property="og:description"
@@ -21,63 +21,52 @@
     type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Shakil Ahmed","jobTitle":"Software Engineer | AI/ML & Computer Vision","email":"msazunayed@gmail.com","sameAs":["https://github.com/msazunayed","https://www.linkedin.com/in/shakilahmedzunayed/"]}</script>
   <meta name="description"
     content="Software Engineer | AI/ML & Computer Vision. Building end-to-end intelligent vision systems for production.">
+  <!-- ⚡ Early theme init — runs synchronously before first paint to prevent flash of wrong theme -->
+  <script>
+    (function () {
+      var STORAGE_KEY = 'portfolio-theme-preference';
+      var stored = null;
+      try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+      var isDark;
+      if (stored === 'manual-dark') {
+        isDark = true;
+      } else if (stored === 'manual-light') {
+        isDark = false;
+      } else {
+        // Time-based: Bangladesh time UTC+6; day = 6:00–18:00 → light, else dark
+        var now = new Date();
+        var bdHour = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })).getHours();
+        isDark = (bdHour >= 18 || bdHour < 6);
+      }
+
+      if (isDark) {
+        document.documentElement.classList.add('dark-init');
+        document.documentElement.style.setProperty('--bg', '#0E0C0A');
+        document.documentElement.style.setProperty('--bg-rgb', '14, 12, 10');
+      }
+
+      // Update theme-color meta immediately for browser chrome / status bar
+      document.addEventListener('DOMContentLoaded', function () {
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', isDark ? '#0E0C0A' : '#F8F4EE');
+        // Migrate html class to body once body exists
+        if (isDark) document.body.classList.add('dark');
+        document.documentElement.classList.remove('dark-init');
+      });
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
-  <!-- EARLY THEME INIT: blocking script — runs before first paint on ALL screen sizes.
-       Prevents white flash by applying dark class immediately based on Bangladesh time (UTC+6).
-       Day 06:00–17:59 = white/light theme. Night 18:00–05:59 = dark theme. Manual toggle overrides. -->
-  <script>
-    (function () {
-      try {
-        var KEY = 'portfolio-theme-preference';
-        var stored = localStorage.getItem(KEY);
-
-        // Migrate old format ('dark'/'light') — clear it so time-based default takes over
-        if (stored === 'dark' || stored === 'light') {
-          localStorage.removeItem(KEY);
-          stored = null;
-        }
-
-        var isDark;
-        if (stored === 'manual-dark') {
-          isDark = true;
-        } else if (stored === 'manual-light') {
-          isDark = false;
-        } else {
-          // Bangladesh Standard Time = UTC+6, no DST.
-          // Use raw UTC offset math — works on ALL mobile browsers reliably.
-          var utcMs = Date.now() + (new Date().getTimezoneOffset() * 60000);
-          var bdHour = new Date(utcMs + (6 * 3600000)).getHours();
-          // 06:00–17:59 = day → light/white. 18:00–05:59 = night → dark.
-          isDark = (bdHour >= 18 || bdHour < 6);
-        }
-        if (isDark) {
-          document.documentElement.style.setProperty('--bg', '#0E0C0A');
-          document.documentElement.style.setProperty('--bg2', '#161210');
-          document.documentElement.style.setProperty('--bg3', '#1E1814');
-          document.documentElement.style.setProperty('--bg-rgb', '14, 12, 10');
-          document.documentElement.style.setProperty('--card-bg', '#1A1612');
-          document.documentElement.style.setProperty('--text', '#F0E8DC');
-          document.documentElement.style.setProperty('--text2', '#C8B8A0');
-          document.documentElement.style.setProperty('--text3', '#8C7A60');
-          document.documentElement.style.setProperty('--accent', '#F0E8DC');
-          document.documentElement.style.setProperty('--accent2', '#D4C4A8');
-          document.documentElement.style.setProperty('--border', 'rgba(200,180,140,0.10)');
-          document.documentElement.style.setProperty('--border2', 'rgba(200,180,140,0.18)');
-          if (document.body) {
-            document.body.classList.add('dark');
-          } else {
-            new MutationObserver(function (_, obs) {
-              if (document.body) { document.body.classList.add('dark'); obs.disconnect(); }
-            }).observe(document.documentElement, { childList: true });
-          }
-        }
-      } catch (e) {}
-    })();
-  </script>
   <style>
+    /* ── Early dark-init: applied by inline head script before first paint ── */
+    html.dark-init,
+    html.dark-init body {
+      background: #0E0C0A !important;
+    }
+
     /* ── ROOT TOKENS ── */
     :root {
       --bg: #F8F4EE;
@@ -3915,15 +3904,8 @@
         letter-spacing: .10em !important;
         white-space: nowrap !important;
         background: transparent !important;
-        color: #000000 !important;
-        border: 1.5px solid #000000 !important;
-      }
-
-      /* Dark theme on mobile — gold border & text, not white */
-      body.dark .btn-p {
-        color: #D4A017 !important;
-        border-color: #D4A017 !important;
-        background: transparent !important;
+        color: var(--indigo) !important;
+        border: 1.5px solid var(--indigo) !important;
       }
 
       /* Secondary ghost buttons — separate, equal, proper gaps */
@@ -5595,15 +5577,14 @@
         STORAGE_KEY: 'portfolio-theme-preference',
         DARK_CLASS: 'dark',
         
-        // Get stored manual preference (set only when user explicitly toggles)
+        // Get stored preference or system preference
         getStoredPreference() {
-          const val = localStorage.getItem(this.STORAGE_KEY);
-          // Migrate old format ('dark'/'light') left from before manual- prefix was introduced
-          if (val === 'dark' || val === 'light') {
-            localStorage.removeItem(this.STORAGE_KEY);
-            return null;
-          }
-          return val;
+          return localStorage.getItem(this.STORAGE_KEY);
+        },
+
+        // Get system color scheme preference
+        getSystemPreference() {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         },
 
         // Save preference to localStorage (manual-dark / manual-light)
@@ -5611,10 +5592,12 @@
           localStorage.setItem(this.STORAGE_KEY, theme === 'dark' ? 'manual-dark' : 'manual-light');
         },
 
-        // Get current hour in Bangladesh timezone (UTC+6, no DST) — reliable on all browsers
+        // Get current time in Bangladesh timezone (UTC+6)
         getBangladeshHour() {
-          var utcMs = Date.now() + (new Date().getTimezoneOffset() * 60000);
-          return new Date(utcMs + (6 * 3600000)).getHours();
+          const now = new Date();
+          // Bangladesh timezone offset is UTC+6
+          const bangladeshTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+          return bangladeshTime.getHours();
         },
 
         // Determine if it's day or night in Bangladesh
@@ -5718,6 +5701,10 @@
           if (iconSunMobile) iconSunMobile.style.display = 'block';
           if (iconMoonMobile) iconMoonMobile.style.display = 'none';
         }
+
+        // Update browser chrome / status bar color
+        var metaTheme = document.getElementById('meta-theme-color');
+        if (metaTheme) metaTheme.setAttribute('content', dark ? '#0E0C0A' : '#F8F4EE');
 
         // Smooth scrollbar color transition via animated style injection
         _animateScrollbar(dark);
