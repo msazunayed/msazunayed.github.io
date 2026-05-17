@@ -5743,7 +5743,7 @@
       // ── Auto-switch theme at 6 AM / 6 PM Bangladesh time ──
       // Only fires if the user has NOT manually overridden the theme.
       (function scheduleAutoSwitch() {
-        var CHECK_INTERVAL = 60 * 1000; // check every 60 seconds
+        var CHECK_INTERVAL = 10 * 1000; // check every 10 seconds
         setInterval(function () {
           // If user manually chose a theme, respect it
           var stored = ThemeManager.getStoredPreference();
