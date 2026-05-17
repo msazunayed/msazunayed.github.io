@@ -25,6 +25,47 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
+  <!-- EARLY THEME INIT: blocking script — runs before first paint on ALL screen sizes.
+       Prevents white flash by applying dark class immediately based on Bangladesh time (UTC+6).
+       Day 06:00–17:59 = white/light theme. Night 18:00–05:59 = dark theme. Manual toggle overrides. -->
+  <script>
+    (function () {
+      try {
+        var KEY = 'portfolio-theme-preference';
+        var stored = localStorage.getItem(KEY);
+        var isDark;
+        if (stored === 'manual-dark') {
+          isDark = true;
+        } else if (stored === 'manual-light') {
+          isDark = false;
+        } else {
+          var bdHour = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })).getHours();
+          isDark = (bdHour >= 18 || bdHour < 6);
+        }
+        if (isDark) {
+          document.documentElement.style.setProperty('--bg', '#0E0C0A');
+          document.documentElement.style.setProperty('--bg2', '#161210');
+          document.documentElement.style.setProperty('--bg3', '#1E1814');
+          document.documentElement.style.setProperty('--bg-rgb', '14, 12, 10');
+          document.documentElement.style.setProperty('--card-bg', '#1A1612');
+          document.documentElement.style.setProperty('--text', '#F0E8DC');
+          document.documentElement.style.setProperty('--text2', '#C8B8A0');
+          document.documentElement.style.setProperty('--text3', '#8C7A60');
+          document.documentElement.style.setProperty('--accent', '#F0E8DC');
+          document.documentElement.style.setProperty('--accent2', '#D4C4A8');
+          document.documentElement.style.setProperty('--border', 'rgba(200,180,140,0.10)');
+          document.documentElement.style.setProperty('--border2', 'rgba(200,180,140,0.18)');
+          if (document.body) {
+            document.body.classList.add('dark');
+          } else {
+            new MutationObserver(function (_, obs) {
+              if (document.body) { document.body.classList.add('dark'); obs.disconnect(); }
+            }).observe(document.documentElement, { childList: true });
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* ── ROOT TOKENS ── */
     :root {
