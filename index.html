@@ -33,13 +33,24 @@
       try {
         var KEY = 'portfolio-theme-preference';
         var stored = localStorage.getItem(KEY);
+
+        // Migrate old format ('dark'/'light') — clear it so time-based default takes over
+        if (stored === 'dark' || stored === 'light') {
+          localStorage.removeItem(KEY);
+          stored = null;
+        }
+
         var isDark;
         if (stored === 'manual-dark') {
           isDark = true;
         } else if (stored === 'manual-light') {
           isDark = false;
         } else {
-          var bdHour = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })).getHours();
+          // Bangladesh Standard Time = UTC+6, no DST.
+          // Use raw UTC offset math — works on ALL mobile browsers reliably.
+          var utcMs = Date.now() + (new Date().getTimezoneOffset() * 60000);
+          var bdHour = new Date(utcMs + (6 * 3600000)).getHours();
+          // 06:00–17:59 = day → light/white. 18:00–05:59 = night → dark.
           isDark = (bdHour >= 18 || bdHour < 6);
         }
         if (isDark) {
@@ -5586,7 +5597,13 @@
         
         // Get stored manual preference (set only when user explicitly toggles)
         getStoredPreference() {
-          return localStorage.getItem(this.STORAGE_KEY);
+          const val = localStorage.getItem(this.STORAGE_KEY);
+          // Migrate old format ('dark'/'light') left from before manual- prefix was introduced
+          if (val === 'dark' || val === 'light') {
+            localStorage.removeItem(this.STORAGE_KEY);
+            return null;
+          }
+          return val;
         },
 
         // Save preference to localStorage (manual-dark / manual-light)
@@ -5594,12 +5611,10 @@
           localStorage.setItem(this.STORAGE_KEY, theme === 'dark' ? 'manual-dark' : 'manual-light');
         },
 
-        // Get current time in Bangladesh timezone (UTC+6)
+        // Get current hour in Bangladesh timezone (UTC+6, no DST) — reliable on all browsers
         getBangladeshHour() {
-          const now = new Date();
-          // Bangladesh timezone offset is UTC+6
-          const bangladeshTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-          return bangladeshTime.getHours();
+          var utcMs = Date.now() + (new Date().getTimezoneOffset() * 60000);
+          return new Date(utcMs + (6 * 3600000)).getHours();
         },
 
         // Determine if it's day or night in Bangladesh
