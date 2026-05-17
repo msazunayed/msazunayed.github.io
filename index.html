@@ -832,8 +832,8 @@
       align-items: center;
       gap: 8px;
       padding: 10px 22px;
-      background: transparent;
-      color: #000000;
+      background: #000000;
+      color: #F8F4EE;
       font-family: var(--mono);
       font-weight: 600;
       font-size: 11px;
@@ -844,14 +844,14 @@
       transition: background 0.75s ease, color 0.75s ease, transform 0.2s ease, border-color 0.75s ease, box-shadow 0.75s ease;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
     }
 
     .btn-p::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.10);
       opacity: 0;
       transition: opacity 0.75s ease;
     }
@@ -861,14 +861,15 @@
     }
 
     .btn-p:hover {
-      background: rgba(0, 0, 0, 0.10);
+      background: #1a1a1a;
       transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
     }
 
     .btn-p:focus,
     .btn-p:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.20);
       animation: buttonFocusGlow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -3903,9 +3904,18 @@
         border-radius: 6px !important;
         letter-spacing: .10em !important;
         white-space: nowrap !important;
-        background: transparent !important;
-        color: var(--indigo) !important;
-        border: 1.5px solid var(--indigo) !important;
+        background: #000000 !important;
+        color: #F8F4EE !important;
+        border: 1.5px solid #000000 !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
+      }
+
+      /* Dark theme: solid gold on mobile */
+      body.dark .btn-p {
+        background: #D4A017 !important;
+        color: #0E0C0A !important;
+        border-color: #D4A017 !important;
+        box-shadow: 0 2px 14px rgba(212, 160, 23, 0.30) !important;
       }
 
       /* Secondary ghost buttons — separate, equal, proper gaps */
@@ -4217,21 +4227,27 @@
     }
 
     body.dark .btn-p {
-      background: transparent;
-      color: #D4A017;
+      background: #D4A017;
+      color: #0E0C0A;
       border-color: #D4A017;
-      box-shadow: 0 0 0 0 rgba(212, 160, 23, 0);
+      box-shadow: 0 2px 14px rgba(212, 160, 23, 0.30);
     }
 
     body.dark .btn-p:hover {
-      background: rgba(212, 160, 23, 0.12);
+      background: #e6b020;
+      border-color: #e6b020;
+      box-shadow: 0 4px 22px rgba(212, 160, 23, 0.45);
     }
 
     body.dark .btn-p:focus,
     body.dark .btn-p:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+      box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.30);
       animation: buttonFocusGlowDark 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    body.dark .btn-p::after {
+      background: rgba(255, 255, 255, 0.12);
     }
 
     body.dark .btn-g {
