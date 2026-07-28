@@ -4262,9 +4262,9 @@
   <style>
     @media (max-width: 768px) {
       .hero-name {
-        font-size: clamp(26px, 7vw, 38px) !important;
+        font-size: clamp(34px, 10vw, 48px) !important;
         white-space: normal !important;
-        line-height: 1.15 !important;
+        line-height: 1.1 !important;
         margin-top: 0 !important;
         word-break: break-word !important;
         overflow-wrap: break-word !important;
@@ -4272,9 +4272,9 @@
 
     @media (max-width: 390px) {
       .hero-name {
-        font-size: clamp(22px, 6.5vw, 32px) !important;
+        font-size: clamp(30px, 9.5vw, 40px) !important;
         white-space: normal !important;
-        line-height: 1.15 !important;
+        line-height: 1.1 !important;
         margin-top: 0 !important;
         word-break: break-word !important;
         overflow-wrap: break-word !important;
@@ -6223,7 +6223,17 @@
         // and sits right up against the buttons above and content below, so
         // zooming in as close as desktop allows made the object (plus its
         // float/bounce motion) visually spill into neighbouring elements.
-        const MIN_CAM_DIST = OUTER_RADIUS * EFFECTIVE_OBJECT_SCALE * (isMobileDevice ? 2.9 : 2.0);
+        // Desktop's canvas also sits flush against the nav bar (top: var(--nav-h),
+        // no gap) and the hero's bottom edge, so the margin there is bumped up
+        // too - otherwise zooming all the way in plus the float/breathing bounce
+        // pushes the orbit visually into the nav links / CTA above and whatever
+        // sits below the hero on tall desktop/laptop screens.
+        const MIN_CAM_DIST = OUTER_RADIUS * EFFECTIVE_OBJECT_SCALE * (isMobileDevice ? 2.9 : 2.35);
+        // Max vertical travel of the idle float/bob (see _floatY below) plus the
+        // breathing pulse - used to pad the zoom-in/out limits so the bounce
+        // never carries the orbit past the canvas' top/bottom edge, even at the
+        // closest allowed zoom.
+        const FLOAT_BOUNCE_MARGIN = 0.43 + OUTER_RADIUS * EFFECTIVE_OBJECT_SCALE * 0.02;
 
         const outerGroup = new THREE.Group();
         mainGroup.add(outerGroup);
@@ -6680,14 +6690,17 @@
           const _fovRad = (camera.fov * Math.PI) / 180;
           const _halfH = Math.tan(_fovRad / 2);
           const _halfW = _halfH * camera.aspect;
-          // Zoom-out floor: orbit (r 3.2) just fits with 5% breathing room
-          const _minZoomH = 3.2 / _halfH;
-          const _minZoomW = 3.2 / _halfW;
-          const _zoomOutFloor = isMobileDevice
-            ? Math.max(_minZoomH, _minZoomW) * 1.05
-            : 3.5;
-          // Zoom-in ceiling: stop right at the object's outer shell so it never
-          // visually "cuts off" as the camera pushes in.
+          // Zoom-out floor: orbit (r 3.2), plus the float/bounce travel so the
+          // idle bob never carries the top/bottom of the object past the
+          // canvas edge - computed for both mobile and desktop so a big
+          // desktop/laptop viewport gets the same guarantee mobile already had.
+          const _minZoomH = (3.2 + FLOAT_BOUNCE_MARGIN) / _halfH;
+          const _minZoomW = (3.2 + FLOAT_BOUNCE_MARGIN) / _halfW;
+          const _zoomOutFloor = Math.max(_minZoomH, _minZoomW) * 1.05;
+          // Zoom-in ceiling: stop right at the object's outer shell (plus the
+          // float/bounce margin) so it never visually "cuts off" - or, on
+          // desktop, bounces into the nav bar above / content below - as the
+          // camera pushes in close.
           const _zoomInCeil = MIN_CAM_DIST;
           // Max zoom-out: don't let globe shrink to a dot
           const _zoomMax = isMobileDevice ? 12 : 18;
