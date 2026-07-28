@@ -6560,7 +6560,29 @@
         if (isMobileDevice && orbitZone) {
           orbitZone.style.touchAction = 'none';
 
+          function _touchInZone(touch) {
+            const r = orbitZone.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
+            const radius = r.width / 2;
+            return Math.hypot(touch.clientX - cx, touch.clientY - cy) <= radius;
+          }
+
           orbitZone.addEventListener('touchstart', e => {
+            // e.touches lists every active finger on the whole page, not just
+            // the one that landed on this element - a two-finger gesture where
+            // only one finger is actually on the orbit (the other is on empty
+            // background) still fires this handler with touches.length === 2.
+            // Verify every touch is really inside the zone before treating it
+            // as a pinch on the object; a stray outside finger is ignored.
+            if (e.touches.length === 2) {
+              const bothInZone = _touchInZone(e.touches[0]) && _touchInZone(e.touches[1]);
+              if (!bothInZone) {
+                touchOnObject = false;
+                pinchOnObject = false;
+                return; // let this gesture pass through untouched
+              }
+            }
             e.preventDefault(); // we own this gesture fully
             touchOnObject = true;
             pinchOnObject = false;
