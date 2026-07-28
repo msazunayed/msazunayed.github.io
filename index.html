@@ -6225,7 +6225,11 @@
         // Never let the camera get closer than the object's outer shell (plus a
         // small margin) - going past that point pushes geometry through the
         // camera's near plane and makes the shape appear to "cut off" mid-zoom.
-        const MIN_CAM_DIST = OUTER_RADIUS * EFFECTIVE_OBJECT_SCALE * 2.0;
+        // Mobile gets a bigger margin than desktop - the canvas there is short
+        // and sits right up against the buttons above and content below, so
+        // zooming in as close as desktop allows made the object (plus its
+        // float/bounce motion) visually spill into neighbouring elements.
+        const MIN_CAM_DIST = OUTER_RADIUS * EFFECTIVE_OBJECT_SCALE * (isMobileDevice ? 2.9 : 2.0);
 
         const outerGroup = new THREE.Group();
         mainGroup.add(outerGroup);
