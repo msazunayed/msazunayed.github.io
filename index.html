@@ -6219,7 +6219,7 @@
         // Smartphones get a further size trim on top of the base scale - the
         // hero canvas is much smaller there, so the same world-scale object
         // reads as comparatively larger on-screen than it does on desktop.
-        const MOBILE_SIZE_FACTOR = 1.2;
+        const MOBILE_SIZE_FACTOR = 1.35;
         const EFFECTIVE_OBJECT_SCALE = OBJECT_SCALE * (isMobileDevice ? MOBILE_SIZE_FACTOR : 1);
         const OUTER_RADIUS = 3.2; // outermost shell geometry radius, in world units
         // Never let the camera get closer than the object's outer shell (plus a
@@ -6537,9 +6537,7 @@
 
         /* ── Touch state ── */
         let touchStartX = 0, touchStartY = 0;
-        let pinchStartDist = 0;
         let touchOnObject = false;
-        let pinchOnObject = false;
         let tapStartX = 0, tapStartY = 0, tapMoved = false, wasPinch = false;
 
         // Canvas stays pointer-events:none on mobile (CSS handles this).
@@ -6550,55 +6548,29 @@
         if (isMobileDevice && orbitZone) {
           orbitZone.style.touchAction = 'none';
 
-          function _touchInZone(touch) {
-            const r = orbitZone.getBoundingClientRect();
-            const cx = r.left + r.width / 2;
-            const cy = r.top + r.height / 2;
-            const radius = r.width / 2;
-            return Math.hypot(touch.clientX - cx, touch.clientY - cy) <= radius;
-          }
-
           orbitZone.addEventListener('touchstart', e => {
-            // e.touches lists every active finger on the whole page, not just
-            // the one that landed on this element - a two-finger gesture where
-            // only one finger is actually on the orbit (the other is on empty
-            // background) still fires this handler with touches.length === 2.
-            // Verify every touch is really inside the zone before treating it
-            // as a pinch on the object; a stray outside finger is ignored.
-            if (e.touches.length === 2) {
-              const bothInZone = _touchInZone(e.touches[0]) && _touchInZone(e.touches[1]);
-              if (!bothInZone) {
-                touchOnObject = false;
-                pinchOnObject = false;
-                return; // let this gesture pass through untouched
-              }
+            // Pinch-to-zoom is disabled on mobile - two-finger touches pass
+            // straight through untouched. Only single-finger rotate and the
+            // tap-to-pulse zoom are handled here.
+            if (e.touches.length !== 1) {
+              touchOnObject = false;
+              return;
             }
             e.preventDefault(); // we own this gesture fully
             touchOnObject = true;
-            pinchOnObject = false;
             autoSpin = false;
-            if (e.touches.length === 1) {
-              touchStartX = e.touches[0].clientX;
-              touchStartY = e.touches[0].clientY;
-              tapStartX = e.touches[0].clientX;
-              tapStartY = e.touches[0].clientY;
-              tapMoved = false;
-              wasPinch = false;
-              dragVelX = 0; dragVelY = 0;
-            } else if (e.touches.length === 2) {
-              touchOnObject = false;
-              pinchOnObject = true;
-              wasPinch = true;
-              pinchStartDist = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-              );
-            }
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            tapStartX = e.touches[0].clientX;
+            tapStartY = e.touches[0].clientY;
+            tapMoved = false;
+            wasPinch = false;
+            dragVelX = 0; dragVelY = 0;
           }, { passive: false });
 
           orbitZone.addEventListener('touchmove', e => {
-            e.preventDefault();
             if (e.touches.length === 1 && touchOnObject) {
+              e.preventDefault();
               const dx = e.touches[0].clientX - touchStartX;
               const dy = e.touches[0].clientY - touchStartY;
               if (Math.hypot(e.touches[0].clientX - tapStartX, e.touches[0].clientY - tapStartY) > 6) {
@@ -6611,31 +6583,19 @@
               userRotX += dragVelY;
               touchStartX = e.touches[0].clientX;
               touchStartY = e.touches[0].clientY;
-            } else if (e.touches.length === 2 && pinchOnObject) {
-              const dist = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-              );
-              const delta = (dist - pinchStartDist) * 0.03;
-              targetZoom = Math.max(MIN_CAM_DIST, Math.min(18, targetZoom - delta));
-              pinchStartDist = dist;
-              // Reposition zone after zoom changes orbit screen size
-              _positionOrbitZone();
             }
           }, { passive: false });
 
           orbitZone.addEventListener('touchend', e => {
             if (e.touches.length === 0) {
-              // A clean tap - no drag, no pinch - punches the zoom in/out.
+              // A clean tap - no drag - punches the tap-to-pulse zoom/spring.
               // Since orbitZone only covers the orbit itself, any tap here
               // is by definition on the orbit, never the empty hero space.
               if (!tapMoved && !wasPinch) {
                 pulseZoomOnOrbitClick();
               }
               touchOnObject = false;
-              pinchOnObject = false;
             } else if (e.touches.length === 1) {
-              pinchOnObject = false;
               touchOnObject = true;
               touchStartX = e.touches[0].clientX;
               touchStartY = e.touches[0].clientY;
