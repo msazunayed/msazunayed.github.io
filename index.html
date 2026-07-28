@@ -1166,23 +1166,6 @@
       overflow: hidden;
     }
 
-    /* whole-section zoom-out: each full section scales down from
-       slightly-zoomed-in to its true size and slides up into place
-       as it enters the viewport; reverses when scrolled back past it */
-    .section-zoom {
-      opacity: 0;
-      transform: scale(1.22) translateY(60px) rotateX(-4deg);
-      filter: blur(6px);
-      transition: opacity .45s ease-out, transform .6s cubic-bezier(0.34, 1.56, 0.64, 1), filter .5s ease-out;
-      will-change: transform, opacity, filter;
-    }
-
-    .section-zoom.in {
-      opacity: 1;
-      transform: none;
-      filter: blur(0);
-    }
-
     /* Animated black glow behind every section heading */
     .parallax-bg {
       animation: skillsGlowPulse 7s ease-in-out infinite alternate;
@@ -4464,7 +4447,7 @@
   <div class="divider"></div>
 
   <!-- ABOUT -->
-  <section class="section section-alt section-zoom" id="about">
+  <section class="section section-alt" id="about">
     <div class="parallax-bg"></div>
     <div class="tag reveal">About</div>
     <h2 class="sec-h reveal">Who I <em>am</em></h2>
@@ -4513,7 +4496,7 @@
   <div class="divider"></div>
 
   <!-- SKILLS - with radar chart -->
-  <section class="section section-zoom" id="skills">
+  <section class="section" id="skills">
     <div class="parallax-bg"></div>
     <div class="tag reveal">Skills</div>
     <h2 class="sec-h reveal">Technical <em>expertise</em></h2>
@@ -4681,7 +4664,7 @@
   <div class="divider"></div>
 
   <!-- EXPERIENCE -->
-  <section class="section section-alt section-zoom" id="experience">
+  <section class="section section-alt" id="experience">
     <div class="parallax-bg"></div>
     <div class="tag reveal">Experience</div>
     <h2 class="sec-h reveal">Where I've <em>worked</em></h2>
@@ -4725,7 +4708,7 @@
   <div class="divider"></div>
 
   <!-- 4. HORIZONTAL SCROLL PROJECTS -->
-  <section class="section section-alt section-zoom" id="projects" style="padding:0; min-height:auto;">
+  <section class="section section-alt" id="projects" style="padding:0; min-height:auto;">
     <div style="padding:clamp(96px,11vw,160px) var(--gutter) 20px;">
       <div class="tag reveal">Projects</div>
       <h2 class="sec-h reveal">Selected <em>work</em></h2>
@@ -5064,7 +5047,7 @@
   <div class="divider"></div>
 
   <!-- EDUCATION -->
-  <section class="section section-zoom" id="education">
+  <section class="section" id="education">
     <div class="parallax-bg"></div>
     <div class="tag reveal">Education</div>
     <h2 class="sec-h reveal">Academic <em>background</em></h2>
@@ -5362,7 +5345,7 @@
   <div class="divider"></div>
 
   <!-- CONTACT -->
-  <section class="section section-alt section-zoom" id="contact">
+  <section class="section section-alt" id="contact">
     <div class="parallax-bg"></div>
     <div class="tag reveal">Contact</div>
     <h2 class="sec-h reveal">Let's <em>work together</em></h2>
@@ -5617,17 +5600,6 @@
         e.target.classList.toggle('in', e.isIntersecting);
       }), { threshold: .05, rootMargin: '0px 0px -12px 0px' });
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-      /* ─────────────────────────────────────────────
-         WHOLE-SECTION ZOOM ON SCROLL
-         Each full section scales/settles into place as a
-         single unit as it enters the viewport, and reverses
-         the effect when scrolled back past it.
-      ───────────────────────────────────────────── */
-      const sectionIo = new IntersectionObserver(es => es.forEach(e => {
-        e.target.classList.toggle('in', e.isIntersecting);
-      }), { threshold: .12 });
-      document.querySelectorAll('.section-zoom').forEach(el => sectionIo.observe(el));
 
       /* ─────────────────────────────────────────────
          7. NUMBER COUNTER ANIMATIONS
