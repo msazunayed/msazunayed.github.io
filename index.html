@@ -6504,21 +6504,34 @@
         /* ── Position the circular touch zone over the orbit ── */
         const orbitZone = document.getElementById('orbit-touch-zone');
 
+        const _zoneVec3 = new THREE.Vector3();
         function _positionOrbitZone() {
           if (!orbitZone || !isMobileDevice) return;
           const rect = canvas.getBoundingClientRect();
-          // The orbit is centred in the canvas. Outermost shell radius ≈ 3.2 world units.
-          // Camera is at z=12.5 on mobile, fov=65°. Project orbit radius to screen pixels:
-          //   screenR = canvasHeight/2 * (orbitR / (camZ * tan(fov/2)))
-          const fovRad = (65 * Math.PI) / 180;
-          const halfH = Math.tan(fovRad / 2);
-          const camZ = camera.position.z;
-          const orbitWorldR = 3.2;
-          // Fraction of canvas height the orbit occupies
-          const fraction = orbitWorldR / (camZ * halfH);
-          const screenR = (rect.height / 2) * fraction * 1.08; // 8% padding
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
+          if (!rect.width || !rect.height) return;
+
+          // Project the orbit's true world-space centre to screen space (same
+          // technique as the ground shadow) so the zone follows the object
+          // exactly - including the vertical float/bob animation - instead of
+          // assuming it always sits dead-centre in the canvas. A stale/offset
+          // zone is what let taps on empty space near the object still land
+          // on the orbit's hit-circle.
+          _zoneVec3.set(mainGroup.position.x, mainGroup.position.y, mainGroup.position.z);
+          _zoneVec3.project(camera);
+          const cx = (_zoneVec3.x * 0.5 + 0.5) * rect.width + rect.left;
+          const cy = (-_zoneVec3.y * 0.5 + 0.5) * rect.height + rect.top;
+
+          // Apparent on-screen radius, derived from live camera distance and
+          // the object's current (breathing) scale - tracks zoom exactly.
+          const camDist = Math.max(camera.position.distanceTo(mainGroup.position), 0.001);
+          const vFovRad = (camera.fov * Math.PI) / 180;
+          const halfH = Math.tan(vFovRad / 2);
+          const worldRadius = OUTER_RADIUS * mainGroup.scale.x;
+          // Tight fit - a hair smaller than the visual edge (was +8% padding,
+          // which let the invisible hit-circle spill out over empty space
+          // around the object and "catch" scroll touches meant to pass through).
+          const screenR = (worldRadius / (camDist * halfH)) * (rect.height / 2) * 0.94;
+
           // Position relative to offsetParent (the hero section)
           const heroRect = orbitZone.parentElement.getBoundingClientRect();
           orbitZone.style.width = (screenR * 2) + 'px';
@@ -6527,7 +6540,7 @@
           orbitZone.style.top = (cy - heroRect.top - screenR) + 'px';
         }
 
-        // Position on load and whenever the window resizes or zoom changes
+        // Position on load and whenever the window resizes
         window.addEventListener('resize', _positionOrbitZone, { passive: true });
         // Initial position - defer until canvas is laid out
         setTimeout(_positionOrbitZone, 100);
@@ -6713,10 +6726,6 @@
           if (targetZoom > _zoomMax) targetZoom = _zoomMax;
 
           camera.position.z += (targetZoom - camera.position.z) * 0.10;
-          // Keep circular touch zone in sync with orbit screen size during zoom
-          if (isMobileDevice && Math.abs(targetZoom - camera.position.z) > 0.05) {
-            _positionOrbitZone();
-          }
 
           // On mobile: keep orbit horizontally/depth centred (fixed base Y),
           // then layer a slow vertical bob on top on both mobile and desktop
@@ -6800,6 +6809,7 @@
 
           renderer.render(scene, camera);
           updateHeroShadow();
+          if (isMobileDevice) _positionOrbitZone();
         }
         animate();
       }
