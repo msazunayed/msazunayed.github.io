@@ -6241,7 +6241,7 @@
         // Smartphones get a further size trim on top of the base scale - the
         // hero canvas is much smaller there, so the same world-scale object
         // reads as comparatively larger on-screen than it does on desktop.
-        const MOBILE_SIZE_FACTOR = 0.8;
+        const MOBILE_SIZE_FACTOR = 0.95;
         const EFFECTIVE_OBJECT_SCALE = OBJECT_SCALE * (isMobileDevice ? MOBILE_SIZE_FACTOR : 1);
         const OUTER_RADIUS = 3.2; // outermost shell geometry radius, in world units
         // Never let the camera get closer than the object's outer shell (plus a
@@ -6530,14 +6530,22 @@
           // Tight fit - a hair smaller than the visual edge (was +8% padding,
           // which let the invisible hit-circle spill out over empty space
           // around the object and "catch" scroll touches meant to pass through).
-          const screenR = (worldRadius / (camDist * halfH)) * (rect.height / 2) * 0.94;
+          let screenR = (worldRadius / (camDist * halfH)) * (rect.height / 2) * 0.94;
+          // Hard clamp: never let the zone extend past the canvas's own
+          // bounds. Without this, zooming in close on a short mobile canvas
+          // could balloon the circle up into the buttons above it or down
+          // into whatever section follows the hero.
+          const maxR = Math.min(rect.width, rect.height) / 2;
+          screenR = Math.min(screenR, maxR);
+          const clampedCx = Math.min(Math.max(cx, rect.left + screenR), rect.left + rect.width - screenR);
+          const clampedCy = Math.min(Math.max(cy, rect.top + screenR), rect.top + rect.height - screenR);
 
           // Position relative to offsetParent (the hero section)
           const heroRect = orbitZone.parentElement.getBoundingClientRect();
           orbitZone.style.width = (screenR * 2) + 'px';
           orbitZone.style.height = (screenR * 2) + 'px';
-          orbitZone.style.left = (cx - heroRect.left - screenR) + 'px';
-          orbitZone.style.top = (cy - heroRect.top - screenR) + 'px';
+          orbitZone.style.left = (clampedCx - heroRect.left - screenR) + 'px';
+          orbitZone.style.top = (clampedCy - heroRect.top - screenR) + 'px';
         }
 
         // Position on load and whenever the window resizes
@@ -6703,8 +6711,12 @@
           // Dropped well below the sphere's visual base (rather than just under
           // it) so there's a clear air-gap between object and shadow - this is
           // what actually sells the "floating" illusion instead of it reading
-          // as an object resting on the ground.
-          heroShadowEl.style.top = (screenY - heroRect.top + screenRadius * 1.4) + 'px';
+          // as an object resting on the ground. Clamped to the canvas's own
+          // bottom edge so a close-up zoom can't push the shadow down into
+          // whatever section follows the hero.
+          const canvasBottom = canvasRect.top + canvasRect.height - heroRect.top;
+          const rawTop = screenY - heroRect.top + screenRadius * 1.4;
+          heroShadowEl.style.top = Math.min(rawTop, canvasBottom - 4) + 'px';
           heroShadowEl.style.width = width + 'px';
           heroShadowEl.style.height = (width * 0.3) + 'px';
           heroShadowEl.classList.add('is-visible');
@@ -6712,7 +6724,7 @@
 
         function animate() {
           requestAnimationFrame(animate);
-          t += isMobileDevice ? 0.005 : 0.008;
+          t += 0.008;
 
           // Inertia - smooth glide after release (0.96 = slow decay for long spin feel)
           if (!isDragging) {
