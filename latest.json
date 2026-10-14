@@ -1,0 +1,366 @@
+{
+ "updated": "2026-10-14T08:42:26.807Z",
+ "github": [
+  {
+   "title": "msazunayed.github.io",
+   "url": "https://github.com/msazunayed/msazunayed.github.io",
+   "desc": "Personal Website",
+   "date": "2026-10-13T08:21:57Z",
+   "repo": {
+    "name": "msazunayed.github.io",
+    "description": "Personal Website",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "FDE-Ostad",
+   "url": "https://github.com/msazunayed/FDE-Ostad",
+   "desc": "Assignment for FDE role",
+   "date": "2026-10-08T12:52:17Z",
+   "repo": {
+    "name": "FDE-Ostad",
+    "description": "Assignment for FDE role",
+    "language": "CSS",
+    "topics": []
+   }
+  },
+  {
+   "title": "Smart-Delivery-Verification",
+   "url": "https://github.com/msazunayed/Smart-Delivery-Verification",
+   "desc": "An end-to-end computer vision pipeline for last-mile delivery. DeliverGuard inspects photos taken by riders to **flag damaged packages** and **check helmet compliance**, then uses n8n to alert operations and log every result.",
+   "date": "2026-09-30T11:52:34Z",
+   "repo": {
+    "name": "Smart-Delivery-Verification",
+    "description": "An end-to-end computer vision pipeline for last-mile delivery. DeliverGuard inspects photos taken by riders to **flag damaged packages** and **check helmet compliance**, then uses n8n to alert operations and log every result.",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "AI-Research-Assistant",
+   "url": "https://github.com/msazunayed/AI-Research-Assistant",
+   "desc": "Give it a topic — it plans searches, reads the web, and streams back a cited, professionally-formatted research report. You can also customize the report style.",
+   "date": "2026-09-26T14:06:46Z",
+   "repo": {
+    "name": "AI-Research-Assistant",
+    "description": "Give it a topic — it plans searches, reads the web, and streams back a cited, professionally-formatted research report. You can also customize the report style.",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "flyrank-ml-internship",
+   "url": "https://github.com/msazunayed/flyrank-ml-internship",
+   "desc": "",
+   "date": "2026-09-19T19:37:38Z",
+   "repo": {
+    "name": "flyrank-ml-internship",
+    "description": null,
+    "language": "Jupyter Notebook",
+    "topics": []
+   }
+  },
+  {
+   "title": "papers",
+   "url": "https://github.com/msazunayed/papers",
+   "desc": "Flyrank Capstone Project paper",
+   "date": "2026-09-19T15:18:29Z",
+   "repo": {
+    "name": "papers",
+    "description": "Flyrank Capstone Project paper",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "ab-testing-analysis",
+   "url": "https://github.com/msazunayed/ab-testing-analysis",
+   "desc": "End-to-end A/B test analysis in Python: hypothesis testing, power analysis, and segment-level insights, with a business recommendatio",
+   "date": "2026-09-16T08:56:43Z",
+   "repo": {
+    "name": "ab-testing-analysis",
+    "description": "End-to-end A/B test analysis in Python: hypothesis testing, power analysis, and segment-level insights, with a business recommendatio",
+    "language": "Jupyter Notebook",
+    "topics": []
+   }
+  },
+  {
+   "title": "RFM-Customer-Segmentation-Engine",
+   "url": "https://github.com/msazunayed/RFM-Customer-Segmentation-Engine",
+   "desc": "Built an RFM (Recency, Frequency, Monetary) customer segmentation pipeline in Python/pandas that scores and classifies customers into actionable segments (Champions, At Risk, Lost, etc.), surfacing that the top 26% of customers drove 63% of revenue.",
+   "date": "2026-09-16T08:32:04Z",
+   "repo": {
+    "name": "RFM-Customer-Segmentation-Engine",
+    "description": "Built an RFM (Recency, Frequency, Monetary) customer segmentation pipeline in Python/pandas that scores and classifies customers into actionable segments (Champions, At Risk, Lost, etc.), surfacing that the top 26% of customers drove 63% of revenue.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "delivery-vision-mcp",
+   "url": "https://github.com/msazunayed/delivery-vision-mcp",
+   "desc": "An MCP (Model Context Protocol) server that wraps custom-trained YOLO computer vision models as tools an AI agent (Claude Desktop, Claude Code, Cursor) can call directly - built specifically for logistics/delivery use cases like Pathao, Redx, Carrybee etc.",
+   "date": "2026-09-15T22:57:24Z",
+   "repo": {
+    "name": "delivery-vision-mcp",
+    "description": "An MCP (Model Context Protocol) server that wraps custom-trained YOLO computer vision models as tools an AI agent (Claude Desktop, Claude Code, Cursor) can call directly - built specifically for logistics/delivery use cases like Pathao, Redx, Carrybee etc.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "CarParts-Instance-Segmentation",
+   "url": "https://github.com/msazunayed/CarParts-Instance-Segmentation",
+   "desc": "Instance segmentation pipeline that detects and masks individual car parts (bumpers, doors, headlights, mirrors, hood, trunk, glass, wheels, etc.) from a single image or live webcam feed, using YOLO26-seg and the Ultralytic",
+   "date": "2026-09-15T20:49:08Z",
+   "repo": {
+    "name": "CarParts-Instance-Segmentation",
+    "description": "Instance segmentation pipeline that detects and masks individual car parts (bumpers, doors, headlights, mirrors, hood, trunk, glass, wheels, etc.) from a single image or live webcam feed, using YOLO26-seg and the Ultralytic",
+    "language": "CSS",
+    "topics": []
+   }
+  },
+  {
+   "title": "Youtube_Tutorial",
+   "url": "https://github.com/msazunayed/Youtube_Tutorial",
+   "desc": "Teach the students how the AI and ML work",
+   "date": "2026-09-04T13:03:16Z",
+   "repo": {
+    "name": "Youtube_Tutorial",
+    "description": "Teach the students how the AI and ML work",
+    "language": "Jupyter Notebook",
+    "topics": []
+   }
+  },
+  {
+   "title": "Cat-Election",
+   "url": "https://github.com/msazunayed/Cat-Election",
+   "desc": "",
+   "date": "2026-08-21T09:26:18Z",
+   "repo": {
+    "name": "Cat-Election",
+    "description": null,
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "msazunayed",
+   "url": "https://github.com/msazunayed/msazunayed",
+   "desc": "",
+   "date": "2026-08-20T09:56:45Z",
+   "repo": {
+    "name": "msazunayed",
+    "description": null,
+    "language": null,
+    "topics": []
+   }
+  },
+  {
+   "title": "Homeobject-Detection",
+   "url": "https://github.com/msazunayed/Homeobject-Detection",
+   "desc": "",
+   "date": "2026-08-03T10:45:01Z",
+   "repo": {
+    "name": "Homeobject-Detection",
+    "description": null,
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "PPE-Detector",
+   "url": "https://github.com/msazunayed/PPE-Detector",
+   "desc": "Real-time PPE compliance detection using YOLOv8/YOLO26 and OpenCV — flags missing helmets, vests, gloves, goggles, and boots from a webcam or video feed, with a live FastAPI dashboard and CSV violation logging.",
+   "date": "2026-07-26T13:59:23Z",
+   "repo": {
+    "name": "PPE-Detector",
+    "description": "Real-time PPE compliance detection using YOLOv8/YOLO26 and OpenCV — flags missing helmets, vests, gloves, goggles, and boots from a webcam or video feed, with a live FastAPI dashboard and CSV violation logging.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Thesis",
+   "url": "https://github.com/msazunayed/Thesis",
+   "desc": "GlaucomaNet is a deep learning web app that analyzes retinal fundus images to detect glaucomatous optic neuropathy (GON) using a custom 4-block CNN trained on the HYGD dataset. It provides a FastAPI backend for inference and a clean browser UI where clinicians or researchers can upload eye images and instantly get a diagnosis with confidence scores",
+   "date": "2026-06-10T05:49:47Z",
+   "repo": {
+    "name": "Thesis",
+    "description": "GlaucomaNet is a deep learning web app that analyzes retinal fundus images to detect glaucomatous optic neuropathy (GON) using a custom 4-block CNN trained on the HYGD dataset. It provides a FastAPI backend for inference and a clean browser UI where clinicians or researchers can upload eye images and instantly get a diagnosis with confidence scores",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "JaalTaka",
+   "url": "https://github.com/msazunayed/JaalTaka",
+   "desc": "A deep learning web app that detects counterfeit banknotes using a custom CNN. Built with PyTorch + FastAPI.",
+   "date": "2026-06-07T10:12:19Z",
+   "repo": {
+    "name": "JaalTaka",
+    "description": "A deep learning web app that detects counterfeit banknotes using a custom CNN. Built with PyTorch + FastAPI.",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "Deepfake-Detector",
+   "url": "https://github.com/msazunayed/Deepfake-Detector",
+   "desc": "Classify videos as real or AI-generated using facial inconsistency analysis",
+   "date": "2026-05-05T11:17:48Z",
+   "repo": {
+    "name": "Deepfake-Detector",
+    "description": "Classify videos as real or AI-generated using facial inconsistency analysis",
+    "language": null,
+    "topics": []
+   }
+  },
+  {
+   "title": "Bank-Churn-Intelligence-Platform",
+   "url": "https://github.com/msazunayed/Bank-Churn-Intelligence-Platform",
+   "desc": "A professional FastAPI-powered analytics dashboard for bank customer churn prediction and risk analysis.",
+   "date": "2026-04-30T10:34:58Z",
+   "repo": {
+    "name": "Bank-Churn-Intelligence-Platform",
+    "description": "A professional FastAPI-powered analytics dashboard for bank customer churn prediction and risk analysis.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Credit-Card-Fraud-Detection",
+   "url": "https://github.com/msazunayed/Credit-Card-Fraud-Detection",
+   "desc": "",
+   "date": "2026-04-20T09:56:54Z",
+   "repo": {
+    "name": "Credit-Card-Fraud-Detection",
+    "description": null,
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Notebook_Projects",
+   "url": "https://github.com/msazunayed/Notebook_Projects",
+   "desc": "",
+   "date": "2026-04-19T07:06:33Z",
+   "repo": {
+    "name": "Notebook_Projects",
+    "description": null,
+    "language": "Jupyter Notebook",
+    "topics": []
+   }
+  },
+  {
+   "title": "Retail-shelf-analytics",
+   "url": "https://github.com/msazunayed/Retail-shelf-analytics",
+   "desc": "Detects **products** and **empty shelf spaces** in real time using YOLOv11n. Produces a full shelf health report with zone-level breakdown, fill rate, and restock alerts.",
+   "date": "2026-04-05T14:02:28Z",
+   "repo": {
+    "name": "Retail-shelf-analytics",
+    "description": "Detects **products** and **empty shelf spaces** in real time using YOLOv11n. Produces a full shelf health report with zone-level breakdown, fill rate, and restock alerts.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "ShopFlow-MySQL-Analytics-Project",
+   "url": "https://github.com/msazunayed/ShopFlow-MySQL-Analytics-Project",
+   "desc": "Full-stack e-commerce analytics project using MySQL 8, FastAPI, and a browser dashboard.",
+   "date": "2026-04-01T08:08:50Z",
+   "repo": {
+    "name": "ShopFlow-MySQL-Analytics-Project",
+    "description": "Full-stack e-commerce analytics project using MySQL 8, FastAPI, and a browser dashboard.",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "Image-Classifier-CNN-Transfer-Learning-ResNet18",
+   "url": "https://github.com/msazunayed/Image-Classifier-CNN-Transfer-Learning-ResNet18",
+   "desc": "A modular PyTorch image classifier using transfer learning with ResNet18. Classifies images into 3 categories: **bird, cat, dog**.",
+   "date": "2026-03-30T13:33:57Z",
+   "repo": {
+    "name": "Image-Classifier-CNN-Transfer-Learning-ResNet18",
+    "description": "A modular PyTorch image classifier using transfer learning with ResNet18. Classifies images into 3 categories: **bird, cat, dog**.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Amazon-Review-Sentiment-Analyzer",
+   "url": "https://github.com/msazunayed/Amazon-Review-Sentiment-Analyzer",
+   "desc": "sentiment classifier for Amazon reviews using Bidirectional LSTM + Bahdanau Attention, served with FastAPI and an interactive frontend — trained on 60K samples with PyTorch",
+   "date": "2026-03-20T12:20:03Z",
+   "repo": {
+    "name": "Amazon-Review-Sentiment-Analyzer",
+    "description": "sentiment classifier for Amazon reviews using Bidirectional LSTM + Bahdanau Attention, served with FastAPI and an interactive frontend — trained on 60K samples with PyTorch",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "image-text-extractor",
+   "url": "https://github.com/msazunayed/image-text-extractor",
+   "desc": "Local OCR API for extracting text from images — powered by EasyOCR with dual-pass contrast enhancement. Supports file uploads and image URLs.",
+   "date": "2026-03-14T14:06:24Z",
+   "repo": {
+    "name": "image-text-extractor",
+    "description": "Local OCR API for extracting text from images — powered by EasyOCR with dual-pass contrast enhancement. Supports file uploads and image URLs.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "RNN-LSTM-based-toxic-tweet-classification-model",
+   "url": "https://github.com/msazunayed/RNN-LSTM-based-toxic-tweet-classification-model",
+   "desc": "This project detects toxic or harmful tweets using deep learning. It uses an RNN with LSTM to analyze tweet text and classify it as toxic or non-toxic. The model helps identify hate speech, insults, and abusive language to support safer and healthier online communities.",
+   "date": "2026-03-05T21:52:57Z",
+   "repo": {
+    "name": "RNN-LSTM-based-toxic-tweet-classification-model",
+    "description": "This project detects toxic or harmful tweets using deep learning. It uses an RNN with LSTM to analyze tweet text and classify it as toxic or non-toxic. The model helps identify hate speech, insults, and abusive language to support safer and healthier online communities.",
+    "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "TabulaInsight",
+   "url": "https://github.com/msazunayed/TabulaInsight",
+   "desc": "A professional, interactive **Exploratory Data Analysis** dashboard built with **Streamlit** and **Plotly**. Upload any tabular dataset and get instant, comprehensive visual analysis — no coding required.",
+   "date": "2026-02-22T21:33:51Z",
+   "repo": {
+    "name": "TabulaInsight",
+    "description": "A professional, interactive **Exploratory Data Analysis** dashboard built with **Streamlit** and **Plotly**. Upload any tabular dataset and get instant, comprehensive visual analysis — no coding required.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Agentic-Search-Engine",
+   "url": "https://github.com/msazunayed/Agentic-Search-Engine",
+   "desc": "",
+   "date": "2026-01-27T22:11:26Z",
+   "repo": {
+    "name": "Agentic-Search-Engine",
+    "description": null,
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "VibeCheck-Hybrid-AI-Music-Recommendation-System",
+   "url": "https://github.com/msazunayed/VibeCheck-Hybrid-AI-Music-Recommendation-System",
+   "desc": "",
+   "date": "2026-01-27T14:09:36Z",
+   "repo": {
+    "name": "VibeCheck-Hybrid-AI-Music-Recommendation-System",
+    "description": null,
+    "language": "Jupyter Notebook",
+    "topics": []
+   }
+  }
+ ],
+ "youtube": []
+}
