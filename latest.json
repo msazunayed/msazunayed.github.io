@@ -1,11 +1,23 @@
 {
- "updated": "2026-10-15T08:17:14.107Z",
+ "updated": "2026-10-16T08:09:56.894Z",
  "github": [
+  {
+   "title": "Intelligent-API-Monitoring-Alert-System",
+   "url": "https://github.com/msazunayed/Intelligent-API-Monitoring-Alert-System",
+   "desc": "Smart API monitoring with anomaly detection and automated alerts.",
+   "date": "2026-10-15T20:38:45Z",
+   "repo": {
+    "name": "Intelligent-API-Monitoring-Alert-System",
+    "description": "Smart API monitoring with anomaly detection and automated alerts.",
+    "language": "JavaScript",
+    "topics": []
+   }
+  },
   {
    "title": "msazunayed.github.io",
    "url": "https://github.com/msazunayed/msazunayed.github.io",
    "desc": "Personal Website",
-   "date": "2026-10-14T20:15:12Z",
+   "date": "2026-10-15T08:49:22Z",
    "repo": {
     "name": "msazunayed.github.io",
     "description": "Personal Website",
@@ -346,18 +358,6 @@
     "name": "Agentic-Search-Engine",
     "description": null,
     "language": "Python",
-    "topics": []
-   }
-  },
-  {
-   "title": "VibeCheck-Hybrid-AI-Music-Recommendation-System",
-   "url": "https://github.com/msazunayed/VibeCheck-Hybrid-AI-Music-Recommendation-System",
-   "desc": "",
-   "date": "2026-01-27T14:09:36Z",
-   "repo": {
-    "name": "VibeCheck-Hybrid-AI-Music-Recommendation-System",
-    "description": null,
-    "language": "Jupyter Notebook",
     "topics": []
    }
   }
