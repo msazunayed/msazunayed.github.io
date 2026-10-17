@@ -1,6 +1,18 @@
 {
- "updated": "2026-10-16T08:09:56.894Z",
+ "updated": "2026-10-17T07:47:16.063Z",
  "github": [
+  {
+   "title": "msazunayed.github.io",
+   "url": "https://github.com/msazunayed/msazunayed.github.io",
+   "desc": "Personal Website",
+   "date": "2026-10-16T08:09:59Z",
+   "repo": {
+    "name": "msazunayed.github.io",
+    "description": "Personal Website",
+    "language": "HTML",
+    "topics": []
+   }
+  },
   {
    "title": "Intelligent-API-Monitoring-Alert-System",
    "url": "https://github.com/msazunayed/Intelligent-API-Monitoring-Alert-System",
@@ -10,18 +22,6 @@
     "name": "Intelligent-API-Monitoring-Alert-System",
     "description": "Smart API monitoring with anomaly detection and automated alerts.",
     "language": "JavaScript",
-    "topics": []
-   }
-  },
-  {
-   "title": "msazunayed.github.io",
-   "url": "https://github.com/msazunayed/msazunayed.github.io",
-   "desc": "Personal Website",
-   "date": "2026-10-15T08:49:22Z",
-   "repo": {
-    "name": "msazunayed.github.io",
-    "description": "Personal Website",
-    "language": "HTML",
     "topics": []
    }
   },
