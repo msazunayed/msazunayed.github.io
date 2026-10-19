@@ -1,15 +1,39 @@
 {
- "updated": "2026-10-18T08:01:13.403Z",
+ "updated": "2026-10-19T08:51:32.377Z",
  "github": [
   {
    "title": "msazunayed.github.io",
    "url": "https://github.com/msazunayed/msazunayed.github.io",
    "desc": "Personal Website",
-   "date": "2026-10-17T12:25:44Z",
+   "date": "2026-10-18T22:57:26Z",
    "repo": {
     "name": "msazunayed.github.io",
     "description": "Personal Website",
     "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "Datheon-Python-Internship",
+   "url": "https://github.com/msazunayed/Datheon-Python-Internship",
+   "desc": "Python + Generative AI & LangChain Internship Intern for the upcoming 2026 cohort.",
+   "date": "2026-10-18T19:22:40Z",
+   "repo": {
+    "name": "Datheon-Python-Internship",
+    "description": "Python + Generative AI & LangChain Internship Intern for the upcoming 2026 cohort.",
+    "language": null,
+    "topics": []
+   }
+  },
+  {
+   "title": "Hub-Ops-Dashboard",
+   "url": "https://github.com/msazunayed/Hub-Ops-Dashboard",
+   "desc": "Parcel hub dashboard in Excel. Paste daily exports, and the KPIs and charts refresh themselves.",
+   "date": "2026-10-18T14:19:02Z",
+   "repo": {
+    "name": "Hub-Ops-Dashboard",
+    "description": "Parcel hub dashboard in Excel. Paste daily exports, and the KPIs and charts refresh themselves.",
+    "language": "Python",
     "topics": []
    }
   },
@@ -334,30 +358,6 @@
     "name": "RNN-LSTM-based-toxic-tweet-classification-model",
     "description": "This project detects toxic or harmful tweets using deep learning. It uses an RNN with LSTM to analyze tweet text and classify it as toxic or non-toxic. The model helps identify hate speech, insults, and abusive language to support safer and healthier online communities.",
     "language": "HTML",
-    "topics": []
-   }
-  },
-  {
-   "title": "TabulaInsight",
-   "url": "https://github.com/msazunayed/TabulaInsight",
-   "desc": "A professional, interactive **Exploratory Data Analysis** dashboard built with **Streamlit** and **Plotly**. Upload any tabular dataset and get instant, comprehensive visual analysis — no coding required.",
-   "date": "2026-02-22T21:33:51Z",
-   "repo": {
-    "name": "TabulaInsight",
-    "description": "A professional, interactive **Exploratory Data Analysis** dashboard built with **Streamlit** and **Plotly**. Upload any tabular dataset and get instant, comprehensive visual analysis — no coding required.",
-    "language": "Python",
-    "topics": []
-   }
-  },
-  {
-   "title": "Agentic-Search-Engine",
-   "url": "https://github.com/msazunayed/Agentic-Search-Engine",
-   "desc": "",
-   "date": "2026-01-27T22:11:26Z",
-   "repo": {
-    "name": "Agentic-Search-Engine",
-    "description": null,
-    "language": "Python",
     "topics": []
    }
   }
