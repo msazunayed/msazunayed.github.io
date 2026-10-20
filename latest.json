@@ -1,11 +1,11 @@
 {
- "updated": "2026-10-19T08:51:32.377Z",
+ "updated": "2026-10-20T08:31:46.883Z",
  "github": [
   {
    "title": "msazunayed.github.io",
    "url": "https://github.com/msazunayed/msazunayed.github.io",
    "desc": "Personal Website",
-   "date": "2026-10-18T22:57:26Z",
+   "date": "2026-10-20T03:55:31Z",
    "repo": {
     "name": "msazunayed.github.io",
     "description": "Personal Website",
@@ -17,11 +17,11 @@
    "title": "Datheon-Python-Internship",
    "url": "https://github.com/msazunayed/Datheon-Python-Internship",
    "desc": "Python + Generative AI & LangChain Internship Intern for the upcoming 2026 cohort.",
-   "date": "2026-10-18T19:22:40Z",
+   "date": "2026-10-19T10:27:02Z",
    "repo": {
     "name": "Datheon-Python-Internship",
     "description": "Python + Generative AI & LangChain Internship Intern for the upcoming 2026 cohort.",
-    "language": null,
+    "language": "Python",
     "topics": []
    }
   },
