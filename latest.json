@@ -1,15 +1,27 @@
 {
- "updated": "2026-10-31T03:19:59.416Z",
+ "updated": "2026-11-01T03:23:19.743Z",
  "github": [
   {
    "title": "msazunayed.github.io",
    "url": "https://github.com/msazunayed/msazunayed.github.io",
    "desc": "Personal Website",
-   "date": "2026-10-30T03:24:50Z",
+   "date": "2026-11-01T00:25:49Z",
    "repo": {
     "name": "msazunayed.github.io",
     "description": "Personal Website",
     "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "DataAnalystProject",
+   "url": "https://github.com/msazunayed/DataAnalystProject",
+   "desc": "Data related task",
+   "date": "2026-10-31T22:44:34Z",
+   "repo": {
+    "name": "DataAnalystProject",
+    "description": "Data related task",
+    "language": "CSS",
     "topics": []
    }
   },
@@ -346,18 +358,6 @@
     "name": "image-text-extractor",
     "description": "Local OCR API for extracting text from images — powered by EasyOCR with dual-pass contrast enhancement. Supports file uploads and image URLs.",
     "language": "Python",
-    "topics": []
-   }
-  },
-  {
-   "title": "RNN-LSTM-based-toxic-tweet-classification-model",
-   "url": "https://github.com/msazunayed/RNN-LSTM-based-toxic-tweet-classification-model",
-   "desc": "This project detects toxic or harmful tweets using deep learning. It uses an RNN with LSTM to analyze tweet text and classify it as toxic or non-toxic. The model helps identify hate speech, insults, and abusive language to support safer and healthier online communities.",
-   "date": "2026-03-05T21:52:57Z",
-   "repo": {
-    "name": "RNN-LSTM-based-toxic-tweet-classification-model",
-    "description": "This project detects toxic or harmful tweets using deep learning. It uses an RNN with LSTM to analyze tweet text and classify it as toxic or non-toxic. The model helps identify hate speech, insults, and abusive language to support safer and healthier online communities.",
-    "language": "HTML",
     "topics": []
    }
   }
