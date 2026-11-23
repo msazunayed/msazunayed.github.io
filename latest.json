@@ -1,15 +1,39 @@
 {
- "updated": "2026-11-04T03:22:10.858Z",
+ "updated": "2026-11-23T10:32:22.458Z",
  "github": [
   {
    "title": "msazunayed.github.io",
    "url": "https://github.com/msazunayed/msazunayed.github.io",
    "desc": "Personal Website",
-   "date": "2026-11-03T03:21:34Z",
+   "date": "2026-11-23T10:12:17Z",
    "repo": {
     "name": "msazunayed.github.io",
     "description": "Personal Website",
     "language": "HTML",
+    "topics": []
+   }
+  },
+  {
+   "title": "Crewai-Sales-Outreach",
+   "url": "https://github.com/msazunayed/Crewai-Sales-Outreach",
+   "desc": "AI-powered sales outreach built with CrewAI. Two agents research a lead, build a company profile, and draft personalized emails for the key decision maker.",
+   "date": "2026-11-23T09:34:55Z",
+   "repo": {
+    "name": "Crewai-Sales-Outreach",
+    "description": "AI-powered sales outreach built with CrewAI. Two agents research a lead, build a company profile, and draft personalized emails for the key decision maker.",
+    "language": "Python",
+    "topics": []
+   }
+  },
+  {
+   "title": "Customer-Support-Flow",
+   "url": "https://github.com/msazunayed/Customer-Support-Flow",
+   "desc": "Customer support ticket pipeline built with CrewAI Flows and FastAPI. Categorizes tickets with an LLM on Groq, falls back to keyword rules, and routes each ticket to a team.",
+   "date": "2026-11-07T20:13:28Z",
+   "repo": {
+    "name": "Customer-Support-Flow",
+    "description": "Customer support ticket pipeline built with CrewAI Flows and FastAPI. Categorizes tickets with an LLM on Groq, falls back to keyword rules, and routes each ticket to a team.",
+    "language": "CSS",
     "topics": []
    }
   },
@@ -280,11 +304,11 @@
   {
    "title": "Credit-Card-Fraud-Detection",
    "url": "https://github.com/msazunayed/Credit-Card-Fraud-Detection",
-   "desc": "",
+   "desc": "A modular deep learning project for detecting credit card fraud using PyTorch. Includes training, evaluation, prediction, and a simple web UI for demo.",
    "date": "2026-04-20T09:56:54Z",
    "repo": {
     "name": "Credit-Card-Fraud-Detection",
-    "description": null,
+    "description": "A modular deep learning project for detecting credit card fraud using PyTorch. Includes training, evaluation, prediction, and a simple web UI for demo.",
     "language": "Python",
     "topics": []
    }
@@ -333,30 +357,6 @@
    "repo": {
     "name": "Image-Classifier-CNN-Transfer-Learning-ResNet18",
     "description": "A modular PyTorch image classifier using transfer learning with ResNet18. Classifies images into 3 categories: **bird, cat, dog**.",
-    "language": "Python",
-    "topics": []
-   }
-  },
-  {
-   "title": "Amazon-Review-Sentiment-Analyzer",
-   "url": "https://github.com/msazunayed/Amazon-Review-Sentiment-Analyzer",
-   "desc": "sentiment classifier for Amazon reviews using Bidirectional LSTM + Bahdanau Attention, served with FastAPI and an interactive frontend — trained on 60K samples with PyTorch",
-   "date": "2026-03-20T12:20:03Z",
-   "repo": {
-    "name": "Amazon-Review-Sentiment-Analyzer",
-    "description": "sentiment classifier for Amazon reviews using Bidirectional LSTM + Bahdanau Attention, served with FastAPI and an interactive frontend — trained on 60K samples with PyTorch",
-    "language": "HTML",
-    "topics": []
-   }
-  },
-  {
-   "title": "image-text-extractor",
-   "url": "https://github.com/msazunayed/image-text-extractor",
-   "desc": "Local OCR API for extracting text from images — powered by EasyOCR with dual-pass contrast enhancement. Supports file uploads and image URLs.",
-   "date": "2026-03-14T14:06:24Z",
-   "repo": {
-    "name": "image-text-extractor",
-    "description": "Local OCR API for extracting text from images — powered by EasyOCR with dual-pass contrast enhancement. Supports file uploads and image URLs.",
     "language": "Python",
     "topics": []
    }
